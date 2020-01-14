@@ -8,6 +8,24 @@ exports.profile = (req, res) => {
     res.send(serialize(req, res));
 };
 
+/* POST  api/auth/join/uniqueCheck */
+exports.uniqueCheck = async (req, res, next) => {
+    try {
+        // check the uniqueness of username/email before submit the signup form
+        const { type, value } = req.body;
+        const obj = {};
+        obj[type] = value;
+        const exUser = await User.findOne({ where: obj });
+        if (exUser) {
+            res.sendStatus(409);
+        } else {
+            res.sendStatus(200);
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 /* GET  api/auth/join */
 exports.join = (req, res) => {
     res.sendStatus(200);
@@ -15,23 +33,18 @@ exports.join = (req, res) => {
 
 /* POST api/auth/join */
 exports.joinPost = async (req, res, next) => {
-    const { email, nick, password, cell } = req.body;
     try {
-        const exUser = await User.findOne({ where: { email }});
-        if (exUser) {
-            res.sendStatus(409); // conflict
-        }
+        const { email, username, password, cell } = req.body;
         const hash = await bcrypt.hash(password, 12);
         const user = await User.create({
             email,
-            nick,
+            username,
             cell,
             password: hash,
-            provider: 'local'})
-       res.sendStatus(200)
-    } catch (e) {
-        console.error(e);
-        return next(e);
+            provider: 'local'});
+        res.send(user);
+    } catch (err) {
+        next(err);
     }
 }
 

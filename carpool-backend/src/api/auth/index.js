@@ -18,5 +18,5 @@ auth.get('/join', isNotLoggedIn, authCtrl.profile);
 auth.post('/join', isNotLoggedIn, authCtrl.joinPost);
 auth.post('/login', isNotLoggedIn, authCtrl.login);
 auth.post('/logout', isLoggedIn, authCtrl.logout);
-
+auth.post('/join/uniqueCheck', isNotLoggedIn, authCtrl.uniqueCheck);
 module.exports = auth;
