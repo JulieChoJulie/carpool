@@ -22,5 +22,6 @@ db.Comment.belongsTo(db.Post);
 db.User.hasMany(db.Comment);
 db.Comment.belongsTo(db.User);
 
+
 module.exports = db;
 

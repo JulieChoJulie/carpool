@@ -6,13 +6,12 @@ module.exports = (sequelize, DataTypes) => (
             unique: true,
         },
         cell: {
-            type:DataTypes.INTEGER.UNSIGNED,
+            type:DataTypes.STRING(10),
             allowNull: true,
         },
         nick: {
             type: DataTypes.STRING(15),
             allowNull: false,
-            unique: true,
         },
         password: {
             type: DataTypes.STRING(100),
