@@ -56,7 +56,7 @@ exports.login = (req, res, next) => {
             return next(authError);
         }
         if (!user) {
-            return res.error(401).send(info.message); //unauthorized err
+            return res.sendStatus(401); //unauthorized err
         }
         return req.login(user, (loginError) => {
             if (loginError) {
