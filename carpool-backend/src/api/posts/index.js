@@ -17,9 +17,9 @@ posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, postsCtrl.editPost);
 posts.delete('/:id', isLoggedIn, postsCtrl.deletePost);
 
-posts.post('/:id/comments', isLoggedIn, printInfo);
-posts.get('/:id/comments', printInfo);
-posts.put('/:id/comments/:commentId', isLoggedIn, printInfo);
-posts.delete('api/posts/:id/comments/:commentId', isLoggedIn, printInfo);
+posts.post('/:id/comments', isLoggedIn, postsCtrl.writeComment);
+posts.get('/:id/comments', postsCtrl.readComment);
+posts.put('/:id/comments/:commentId', isLoggedIn, postsCtrl.editComment);
+posts.delete('/:id/comments/:commentId', isLoggedIn, postsCtrl.deleteComment);
 
 module.exports = posts;
