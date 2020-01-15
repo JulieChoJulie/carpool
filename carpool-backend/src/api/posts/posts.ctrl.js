@@ -1,11 +1,14 @@
 const { Post, Comment, User, Ride } = require('../../../models');
+const { Op } = require('sequelize');
 
 /* post format */
 const postFormat = (key, value) => {
     const format = {
+        where: { status: true },
         include: [
             {
                 model: Comment,
+                where: { status: true },
                 attributes: ['content', 'createdAt', 'userId'],
                 include: {
                     model: User,
@@ -16,6 +19,7 @@ const postFormat = (key, value) => {
             },
             {
                 model: Ride,
+                where: { status: true }
             },
             {
                 model: User,
@@ -23,11 +27,13 @@ const postFormat = (key, value) => {
             }
         ]
     };
-    format[key] = value;
+    if(!!value & !!key) {
+        const obj = {};
+        obj[key] = value;
+        format.where = {[Op.and]: [obj, { status: true }] }
+    }
     return format;
 };
-
-
 
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
@@ -65,7 +71,7 @@ exports.write = async (req, res, next) => {
                 to,
                 seats,
                 available: seats,
-                postId: postId
+                postId: postId,
             });
         }));
         res.json({ id: postId });
@@ -78,7 +84,12 @@ exports.write = async (req, res, next) => {
 /* GET api/posts/:id */
 exports.readPost = async (req, res, next) => {
     try {
-        const post = await Post.findOne(postFormat('where', { id: req.params.id }))
+        const id = parseInt(req.params.id);
+        const post = await Post.findOne(postFormat('id', id));
+        if (post === null) {
+            console.log('here')
+            res.sendStatus(404); // Not Found
+        }
         res.send(post);
     } catch (err) {
         console.error(err);
@@ -114,7 +125,7 @@ exports.editPost = async (req, res, next) => {
             });
         }));
 
-        const post = await Post.findOne(postFormat('where', { id: req.params.id }));
+        const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         res.json(post);
     } catch (err) {
         console.error(err);
@@ -122,14 +133,14 @@ exports.editPost = async (req, res, next) => {
     }
 }
 
-
 /* DELETE api/posts/:id */
 exports.deletePost = async (req, res, next) => {
     try {
         await Post.update({ status: false }, { where: { id: req.params.id } })
         res.sendStatus(200);
     } catch (err) {
-
+        console.error(err);
+        next(err);
     }
 }
 
