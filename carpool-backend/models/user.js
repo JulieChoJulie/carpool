@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => (
         snsId: {
             type: DataTypes.STRING(30),
             allowNull: true,
+        },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
         }
     }, {
         timestamps: true,
