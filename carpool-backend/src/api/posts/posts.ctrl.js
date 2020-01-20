@@ -1,8 +1,9 @@
 const { Post, Comment, User, Ride } = require('../../../models');
-const { Op } = require('sequelize');
+const { sequelize } = require('../../../models');
+const { Op, transaction } = require('sequelize');
 
 /* post format */
-const postFormat = (key, value) => {
+const postFormat = (id) => {
     const format = {
         where: { status: true },
         include: [
@@ -27,10 +28,8 @@ const postFormat = (key, value) => {
             }
         ]
     };
-    if(!!value & !!key) {
-        const obj = {};
-        obj[key] = value;
-        format.where = {[Op.and]: [obj, { status: true }] }
+    if(!!id) {
+        format.where = {[Op.and]: [{ id: id }, { status: true }] }
     }
     return format;
 };
@@ -38,21 +37,13 @@ const postFormat = (key, value) => {
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
     try {
-        // const posts = await Post.findAll({ limit: 2 });
-        // const result = await Promise.all(posts.map(
-        //     post => {
-        //          const postId = post.id
-        //          return Post.findOne(postFormat('where', {id: postId}))
-        //     }
-        // ));
-        // res.send(result)
         const posts = await Post.findAll(postFormat());
         res.send(posts)
     } catch (err) {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* POST /api/posts */
 exports.write = async (req, res, next) => {
@@ -84,15 +75,12 @@ exports.write = async (req, res, next) => {
         console.error(error);
         next(error);
     }
-}
+};
 
 /* GET api/posts/:id */
 exports.readPost = async (req, res, next) => {
     try {
-        console.log('------------------here')
-
-        const id = parseInt(req.params.id);
-        const post = await Post.findOne(postFormat('id', id));
+        const post = await Post.findOne(postFormat(parseInt(req.params.id)));
         if (post === null) {
             console.log('here')
             res.status(404); // Not Found
@@ -102,7 +90,7 @@ exports.readPost = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* PUT api/posts/:id */
 exports.editPost = async (req, res, next) => {
@@ -121,9 +109,9 @@ exports.editPost = async (req, res, next) => {
         const result = await Promise.all(rides.map(ride => {
             const id = ride[0].id;
             const fields = ride.slice(1);
-            return fields.reduce(async (acc, field) => {
+            return fields.forEach(async (field) => {
                 if (!!field.seats) {
-                    const exRide = await Ride.findOne({where: {id: id}});
+                    const exRide = await Ride.findOne({ where: { id: id } });
                     if (exRide === null) {
                         return res.status(404); // Not Found
                     } else if (exRide.available > field.seats) {
@@ -133,14 +121,13 @@ exports.editPost = async (req, res, next) => {
                 return Ride.update(field, { where: { id: id } });
             });
         }));
-
-        const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
+        const post = await Post.findOne(postFormat(parseInt(req.params.id)));
         res.json(post);
     } catch (err) {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* DELETE api/posts/:id */
 exports.deletePost = async (req, res, next) => {
@@ -174,7 +161,7 @@ exports.deletePost = async (req, res, next) => {
 /* GET api/posts/:id/comments */
 exports.readComment = async (req, res, next) => {
     try {
-        const id = req.params.id
+        const id = req.params.id;
         const comments = await Comment.findAll({
             where: {
                 [Op.and]: [
@@ -242,6 +229,49 @@ exports.deleteComment = async (req, res, next) => {
             res.send(200);
         }
     } catch (err) {
-
+        console.error(err);
+        next(err);
     }
+};
+
+/* GET api/posts/filter */
+exports.filterPost = async (req, res, next) => {
+    const query = req.query;
+    const arr = [];
+    const newest = parseInt(query.newest);
+    delete query.newest
+
+    for ( key in query) {
+        const obj = {};
+        if (key === 'price' || key === 'when') {
+            const range = query[key].split('_');
+            if (key === 'when') {
+                range[0] = new Date(range[0]);
+                range[1] = new Date(range[1]);
+            };
+            obj[key] = {[Op.lte]: range[1], [Op.gte]: range[0]};
+            arr.push(obj);
+        } else if (key === 'available') {
+            arr.push({ available: { [Op.gte]: query[key] } });
+        } else {
+            obj[key] = query[key];
+            arr.push(obj);
+        }
+    }
+
+    const rides = await Ride.findAll({
+        where: {
+            [Op.and]: [...arr, { status: true }]
+        },
+        include: {
+            model: Post,
+            attributes: ['updatedAt', 'createdAt'],
+        },
+        order: !!newest ? [[Post, 'createdAt', 'DESC']] : [[Post, 'updateAt', 'ASC']]
+
+    // order: !!newest ? ['createdAt', 'DESC'] : [['createdAt', 'ASC']]
+    });
+
+
+    res.send(rides);
 };

@@ -13,6 +13,7 @@ const printInfo = function(req, res, next) {
 
 posts.get('/', postsCtrl.readFeed);
 posts.post('/', isLoggedIn, postsCtrl.write);
+posts.get('/filter', postsCtrl.filterPost);
 posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, postsCtrl.editPost);
 posts.delete('/:id', isLoggedIn, postsCtrl.deletePost);
