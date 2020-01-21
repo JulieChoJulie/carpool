@@ -17,6 +17,7 @@ posts.get('/filter', postsCtrl.filterPost);
 posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, postsCtrl.editPost);
 posts.delete('/:id', isLoggedIn, postsCtrl.deletePost);
+posts.delete('/:id/ride/:rideId', isLoggedIn, postsCtrl.deleteRide);
 
 posts.post('/:id/comments', isLoggedIn, postsCtrl.writeComment);
 posts.get('/:id/comments', postsCtrl.readComment);

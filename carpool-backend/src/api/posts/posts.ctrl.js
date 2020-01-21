@@ -129,18 +129,18 @@ exports.editPost = async (req, res, next) => {
     }
 };
 
-/* DELETE api/posts/:id */
+/* DELEE api/posts/:id */
 exports.deletePost = async (req, res, next) => {
     try {
         const post = await Post.update(
             { status: false },
             { where: {
                     [Op.and]: [
-                        {status: true},
-                        {id: req.params.id}
+                        { status: true },
+                        { id: req.params.id }
                     ]
                 }
-            }
+            },
         );
         /*
         post = [ affected row]
@@ -157,6 +157,73 @@ exports.deletePost = async (req, res, next) => {
         next(err);
     }
 };
+
+/* DELETE /:id/ride/:rideId */
+// exports.deleteRide = aysnc (req, res, next) => {
+//     return sequelize.transaction().then(function (t) {
+//         return Ride.update(
+//             { status: false },
+//             { where: {
+//                 [Op.and] : [
+//                     { state: true },
+//                     { id: req.params.rideId }
+//                 ]
+//             }}, {transaction: t}).then(function (ride) {
+//                 if (ride)
+//             return user.addSibling({
+//                 firstName: 'Lisa',
+//                 lastName: 'Simpson'
+//             }, {transction: t});
+//         }).then(function () {
+//             t.commit();
+//         }).catch(function (err) {
+//             t.rollback();
+//         });
+//     });
+// }
+exports.deleteRide = async (req, res, next) => {
+    const t = await sequelize.transaction();
+    try {
+        const ride = await Ride.update(
+            { status: false },
+            {
+                where: {
+                    [Op.and]: [
+                        { status: true },
+                        { id: req.params.rideId }
+                    ]
+                },
+                transaction: t
+            }
+        );
+        if (ride[0] === 0) {
+            res.sendStatus(404); // Not Found
+        } else {
+            // delete the post if rides are all deleted.
+            const rides = await Ride.findAll({
+                where: {
+                    [Op.and]: [
+                        { staxtus: true },
+                        { postId: req.params.id }
+                    ]
+                }
+            });
+            if (rides.length === 0) {
+                const post = await Post.update(
+                    { status: false },
+                    { where: { id: req.params.id } },
+                    { transaction: t }
+                );
+            }
+            await t.commit();
+            res.sendStatus(200);
+        }
+    } catch (err) {
+        await t.rollback();
+        console.error(err);
+        next(err);
+    }
+}
 
 /* GET api/posts/:id/comments */
 exports.readComment = async (req, res, next) => {
@@ -268,10 +335,7 @@ exports.filterPost = async (req, res, next) => {
             attributes: ['updatedAt', 'createdAt'],
         },
         order: !!newest ? [[Post, 'createdAt', 'DESC']] : [[Post, 'updateAt', 'ASC']]
-
-    // order: !!newest ? ['createdAt', 'DESC'] : [['createdAt', 'ASC']]
     });
-
 
     res.send(rides);
 };
