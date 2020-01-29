@@ -15,7 +15,7 @@ module.exports = (passport) =>  {
                 if (result) {
                     done(null, exUser);
                 } else {
-                    done(null, false, { message: 'The email and password you entered do not match.' });
+                    done(null, false, { message: 'notMatch' });
                 }
             } else {
                 done(null, false, { message: 'The email you entered does not exist.' });

@@ -42,8 +42,11 @@ exports.joinPost = async (req, res, next) => {
             cell,
             password: hash,
             provider: 'local'});
-        res.send(user);
+        res.send({"id": user.id, "username": user.username});
     } catch (err) {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            res.status(409).send();
+        }
         next(err);
     }
 }
@@ -55,8 +58,13 @@ exports.login = (req, res, next) => {
             console.error(authError);
             return next(authError);
         }
+        if (info && info.message) {
+            if (info.message === 'notMatch'){
+                return res.sendStatus(401); // unauthorized err
+            }
+        }
         if (!user) {
-            return res.sendStatus(401); //unauthorized err
+            return res.sendStatus(404); // not found
         }
         return req.login(user, (loginError) => {
             if (loginError) {
@@ -72,5 +80,6 @@ exports.login = (req, res, next) => {
 exports.logout = (req, res, next) => {
     req.logout();
     req.session.destroy();
-    res.sendStatus(200);
+    res.status(302);
+    res.redirect('/');
 };

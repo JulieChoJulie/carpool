@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => (
             unique: true,
         },
         cell: {
-            type:DataTypes.STRING(10),
+            type:DataTypes.STRING(25),
             allowNull: true,
         },
         username: {
