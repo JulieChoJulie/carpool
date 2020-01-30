@@ -28,10 +28,10 @@ posts.delete('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.deleteCo
 
 posts.get('/users/:userId', postsCtrl.readPostsByUser);
 
-// posts.get('/users/:userId/save', saveCtrl.getSave);
-// posts.post('/users/:userId/save/post/:postId', saveCtrl.postSave);
-// posts.delete('/users/:userId/save/post/:postId', saveCtrl.deleteSave);
+// posts.get('/save', saveCtrl.getSave);
+posts.post('/save/post/:id', saveCtrl.postSave);
+// posts.delete('/save/post/:id', isOwner, saveCtrl.deleteSave);
 //
-// posts.get('/users/:userId/trip', tripCtrl.getTrip);
+// posts.get('/trip', tripCtrl.getTrip);
 
 module.exports = posts;

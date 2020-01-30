@@ -16,25 +16,25 @@ db.Ride = require('./ride')(sequelize, Sequelize);
 
 // 1:N relationship
 const oneToN = (one, N) => {
-    one.hasMany(N);
-    N.belongsTo(one);
+    db[one].hasMany(db[N]);
+    db[N].belongsTo(db[one]);
 };
 
-oneToN(db.User, db.Post);
-oneToN(db.Post, db.Ride)
-oneToN(db.Post, db.Comment);
-oneToN(db.User, db.Comment);
+oneToN('User', 'Post');
+oneToN('Post', 'Ride')
+oneToN('Post', 'Comment');
+oneToN('User', 'Comment');
 
 // N:M relationship
 const NtoM = (N, M, through) => {
-    N.belongsToMany(M, { through: through });
-    M.belongsToMany(N, { through: through });
+    db[N].belongsToMany(db[M], { through: through, as: through + M });
+    db[M].belongsToMany(db[N], { through: through, as: through + N });
 
 };
 
 // make tables for trip and save;
-NtoM(db.User, db.Post, 'trip');
-NtoM(db.User, db.Post, 'save');
+NtoM('User', 'Post', 'Trip');
+NtoM('User', 'Post', 'Save');
 
 module.exports = db;
 

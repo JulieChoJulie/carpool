@@ -231,6 +231,16 @@ describe('POST-Logged In', function() {
             });
     });
 
+    /* POST /api/posts/save/post/:id */
+    it ('should return 200 on /api/posts/save/post/:id', function(done){
+        authenticatedUser
+            .post('/api/posts/save/post/' + id)
+            .send({})
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            })
+    })
 
     /* GET api/posts/filter  + query */
     /* GET api/posts/:id */
