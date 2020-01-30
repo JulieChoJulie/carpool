@@ -3,9 +3,9 @@ const chaiHttp = require('chai-http');
 const server = require('../../src');
 const should = chai.should();
 const request = require('supertest');
-const bcrypt = require('bcrypt');
 const truncate = require('../truncate');
 const postArray = require('../factories/ride');
+const createUser = require('../createUser');
 
 chai.use(require('chai-datetime'));
 chai.use(chaiHttp);
@@ -18,6 +18,7 @@ const testUser = {
 };
 
 let posts;
+const id = 1;
 
 describe('Post-Not Logged In', function() {
     before(async () => {
@@ -44,11 +45,13 @@ describe('Post-Not Logged In', function() {
                 // 'when' in res = str while 'when' in posts = obj(Time)
                 post[key] = timeToString(post[key]);
             } else {
-                if (key === 'rides') {
+                if (key === 'rides' || key === 'comments') {
                     // change time to string in posts[i].rides.when
                     const length = post[key].length;
+                    const secondKey = key === 'rides' ? 'when' : 'createdAt';
+
                     for (let j = 0; j < length; j++) {
-                        post[key][j].when = timeToString(post[key][j].when)
+                        post[key][j][secondKey] = timeToString(post[key][j][secondKey])
                     }
                 }
             }
@@ -87,7 +90,6 @@ describe('Post-Not Logged In', function() {
     /* GET api/posts/filter  + query */
 
     /* GET api/posts/:id */
-    const id = 1;
     it('should return the post with postId = id on /api/posts/:id GET', function(done) {
         chai.request(server)
             .get('/api/posts/' + id)
@@ -118,10 +120,11 @@ describe('Post-Not Logged In', function() {
             })
     });
 
-    /* GET api/posts/user/:userId */
-    it('should return posts written by user on /api/posts/user/:userId GET', function(done) {
+    /* GET api/posts/users/:userId */
+    // filter posts written by the specific user
+    it('should return posts written by user on /api/posts/users/:userId GET', function(done) {
         chai.request(server)
-            .get('/api/posts/user/' + id)
+            .get('/api/posts/users/' + id)
             .end(function (err, res) {
                 res.should.have.status(200);
 
@@ -166,7 +169,69 @@ describe('Post-Not Logged In', function() {
 
 });
 
+const authenticatedUser = request.agent(server);
+
 describe('POST-Logged In', function() {
+    before(async () => {
+        await truncate();
+        posts = await postArray();
+        await createUser(testUser);
+        await authenticatedUser
+            .post('/api/auth/login')
+            .send(testUser)
+            .expect(200)
+    });
+
+    /* DELETE api/posts/:id */
+    // test isOwner
+    // the logged in user is different from the writer.
+    it('should return 403 error on /api/posts/:id DELETE', function(done){
+        authenticatedUser
+            .delete('/api/posts/' + id)
+            .end(function(err, res) {
+                res.should.have.status(403);
+                done();
+            });
+    });
+
+    /* DELETE api/posts/:id */
+    // test isOwner
+    // the logged in user is different from the writer.
+    it('should return 403 error on /api/posts/:id DELETE', function(done){
+        authenticatedUser
+            .delete('/api/posts/' + id)
+            .end(function(err, res) {
+                res.should.have.status(403);
+                done();
+            });
+    });
+
+    /* DELETE /api/posts/:id/comments/:commentId  */
+    // test isOwner
+    // the logged in user is different from the writer.
+    it('should return 403 error on /api/posts/:id/comments/:commentId DELETE', function(done){
+        authenticatedUser
+            .delete('/api/posts/' + id + '/comments/' + id)
+            .end(function(err, res) {
+                res.should.have.status(403);
+                done();
+            });
+    });
+
+    /* POST api/posts/:id/comments */
+    it('should return 200 on /api/posts/:id/comments POST', function(done) {
+        authenticatedUser
+            .post('/api/posts/' + id + '/comments')
+            .send({
+                "content": "Please check your dm."
+            })
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done()
+            });
+    });
+
+
     /* GET api/posts/filter  + query */
     /* GET api/posts/:id */
     /* PUT api/posts/:id */

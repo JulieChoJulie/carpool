@@ -239,6 +239,7 @@ exports.deleteComment = async (req, res, next) => {
                     ]}
             }
         );
+        console.log(JSON.stringify(comment))
         if (comment[0] === 0) {
             res.status(404).send(); // Not Found
         } else {
@@ -289,10 +290,9 @@ exports.filterPost = async (req, res, next) => {
     res.send(rides);
 };
 
-/* GET api/posts/user/:userId */
+/* GET api/posts/users/:userId */
 exports.readPostsByUser = async (req, res, next) => {
     try {
-
         const posts = await Post.findAll(postFormat('userId', parseInt(req.params.userId)));
         if (posts.length > 0) {
             res.status(200);

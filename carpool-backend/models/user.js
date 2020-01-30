@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => (
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true
+        },
+        profile: {
+            type: DataTypes.STRING(100),
+            allowNull: true,
         }
     }, {
         timestamps: true,

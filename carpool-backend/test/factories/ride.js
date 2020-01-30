@@ -1,6 +1,7 @@
 const faker = require('faker');
 const models = require('../../models');
 const createPost = require('./post');
+const createComment = require('./comment');
 const { postFormat } = require('../../src/api/posts/helper');
 const { Post, User } = require('../../models');
 
@@ -45,6 +46,7 @@ module.exports = async () => {
         const post = await createPost();
         await models.Ride.create(await data(post.id));
         await models.Ride.create(await data(post.id));
+        await createComment(post.id);
         const postFormated = await Post.findOne(postFormat('id', post.id));
         arr.push(postFormated.toJSON());
     }

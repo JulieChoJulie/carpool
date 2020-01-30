@@ -3,8 +3,8 @@ const chaiHttp = require('chai-http');
 const server = require('../../src');
 const should = chai.should();
 const request = require('supertest');
-const bcrypt = require('bcrypt');
 const truncate = require('../truncate');
+const createUser = require('../createUser');
 
 chai.use(chaiHttp);
 
@@ -154,17 +154,6 @@ describe('Auth-Not Logged In', function() {
 
 });
 
-const createUser = async (testUser) => {
-    const { email, password, username, cell } = testUser;
-    const hash = await bcrypt.hash(password, 12);
-    return await Auth.create({
-        email,
-        username,
-        cell,
-        provider: 'local',
-        password: hash
-    });
-}
 
 const authenticatedUser = request.agent(server);
 

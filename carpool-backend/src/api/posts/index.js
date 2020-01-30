@@ -1,7 +1,9 @@
 const express = require('express');
 const posts = express.Router();
 const postsCtrl = require('./posts.ctrl');
-const { isLoggedIn, isNotLoggedIn } = require('../auth/middlewares');
+const saveCtrl = require('./save.ctrl');
+const tripCtrl = require('./trip.ctrl');
+const { isLoggedIn, isNotLoggedIn, isOwner } = require('../auth/middlewares');
 
 const printInfo = function(req, res, next) {
     res.json({
@@ -15,15 +17,21 @@ posts.get('/', postsCtrl.readFeed);
 posts.post('/', isLoggedIn, postsCtrl.write);
 posts.get('/filter', postsCtrl.filterPost);
 posts.get('/:id', postsCtrl.readPost);
-posts.put('/:id', isLoggedIn, postsCtrl.editPost);
-posts.delete('/:id', isLoggedIn, postsCtrl.deletePost);
-posts.delete('/:id/ride/:rideId', isLoggedIn, postsCtrl.deleteRide);
+posts.put('/:id', isLoggedIn, isOwner, postsCtrl.editPost);
+posts.delete('/:id', isLoggedIn, isOwner, postsCtrl.deletePost);
+posts.delete('/:id/ride/:rideId', isLoggedIn, isOwner, postsCtrl.deleteRide);
 
 posts.post('/:id/comments', isLoggedIn, postsCtrl.writeComment);
 posts.get('/:id/comments', postsCtrl.readComment);
-posts.put('/:id/comments/:commentId', isLoggedIn, postsCtrl.editComment);
-posts.delete('/:id/comments/:commentId', isLoggedIn, postsCtrl.deleteComment);
+posts.put('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.editComment);
+posts.delete('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.deleteComment);
 
-posts.get('/user/:userId', postsCtrl.readPostsByUser);
+posts.get('/users/:userId', postsCtrl.readPostsByUser);
+
+// posts.get('/users/:userId/save', saveCtrl.getSave);
+// posts.post('/users/:userId/save/post/:postId', saveCtrl.postSave);
+// posts.delete('/users/:userId/save/post/:postId', saveCtrl.deleteSave);
+//
+// posts.get('/users/:userId/trip', tripCtrl.getTrip);
 
 module.exports = posts;
