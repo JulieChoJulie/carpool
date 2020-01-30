@@ -1,11 +1,14 @@
 
 const map = require('lodash/map');
-const models = require('../models');
-module.exports = async function truncate() {
-    return await Promise.all(
-        map(Object.keys(models), (key) => {
-            if (['sequelize', 'Sequelize'].includes(key)) return null;
-            return models[key].destroy({ where: {}, force: true });
-        })
-    );
+const db = require('../models');
+
+module.exports = function truncate() {
+    return db.sequelize.query("SET FOREIGN_KEY_CHECKS = 0")
+        .then(function(result){
+            return db.sequelize.sync({force: true});
+        }).then(function(){
+        return db.sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
+    }).catch(function(err){
+        res.json({isError : true, status: err.message});
+    });
 }

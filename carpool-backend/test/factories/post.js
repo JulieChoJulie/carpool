@@ -1,5 +1,7 @@
 const faker = require('faker');
 const models = require('../../models');
+const createUser = require('./user');
+
 /**
  * Generate an object which container attributes needed
  * to successfully create a user instance.
@@ -8,14 +10,12 @@ const models = require('../../models');
  *
  * @return {Object}       An object to build the user from.
  */
+
 const data = async (props = {}) => {
+    const user = await createUser();
     const defaultProps = {
-        email: faker.internet.email(),
-        cell: faker.phone.phoneNumber(),
-        username: faker.internet.userName().slice(0,14),
-        password: faker.name.firstName(),
-        status: false,
-        provider: 'local',
+        status: true,
+        userId: user.id
     };
     return Object.assign({}, defaultProps, props);
 };
@@ -27,4 +27,4 @@ const data = async (props = {}) => {
  * @return {Object}       A user instance
  */
 module.exports = async (props = {}) =>
-    models.User.create(await data(props));
+    models.Post.create(await data(props));

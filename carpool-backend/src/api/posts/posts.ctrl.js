@@ -1,38 +1,7 @@
 const { Post, Comment, User, Ride } = require('../../../models');
 const { sequelize } = require('../../../models');
 const { Op, transaction } = require('sequelize');
-
-/* post format */
-const postFormat = (id) => {
-    const format = {
-        where: { status: true },
-        include: [
-            {
-                model: Comment,
-                where: { status: true },
-                attributes: ['content', 'createdAt', 'userId'],
-                include: {
-                    model: User,
-                    attributes: ['id', 'username']
-                },
-                order: [['createdAt', 'DESC']],
-                limit: 2
-            },
-            {
-                model: Ride,
-                where: { status: true }
-            },
-            {
-                model: User,
-                attributes: ['id', 'username']
-            }
-        ]
-    };
-    if(!!id) {
-        format.where = {[Op.and]: [{ id: id }, { status: true }] }
-    }
-    return format;
-};
+const { postFormat } = require('./helper');
 
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
@@ -82,7 +51,6 @@ exports.readPost = async (req, res, next) => {
     try {
         const post = await Post.findOne(postFormat(parseInt(req.params.id)));
         if (post === null) {
-            console.log('here')
             res.status(404); // Not Found
         }
         res.send(post);
@@ -150,6 +118,10 @@ exports.deletePost = async (req, res, next) => {
         if (post[0] === 0) {
             res.sendStatus(404);
         } else {
+            const rides = await Ride.update(
+                { state: false },
+                { where: { postId: req.params.id } }
+            );
             res.sendStatus(200);
         }
     } catch (err) {
@@ -158,29 +130,6 @@ exports.deletePost = async (req, res, next) => {
     }
 };
 
-/* DELETE /:id/ride/:rideId */
-// exports.deleteRide = aysnc (req, res, next) => {
-//     return sequelize.transaction().then(function (t) {
-//         return Ride.update(
-//             { status: false },
-//             { where: {
-//                 [Op.and] : [
-//                     { state: true },
-//                     { id: req.params.rideId }
-//                 ]
-//             }}, {transaction: t}).then(function (ride) {
-//                 if (ride)
-//             return user.addSibling({
-//                 firstName: 'Lisa',
-//                 lastName: 'Simpson'
-//             }, {transction: t});
-//         }).then(function () {
-//             t.commit();
-//         }).catch(function (err) {
-//             t.rollback();
-//         });
-//     });
-// }
 exports.deleteRide = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
