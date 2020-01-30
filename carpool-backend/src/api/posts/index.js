@@ -24,4 +24,6 @@ posts.get('/:id/comments', postsCtrl.readComment);
 posts.put('/:id/comments/:commentId', isLoggedIn, postsCtrl.editComment);
 posts.delete('/:id/comments/:commentId', isLoggedIn, postsCtrl.deleteComment);
 
+posts.get('/user/:userId', postsCtrl.readPostsByUser);
+
 module.exports = posts;

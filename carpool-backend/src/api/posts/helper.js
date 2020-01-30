@@ -2,7 +2,7 @@ const { Comment, User, Ride } = require('../../../models');
 const { Op } = require('sequelize');
 
 /* post format */
-exports.postFormat = (id) => {
+exports.postFormat = (field, value) => {
         const format = {
             where: { status: true },
             include: [
@@ -27,8 +27,10 @@ exports.postFormat = (id) => {
                 }
             ]
         };
-        if(!!id) {
-            format.where = {[Op.and]: [{ id: id }, { status: true }] }
+        const obj = {};
+        obj[field] = value;
+        if(!!field && !!value) {
+            format.where = {[Op.and]: [obj, { status: true }] }
         }
         return format;
     };

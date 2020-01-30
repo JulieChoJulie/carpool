@@ -52,9 +52,9 @@ describe('Post-Not Logged In', function() {
                     }
                 }
             }
-        })
+        });
         return post;
-    }
+    };
 
     /* GET api/posts/ */
     it('should get post feed on /api/posts GET', function(done) {
@@ -68,7 +68,7 @@ describe('Post-Not Logged In', function() {
 
                 const arr = posts.map(post => {
                     return postTimeToString(post);
-                })
+                });
                 res.body.should.deep.equal(arr);
                 done();
             })
@@ -98,7 +98,7 @@ describe('Post-Not Logged In', function() {
 
                 let post;
                 for (let el of posts) {
-                    if (el.id === 1) {
+                    if (el.id === id) {
                         post = el;
                         break;
                     }
@@ -106,7 +106,7 @@ describe('Post-Not Logged In', function() {
                 res.body.should.deep.equal(postTimeToString(post));
                 done();
             });
-    })
+    });
 
     /* GET api/posts/:id */
     it('should return status code 404 with postId is invalid on /api/posts/:id GET', function(done) {
@@ -117,6 +117,25 @@ describe('Post-Not Logged In', function() {
                 done();
             })
     });
+
+    /* GET api/posts/user/:userId */
+    it('should return posts written by user on /api/posts/user/:userId GET', function(done) {
+        chai.request(server)
+            .get('/api/posts/user/' + id)
+            .end(function (err, res) {
+                res.should.have.status(200);
+
+                const arr = posts.reduce((acc, post) => {
+                    if (post.userId === id) {
+                        acc.push(postTimeToString(post))
+                    }
+                    return acc;
+                }, []);
+
+                res.body.should.deep.equal(arr);
+                done();
+            })
+    })
 
     /* PUT api/posts/:id */
     // it('should return the edited post on /api/posts/:id PUT', function(done) {

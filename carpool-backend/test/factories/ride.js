@@ -45,7 +45,7 @@ module.exports = async () => {
         const post = await createPost();
         await models.Ride.create(await data(post.id));
         await models.Ride.create(await data(post.id));
-        const postFormated = await Post.findOne(postFormat(post.id));
+        const postFormated = await Post.findOne(postFormat('id', post.id));
         arr.push(postFormated.toJSON());
     }
     // return an array of posts

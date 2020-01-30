@@ -49,7 +49,7 @@ exports.write = async (req, res, next) => {
 /* GET api/posts/:id */
 exports.readPost = async (req, res, next) => {
     try {
-        const post = await Post.findOne(postFormat(parseInt(req.params.id)));
+        const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         if (post === null) {
             res.status(404); // Not Found
         }
@@ -89,7 +89,7 @@ exports.editPost = async (req, res, next) => {
                 return Ride.update(field, { where: { id: id } });
             });
         }));
-        const post = await Post.findOne(postFormat(parseInt(req.params.id)));
+        const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         res.json(post);
     } catch (err) {
         console.error(err);
@@ -288,3 +288,19 @@ exports.filterPost = async (req, res, next) => {
 
     res.send(rides);
 };
+
+/* GET api/posts/user/:userId */
+exports.readPostsByUser = async (req, res, next) => {
+    try {
+
+        const posts = await Post.findAll(postFormat('userId', parseInt(req.params.userId)));
+        if (posts.length > 0) {
+            res.status(200);
+            res.send(posts);
+        } else {
+            res.status(404); // Not Found
+        }
+    } catch (err) {
+        next(err);
+    }
+}
