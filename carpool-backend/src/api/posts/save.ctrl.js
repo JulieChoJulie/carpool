@@ -1,26 +1,42 @@
-// posts.get('/users/:userId/save', saveCtrl.getSave);
-// posts.post('/users/:userId/save/post/:postId', saveCtrl.postSave);
-// posts.delete('/users/:userId/save/post/:postId', saveCtrl.deleteSave);
-const { Post, User, Save } = require('../../../models');
+const { Post, User } = require('../../../models');
 const { postFormat } = require('./helper');
+const { Op } = require('sequelize');
 
 /* GET /api/posts/save */
 exports.getSave = async (req, res, next) => {
-    const user = await User.findOne({ where: { id: req.params.userId } });
-    const posts = user.getPosts(postFormat());
-
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        const posts = await user.getSavePosts();
+        res.send(posts);
+    } catch (err) {
+        next(err);
+    }
 }
 
 /* POST /api/posts/save/post/:id */
 exports.postSave = async (req, res, next) => {
     try {
-        console.log('***********')
         const user = await User.findOne({ where: { id: req.user.id } });
         const post = await Post.findOne({ where: { id: req.params.id } });
-        await user.addSavePost(post)
+        await user.addSavePosts(post)
         res.sendStatus(200);
     } catch (err) {
         next(err);
     }
+}
 
+/* DELETE /api/posts/save/post/:id */
+exports.deleteSave = async (req, res, next) => {
+    try{
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        // const save = await Save.findOne({ where:
+        //         { [Op.and]: [{ userId: req.user.id }, { postId: post.id }] }
+        // });
+        // await save.destroy();
+        const user = await User.findOne({ where: { id: req.user.id } });
+        await user.removeSavePosts(post);
+        res.sendStatus(200)
+    } catch (err) {
+        next(err);
+    }
 }

@@ -16,6 +16,11 @@ const printInfo = function(req, res, next) {
 posts.get('/', postsCtrl.readFeed);
 posts.post('/', isLoggedIn, postsCtrl.write);
 posts.get('/filter', postsCtrl.filterPost);
+
+posts.get('/save', isLoggedIn, saveCtrl.getSave);
+posts.post('/save/post/:id', isLoggedIn, saveCtrl.postSave);
+posts.delete('/save/post/:id', isLoggedIn, saveCtrl.deleteSave);
+
 posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, isOwner, postsCtrl.editPost);
 posts.delete('/:id', isLoggedIn, isOwner, postsCtrl.deletePost);
@@ -28,10 +33,6 @@ posts.delete('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.deleteCo
 
 posts.get('/users/:userId', postsCtrl.readPostsByUser);
 
-// posts.get('/save', saveCtrl.getSave);
-posts.post('/save/post/:id', saveCtrl.postSave);
-// posts.delete('/save/post/:id', isOwner, saveCtrl.deleteSave);
-//
-// posts.get('/trip', tripCtrl.getTrip);
+posts.get('/trip', isLoggedIn, tripCtrl.getTrip);
 
 module.exports = posts;

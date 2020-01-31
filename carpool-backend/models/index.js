@@ -27,8 +27,9 @@ oneToN('User', 'Comment');
 
 // N:M relationship
 const NtoM = (N, M, through) => {
-    db[N].belongsToMany(db[M], { through: through, as: through + M });
-    db[M].belongsToMany(db[N], { through: through, as: through + N });
+    // ex. as: SavePosts
+    db[N].belongsToMany(db[M], { through: through, as: through + M + 's' });
+    db[M].belongsToMany(db[N], { through: through, as: through + N + 's' });
 
 };
 
