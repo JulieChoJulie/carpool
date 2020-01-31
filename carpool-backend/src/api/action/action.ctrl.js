@@ -8,8 +8,15 @@ exports.joinRide = async (req, res, next) => {
         const user = await User.findOne({ where: { id: req.user.id } });
         const ride = await Ride.findOne({ where: { id: req.params.rideId } });
         const partner = await user.addPartnerRides(ride);
-        res.status(200);
-        res.send(partner);
+        console.log(partner);
+        if (partner === undefined) {
+            // the user already added the ride
+            res.sendStatus(409); // conflict
+        }
+        const seats = ride.seats;
+        const available = seats - partner.length;
+        await ride.update({ available: available } );
+        res.status(200).send(partner);
     } catch (err) {
         console.error(err);
         next(err);
@@ -22,6 +29,14 @@ exports.cancelRide = async (req, res, next) => {
         const user = await User.findOne({ where: { id: req.user.id } });
         const ride = await Ride.findOne({ where: { id: req.params.rideId } });
         const partner = await user.removePartnerRides(ride);
+        console.log(partner)
+        if (partner === 0) {
+            // the user already cancelled the ride
+            res.sendStatus(409); // conflict
+        }
+        const available = ride.available + 1;
+        await ride.update({ available: available } );
+        res.sendStatus(200);
     } catch (err) {
         next(err);
     }
