@@ -1,11 +1,11 @@
 import React from 'react';
 
-const SavePage = () => {
+const Button = () => {
     return (
         <div>
-            SavePage
+            
         </div>
     );
 };
 
-export default SavePage;
+export default Button;
