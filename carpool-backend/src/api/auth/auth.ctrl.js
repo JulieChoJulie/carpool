@@ -45,7 +45,7 @@ exports.joinPost = async (req, res, next) => {
         res.send({"id": user.id, "username": user.username});
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
-            res.status(409).send();
+            res.sendStatus(409);
         }
         next(err);
     }
@@ -80,6 +80,5 @@ exports.login = (req, res, next) => {
 exports.logout = (req, res, next) => {
     req.logout();
     req.session.destroy();
-    res.status(302);
-    res.redirect('/');
+    res.status(302).redirect('/');
 };

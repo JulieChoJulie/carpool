@@ -51,9 +51,9 @@ exports.readPost = async (req, res, next) => {
     try {
         const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         if (post === null) {
-            res.status(404); // Not Found
+            res.sendStatus(404); // Not Found
         }
-        res.send(post);
+        res.status(200).send(post);
     } catch (err) {
         console.error(err);
         next(err);
@@ -81,9 +81,9 @@ exports.editPost = async (req, res, next) => {
                 if (!!field.seats) {
                     const exRide = await Ride.findOne({ where: { id: id } });
                     if (exRide === null) {
-                        return res.status(404); // Not Found
+                        return res.sendStatus(404); // Not Found
                     } else if (exRide.available > field.seats) {
-                        return res.status(409); // conflict
+                        return res.sendStatus(409); // conflict
                     }
                 }
                 return Ride.update(field, { where: { id: id } });
@@ -187,9 +187,9 @@ exports.readComment = async (req, res, next) => {
             }
         });
         if (comments.length > 0) {
-            res.send(comments);
+            res.status(200).send(comments);
         } else {
-            res.status(404); // Not Found
+            res.sendStatus(404); // Not Found
         }
     } catch (err) {
         console.error(err);
@@ -218,7 +218,7 @@ exports.editComment = async (req, res, next) => {
     try {
         const comment = await Comment.update({ content: req.body.content },{ where: { id: req.params.commentId } });
         if (comment[0] !== 0) {
-            res.send(200);
+            res.sendStatus(200);
         } else {
             res.status(404).send(); // Not Found
         }
@@ -243,7 +243,7 @@ exports.deleteComment = async (req, res, next) => {
         if (comment[0] === 0) {
             res.status(404).send(); // Not Found
         } else {
-            res.send(200);
+            res.sendStatus(200);
         }
     } catch (err) {
         console.error(err);
@@ -287,7 +287,7 @@ exports.filterPost = async (req, res, next) => {
         order: !!newest ? [[Post, 'createdAt', 'DESC']] : [[Post, 'updateAt', 'ASC']]
     });
 
-    res.send(rides);
+    res.status(200).send(rides);
 };
 
 /* GET api/posts/users/:userId */
@@ -295,10 +295,9 @@ exports.readPostsByUser = async (req, res, next) => {
     try {
         const posts = await Post.findAll(postFormat('userId', parseInt(req.params.userId)));
         if (posts.length > 0) {
-            res.status(200);
-            res.send(posts);
+            res.status(200).send(posts);
         } else {
-            res.status(404); // Not Found
+            res.sendStatus(404); // Not Found
         }
     } catch (err) {
         next(err);
