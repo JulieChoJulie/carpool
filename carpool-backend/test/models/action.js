@@ -35,7 +35,6 @@ describe('Action-Logged In', function() {
             .post('/api/action/ride/' + id + '/add')
             .send({})
             .end(function(err, res) {
-                console.log("error:" +  err)
                 res.should.have.status(200);
                 res.body.should.be.an('array');
                 res.body[0].should.have.property('userId');
@@ -72,7 +71,7 @@ describe('Action-Logged In', function() {
             })
     });
 
-    /* DELETE /api/posts/save/post/:id */
+    /* DELETE /api/action/save/post/:id */
     it('should return 200 on /api/action/save/post/:id DELETE', function(done) {
         authenticatedUser
             .delete('/api/action/save/post/' + id)

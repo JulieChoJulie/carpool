@@ -1,4 +1,3 @@
-
 const map = require('lodash/map');
 const db = require('../models');
 
@@ -9,6 +8,6 @@ module.exports = function truncate() {
         }).then(function(){
         return db.sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
     }).catch(function(err){
-        res.json({isError : true, status: err.message});
+        return {isError : true, status: err.message};
     });
 }
