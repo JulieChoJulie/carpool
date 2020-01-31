@@ -3,20 +3,12 @@ const posts = express.Router();
 const postsCtrl = require('./posts.ctrl');
 const saveCtrl = require('./save.ctrl');
 const tripCtrl = require('./trip.ctrl');
-const { isLoggedIn, isNotLoggedIn, isOwner } = require('../auth/middlewares');
-
-const printInfo = function(req, res, next) {
-    res.json({
-        method: req.method,
-        path: req.path,
-        params: req.params
-    });
-};
+const { isLoggedIn, isNotLoggedIn, isOwner } = require('../middlewares');
 
 posts.get('/', postsCtrl.readFeed);
 posts.post('/', isLoggedIn, postsCtrl.write);
 posts.get('/filter', postsCtrl.filterPost);
-
+posts.get('/trip', isLoggedIn, tripCtrl.getTrip);
 posts.get('/save', isLoggedIn, saveCtrl.getSave);
 posts.post('/save/post/:id', isLoggedIn, saveCtrl.postSave);
 posts.delete('/save/post/:id', isLoggedIn, saveCtrl.deleteSave);
@@ -32,7 +24,5 @@ posts.put('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.editComment
 posts.delete('/:id/comments/:commentId', isLoggedIn, isOwner, postsCtrl.deleteComment);
 
 posts.get('/users/:userId', postsCtrl.readPostsByUser);
-
-posts.get('/trip', isLoggedIn, tripCtrl.getTrip);
 
 module.exports = posts;

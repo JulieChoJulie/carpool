@@ -29,10 +29,6 @@ exports.postSave = async (req, res, next) => {
 exports.deleteSave = async (req, res, next) => {
     try{
         const post = await Post.findOne({ where: { id: req.params.id } });
-        // const save = await Save.findOne({ where:
-        //         { [Op.and]: [{ userId: req.user.id }, { postId: post.id }] }
-        // });
-        // await save.destroy();
         const user = await User.findOne({ where: { id: req.user.id } });
         await user.removeSavePosts(post);
         res.sendStatus(200)

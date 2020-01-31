@@ -7,7 +7,6 @@ const truncate = require('../truncate');
 const postArray = require('../factories/ride');
 const createUser = require('../createUser');
 
-chai.use(require('chai-datetime'));
 chai.use(chaiHttp);
 
 const testUser = {
@@ -263,6 +262,7 @@ describe('POST-Logged In', function() {
             .delete('/api/posts/save/post/' + id)
             .end(function(err, res) {
                 res.should.have.status(200);
+                done();
             })
     })
 

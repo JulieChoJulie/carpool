@@ -1,7 +1,7 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { User } = require('../../../models');
-const { serialize } = require('./middlewares');
+const { serialize } = require('../middlewares');
 
 /* GET api/auth/profile */
 exports.profile = (req, res) => {
