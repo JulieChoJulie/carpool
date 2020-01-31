@@ -1,17 +1,11 @@
 const express = require('express');
 const posts = express.Router();
 const postsCtrl = require('./posts.ctrl');
-const saveCtrl = require('./save.ctrl');
-const tripCtrl = require('./trip.ctrl');
 const { isLoggedIn, isNotLoggedIn, isOwner } = require('../middlewares');
 
 posts.get('/', postsCtrl.readFeed);
 posts.post('/', isLoggedIn, postsCtrl.write);
 posts.get('/filter', postsCtrl.filterPost);
-posts.get('/trip', isLoggedIn, tripCtrl.getTrip);
-posts.get('/save', isLoggedIn, saveCtrl.getSave);
-posts.post('/save/post/:id', isLoggedIn, saveCtrl.postSave);
-posts.delete('/save/post/:id', isLoggedIn, saveCtrl.deleteSave);
 
 posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, isOwner, postsCtrl.editPost);

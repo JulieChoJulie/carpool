@@ -43,5 +43,43 @@ describe('Action-Logged In', function() {
                 res.body[0].rideId.should.equal(id);
                 done();
             })
+    });
+
+
+    /* POST /api/action/save/post/:id */
+    it ('should return 200 on /api/action/save/post/:id POST', function(done){
+        authenticatedUser
+            .post('/api/action/save/post/' + id)
+            .send({})
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            })
     })
+
+    /* GET /api/action/save */
+    it ('should return posts on /api/action/save GET', function(done) {
+        authenticatedUser
+            .get('/api/action/save')
+            .send({})
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('array');
+                res.body.should.have.lengthOf(1);
+                res.body[0].should.have.property('id');
+                res.body[0].id.should.equal(1);
+                done();
+            })
+    });
+
+    /* DELETE /api/posts/save/post/:id */
+    it('should return 200 on /api/action/save/post/:id DELETE', function(done) {
+        authenticatedUser
+            .delete('/api/action/save/post/' + id)
+            .end(function(err, res) {
+                res.should.have.status(200);
+                done();
+            })
+    })
+
 });

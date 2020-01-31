@@ -229,42 +229,42 @@ describe('POST-Logged In', function() {
                 done()
             });
     });
-
-    /* POST /api/posts/save/post/:id */
-    it ('should return 200 on /api/posts/save/post/:id POST', function(done){
-        authenticatedUser
-            .post('/api/posts/save/post/' + id)
-            .send({})
-            .end(function(err, res) {
-                res.should.have.status(200);
-                done();
-            })
-    })
-
-    /* GET /api/posts/save */
-    it ('should return posts on /api/posts/save GET', function(done) {
-        authenticatedUser
-            .get('/api/posts/save')
-            .send({})
-            .end(function(err, res) {
-                res.should.have.status(200);
-                res.body.should.be.an('array');
-                res.body.should.have.lengthOf(1);
-                res.body[0].should.have.property('id');
-                res.body[0].id.should.equal(1);
-                done();
-            })
-    });
-
-    /* DELETE /api/posts/save/post/:id */
-    it('should return 200 on /api/posts/save/post/:id DELETE', function(done) {
-        authenticatedUser
-            .delete('/api/posts/save/post/' + id)
-            .end(function(err, res) {
-                res.should.have.status(200);
-                done();
-            })
-    })
+    //
+    // /* POST /api/posts/save/post/:id */
+    // it ('should return 200 on /api/posts/save/post/:id POST', function(done){
+    //     authenticatedUser
+    //         .post('/api/posts/save/post/' + id)
+    //         .send({})
+    //         .end(function(err, res) {
+    //             res.should.have.status(200);
+    //             done();
+    //         })
+    // })
+    //
+    // /* GET /api/posts/save */
+    // it ('should return posts on /api/posts/save GET', function(done) {
+    //     authenticatedUser
+    //         .get('/api/posts/save')
+    //         .send({})
+    //         .end(function(err, res) {
+    //             res.should.have.status(200);
+    //             res.body.should.be.an('array');
+    //             res.body.should.have.lengthOf(1);
+    //             res.body[0].should.have.property('id');
+    //             res.body[0].id.should.equal(1);
+    //             done();
+    //         })
+    // });
+    //
+    // /* DELETE /api/posts/save/post/:id */
+    // it('should return 200 on /api/posts/save/post/:id DELETE', function(done) {
+    //     authenticatedUser
+    //         .delete('/api/posts/save/post/' + id)
+    //         .end(function(err, res) {
+    //             res.should.have.status(200);
+    //             done();
+    //         })
+    // })
 
     /* GET api/posts/filter  + query */
     /* GET api/posts/:id */
