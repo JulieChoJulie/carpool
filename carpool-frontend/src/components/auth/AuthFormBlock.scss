@@ -1,0 +1,40 @@
+@import '../../styles/utils';
+
+.AuthFormBlock {
+  h3 {
+    margin: 0;
+    color: $black;
+    padding-bottom: 1rem;
+  }
+}
+
+.Input {
+  font-size: 0.6rem;
+  background: $lightBeige;
+  border: none;
+  border-bottom: 1px solid $lightBlue;
+  padding-bottom: 0.5rem;
+  outline: none;
+  width: 100%;
+  color: $lightBlue;
+  &:focus {
+    color: $black;
+    border-bottom: 1px solid $black;
+  }
+  & + & {
+    margin-top: 1rem;
+  }
+}
+
+.Footer {
+  margin-top: 2rem;
+  text-align: right;
+  a {
+    color: $oc-gray-5;
+    text-decoration: underline;
+    &:hover {
+      color: $black;
+    }
+  }
+  font-size: 0.8rem;
+}

@@ -1,10 +1,14 @@
 import React from 'react';
 import './Button.scss';
+import classNames from 'classnames';
 
-const Button = (props) => {
+const Button = ({ color, fullWidth, children}) => {
     return (
         <div>
-            <button className={`Button ${props.color}`}>{props.children}</button>
+            <button className={
+                classNames('Button', color , { fullWidth } ) } >
+                { children }
+            </button>
         </div>
     );
 };

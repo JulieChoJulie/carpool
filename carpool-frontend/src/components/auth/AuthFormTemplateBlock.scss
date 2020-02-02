@@ -1,0 +1,33 @@
+@import '../../styles/utils';
+
+.AuthFormTemplateBlock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: $lightBlue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Box {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  margin: 1rem;
+  background: $lightBeige;
+  border-radius: 2px;
+  color: $lightBlue;
+}
+
+.Logo {
+  display: block;
+  padding-bottom: 2rem;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: $burgundy;
+}
