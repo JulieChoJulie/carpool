@@ -1,0 +1,20 @@
+@import '../../styles/utils';
+
+.Button {
+  @include button();
+  &.white {
+    color: $burgundy;
+    background: $lightBeige;
+    &:hover {
+      background: $lightBlue;
+    }
+  }
+
+  &.burgundy {
+    color: $lightBeige;
+    background: $burgundy;
+    &:hover {
+      background: $lightBrown;
+    }
+  }
+}

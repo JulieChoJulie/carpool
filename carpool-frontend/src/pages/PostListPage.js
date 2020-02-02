@@ -1,9 +1,11 @@
 import React from 'react';
+import Button from '../components/common/Button';
 
 const PostListPage = () => {
     return (
         <div>
-            PostListPage
+            PageList
+            <Button color="burgundy">Button</Button>
         </div>
     );
 };

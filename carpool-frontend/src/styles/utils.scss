@@ -1,0 +1,17 @@
+// color
+$burgundy: #6c282f;
+$lightBrown: #9a5762;
+$lightBeige: #f5f4f2;
+$lightBlue: #ccd5dc;
+$black: #20292f;
+
+// mixin
+@mixin button() {
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.25rem 1rem;
+  outline: none;
+  cursor: pointer;
+}
