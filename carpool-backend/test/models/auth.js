@@ -115,7 +115,7 @@ describe('Auth-Not Logged In', function() {
         chai.request(server)
             .post('/api/auth/login')
             .send({
-                "email": "h32cho@gmail.com",
+                "username": "Julie",
                 "password": "h32cho"
             })
             .end(function(err, res) {
@@ -129,7 +129,7 @@ describe('Auth-Not Logged In', function() {
         chai.request(server)
             .post('/api/auth/login')
             .send({
-                "email": "uniqueAddress@gmail.com",
+                "username": "julllllllll",
                 "password": "h32cho"
             })
             .end(function(err, res) {
@@ -143,7 +143,7 @@ describe('Auth-Not Logged In', function() {
         chai.request(server)
             .post('/api/auth/login')
             .send({
-                "email": "h32cho@gmail.com",
+                "username": "Julie",
                 "password": "wrongPassword"
             })
             .end(function(err, res) {
