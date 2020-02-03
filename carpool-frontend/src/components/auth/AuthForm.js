@@ -8,16 +8,18 @@ const text = {
     signup: 'SIGN UP'
 }
 
-const AuthForm = ({ type }) => {
+const AuthForm = ({ type, onChange, onSubmit, form }) => {
     return (
         <div className="AuthFormBlock">
             <h3>{text[type]}</h3>
-            <form>
+            <form onSubmit={onSubmit}>
                 <input
                     className="Input"
                     placeholder="USERNAME"
                     name="username"
                     auto-complete="username"
+                    onChange={onChange}
+                    value={form.username}
                 />
                 <input
                     className="Input"
@@ -25,6 +27,8 @@ const AuthForm = ({ type }) => {
                     type="password"
                     name="password"
                     auto-complete="new-password"
+                    onChange={onChange}
+                    value={form.password}
                 />
                 { type === 'signup' && (
                     <input
@@ -33,6 +37,8 @@ const AuthForm = ({ type }) => {
                         name="passwordConfirm"
                         type="pasword"
                         auto-complete="new-password"
+                        onChange={onChange}
+                        value={form.passwordConfirm}
                     />
                 )}
                 <Button color="burgundy" fullWidth>{text[type]}</Button>
