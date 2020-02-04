@@ -6,11 +6,11 @@
     color: $black;
     padding-bottom: 1rem;
   }
-  div {
-    &.subForm {
-      display: flex;
-      flex-wrap: nowrap;
-    }
+  .error {
+    color: $burgundy;
+    text-align: center;
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
   }
 }
 

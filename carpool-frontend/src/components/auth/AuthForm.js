@@ -6,9 +6,9 @@ import Button from '../common/Button';
 const text = {
     login: 'LOG IN',
     signup: 'SIGN UP'
-}
+};
 
-const AuthForm = ({ type, onChange, onSubmit, form, onClick }) => {
+const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur }) => {
     return (
         <div className="AuthFormBlock">
             <h3>{text[type]}</h3>
@@ -21,11 +21,13 @@ const AuthForm = ({ type, onChange, onSubmit, form, onClick }) => {
                         auto-complete="username"
                         onChange={onChange}
                         value={form.username}
+                        onBlur={onBlur}
                     />
-                    { type === 'signup' && (
-                        <Button check color="burgundy" button onClick={onClick}>Check</Button>
+                    { error.username && (
+                        <div className="error">Error!!!</div>
                     )}
                 </div>
+
                 { type === 'signup' && (
                     <>
                         <div className="subForm">
@@ -37,9 +39,10 @@ const AuthForm = ({ type, onChange, onSubmit, form, onClick }) => {
                                 auto-complete="email"
                                 onChange={onChange}
                                 value={form.email}
+                                onBlur={onBlur}
                             />
-                            { type === 'signup' && (
-                                <Button color="burgundy" check button onClick={onClick}>Check</Button>
+                            { error.email && (
+                                <div className="error">ERROR</div>
                             )}
                         </div>
                             <input

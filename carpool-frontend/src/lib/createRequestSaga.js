@@ -20,9 +20,15 @@ export default function createRequestSaga(type, request) {
                 payload: response.data,
             });
         } catch (e) {
+            const error = {};
+            if (e.config.data) {
+                error.data = JSON.parse(e.config.data);
+            }
+            const status =parseInt(e.message.slice(-3));
+            error.status = status;
             yield put({
                 type: FAILURE,
-                payload: e,
+                payload: error,
                 error: true
             })
 

@@ -11,6 +11,7 @@ const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
 
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] = createRequestActionTypes('auth/SIGNUP');
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
+const [UNIQUE, UNIQUE_SUCCESS, UNIQUE_FAILURE] = createRequestActionTypes('auth/UNIQUE');
 
 export const changeField = createAction(
     CHANGE_FIELD,
@@ -31,6 +32,14 @@ export const signup = createAction(
     })
 );
 
+export const unique = createAction(
+    UNIQUE,
+    ({ type, value }) => ({
+        type,
+        value
+    })
+)
+
 export const login = createAction(
     LOGIN,
     ({ username, password}) => ({
@@ -41,10 +50,12 @@ export const login = createAction(
 // create Saga
 const signupSaga = createRequestSaga(SIGNUP, authAPI.signup);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const uniqueSaga = createRequestSaga(UNIQUE, authAPI.uniqueCheck);
 
 export function* authSaga() {
     yield takeLatest(SIGNUP, signupSaga);
     yield takeLatest(LOGIN, loginSaga);
+    yield takeLatest(UNIQUE, uniqueSaga);
 }
 
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
@@ -61,16 +72,24 @@ const initialState = {
         username: '',
         password: ''
     },
+    unique: {
+        type: '',
+        value: ''
+    },
     auth: null,
     authError: null,
+    error: {
+        username: false,
+        email: false,
+    }
 };
 
 const auth = handleActions(
     {
         [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
-        produce(state, draft => {
-            draft[form][key] = value;
-        }),
+            produce(state, draft => {
+                draft[form][key] = value;
+            }),
         [INITIALIZE_FORM]: (state, { payload: form }) => ({
             ...state,
             [form]: initialState[form],
@@ -94,7 +113,21 @@ const auth = handleActions(
             ...state,
             auth: null,
             authError: error
-        })
+        }),
+        [UNIQUE_SUCCESS]: (state, { payload: auth }) => ({
+            ...state,
+            auth,
+            authError: null
+        }),
+        [UNIQUE_FAILURE]: (state, { payload: error }) => {
+            if (error.data.value === '') {
+                return produce(state, draft => {
+                    draft.error[error.data.type] = false;
+                })
+            }
+            return produce(state, draft => {
+                draft.error[error.data.type] = true;
+            })},
     },
     initialState
 );
