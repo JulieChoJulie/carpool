@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm } from "../../modules/auth";
+import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 
 const LoginForm = () => {
-    console.log('here')
     const dispatch = useDispatch();
-    const { form } = useSelector(({ auth }) => ({
-        form: auth.login
+    const { form, auth, authError } = useSelector(({ auth }) => ({
+        form: auth.login,
+        auth: auth.auth,
+        authError: auth.authError
     }));
 
     const onChange = e => {
@@ -23,13 +24,24 @@ const LoginForm = () => {
 
     const onSubmit = e => {
         e.preventDefault();
-        // TBA
+        const { username, password } = form;
+        dispatch(login({ username, password }));
     };
 
     // initialize the form when the comp is first rendered;
     useEffect(() => {
         dispatch(initializeForm('login'));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (authError) {
+            console.log(authError);
+            return;
+        }
+        if (auth) {
+            console.log(auth);
+        }
+    }, [auth, authError])
 
     return (
         <AuthForm

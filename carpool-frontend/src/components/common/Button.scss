@@ -2,6 +2,7 @@
 
 .Button {
   @include button();
+
   &.white {
     color: $burgundy;
     background: $lightBeige;
@@ -22,5 +23,13 @@
     margin-top: 1rem;
     width: 100%;
     font-size: 1.125rem;
+  }
+
+  &.check {
+    position: relative;
+    bottom: 0.5rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
   }
 }

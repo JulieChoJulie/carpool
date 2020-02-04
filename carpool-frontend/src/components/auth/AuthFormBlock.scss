@@ -6,17 +6,29 @@
     color: $black;
     padding-bottom: 1rem;
   }
+  div {
+    &.subForm {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+  }
 }
 
-.Input {
+.subForm {
+  & + & {
+    margin-top: 1rem;
+  }
+}
+
+.input {
+  height: 1rem;
   font-size: 0.6rem;
-  background: $lightBeige;
   border: none;
   border-bottom: 1px solid $lightBlue;
   padding-bottom: 0.5rem;
   outline: none;
+  color: $oc-gray-7;
   width: 100%;
-  color: $lightBlue;
   &:focus {
     color: $black;
     border-bottom: 1px solid $black;
@@ -26,7 +38,7 @@
   }
 }
 
-.Footer {
+.footer {
   margin-top: 2rem;
   text-align: right;
   a {

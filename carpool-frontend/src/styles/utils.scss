@@ -11,9 +11,9 @@ $black: #20292f;
 @mixin button() {
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.6rem;
   font-weight: bold;
-  padding: 0.25rem 1rem;
+  padding: 0.1rem 0.25rem;
   outline: none;
   cursor: pointer;
 }
