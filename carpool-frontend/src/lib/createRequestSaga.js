@@ -15,9 +15,12 @@ export default function createRequestSaga(type, request) {
         yield put(startLoading(type)); // start loading
         try {
             const response = yield call(request, action.payload);
+            const res = {};
+            res.data = response.data;
+            res.payload = action.payload;
             yield put({
                 type: SUCCESS,
-                payload: response.data,
+                payload: res,
             });
         } catch (e) {
             const error = {};

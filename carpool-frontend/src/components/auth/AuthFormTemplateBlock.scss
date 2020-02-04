@@ -21,6 +21,13 @@
   border: 0.1rem solid $burgundy;
   border-radius: 2px;
   color: $lightBlue;
+  @include media('>767px') {
+    width: 50%;
+  }
+  @include media('<370px') {
+    height: 95%;
+    width: 90%;
+  }
 }
 
 .Logo {

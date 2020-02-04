@@ -2,6 +2,8 @@ import React from 'react';
 import './AuthFormBlock.scss';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
+import Input from './Input';
+
 
 const text = {
     login: 'LOG IN',
@@ -13,66 +15,48 @@ const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur }) => {
         <div className="AuthFormBlock">
             <h3>{text[type]}</h3>
             <form onSubmit={onSubmit}>
-                <div className="subForm">
-                    <input
-                        className="input"
-                        placeholder="USERNAME"
-                        name="username"
-                        auto-complete="username"
-                        onChange={onChange}
-                        value={form.username}
-                        onBlur={onBlur}
-                    />
-                    { error.username && (
-                        <div className="error">Error!!!</div>
-                    )}
-                </div>
+                <Input
+                    onBlur={onBlur}
+                    name="username"
+                    type={type}
+                    onChange={onChange}
+                    form={form}
+                    error={error}
+                />
 
                 { type === 'signup' && (
                     <>
-                        <div className="subForm">
-                            <input
-                                className="input"
-                                placeholder="EMAIL"
-                                name="email"
-                                type="email"
-                                auto-complete="email"
-                                onChange={onChange}
-                                value={form.email}
-                                onBlur={onBlur}
-                            />
-                            { error.email && (
-                                <div className="error">ERROR</div>
-                            )}
-                        </div>
-                            <input
-                                className="input subForm"
-                                placeholder="CELL"
-                                name="cell"
-                                type="tel"
-                                onChange={onChange}
-                                value={form.cell}
-                            />
+                        <Input
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            type={type}
+                            name="email"
+                            error={error}
+                            form={form}
+                        />
+                        <Input
+                            onChange={onChange}
+                            type={type}
+                            name="cell"
+                            error={error}
+                            form={form}
+                        />
                     </>
                 )}
-                    <input
-                        className="input subForm"
-                        placeholder="PASSWORD"
-                        type="password"
-                        name="password"
-                        auto-complete="new-password"
-                        onChange={onChange}
-                        value={form.password}
-                    />
-
-                <input
-                    className="input subForm"
-                    placeholder="CONFIRM PASSWORD"
-                    name="passwordConfirm"
-                    type="password"
-                    auto-complete="new-password"
+                <Input
                     onChange={onChange}
-                    value={form.passwordConfirm}
+                    type={type}
+                    name="password"
+                    error={error}
+                    form={form}
+                />
+                <Input
+                    onChange={onChange}
+                    type={type}
+                    name="passwordConfirm"
+                    error={error}
+                    form={form}
+                    onBlur={onBlur}
                 />
                 <Button color="burgundy" fullWidth>{text[type]}</Button>
             </form>

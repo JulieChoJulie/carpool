@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm, signup, unique } from "../../modules/auth";
+import { changeField, initializeForm, signup, unique, passwordCheck } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 
 const SignupForm = () => {
@@ -25,20 +25,31 @@ const SignupForm = () => {
 
     const onBlur = e => {
         const { name, value } = e.target;
-        if (value !== '' || error[name] === true && value === '') {
-            dispatch(
-                unique({
-                    type: name,
-                    value: form[name]
-                })
+        const usernameLength = name === 'username' && value.length > 4;
+        if (name === 'passwordConfirm') {
+            const result = form.password === form.passwordConfirm;
+            dispatch (
+                passwordCheck(!result)
             )
+        } else if (value !== '' || (error[name] === true && value === '')) {
+            if (name !== 'username' || usernameLength) {
+                dispatch(
+                    unique({
+                        type: name,
+                        value: form[name]
+                    })
+                )
+            }
         }
-    }
+    };
+
 
     const onSubmit = e => {
         e.preventDefault();
         const { username, password, cell, email } = form;
-        dispatch(signup({ username, cell, email, password }));
+        if (!error.username && !error.email && !error.passwordConfirm && username.length > 4) {
+            dispatch(signup({username, cell, email, password}));
+        }
     };
 
     // initialize the form when the comp is first rendered;

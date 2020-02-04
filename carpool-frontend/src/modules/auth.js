@@ -12,6 +12,7 @@ const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] = createRequestActionTypes('auth/SIGNUP');
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
 const [UNIQUE, UNIQUE_SUCCESS, UNIQUE_FAILURE] = createRequestActionTypes('auth/UNIQUE');
+const PASSWORD_CHECK = 'auth/PASSWORD_CHECK';
 
 export const changeField = createAction(
     CHANGE_FIELD,
@@ -40,12 +41,15 @@ export const unique = createAction(
     })
 )
 
+
 export const login = createAction(
     LOGIN,
     ({ username, password}) => ({
         username, password
     })
 );
+
+export const passwordCheck = createAction(PASSWORD_CHECK, boolean => boolean);
 
 // create Saga
 const signupSaga = createRequestSaga(SIGNUP, authAPI.signup);
@@ -79,8 +83,9 @@ const initialState = {
     auth: null,
     authError: null,
     error: {
-        username: false,
-        email: false,
+        username: null,
+        email: null,
+        passwordConfirm: null,
     }
 };
 
@@ -97,7 +102,7 @@ const auth = handleActions(
         [SIGNUP_SUCCESS]: (state, { payload: auth }) => ({
             ...state,
             authError: null,
-            auth,
+            auth: auth.data,
         }),
         [SIGNUP_FAILURE]: (state, { payload: error }) => ({
             ...state,
@@ -106,7 +111,7 @@ const auth = handleActions(
         }),
         [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
             ...state,
-            auth,
+            auth: auth.data,
             authError: null
         }),
         [LOGIN_FAILURE]: (state, { payload: error }) => ({
@@ -114,11 +119,13 @@ const auth = handleActions(
             auth: null,
             authError: error
         }),
-        [UNIQUE_SUCCESS]: (state, { payload: auth }) => ({
-            ...state,
-            auth,
-            authError: null
-        }),
+        [UNIQUE_SUCCESS]: (state, { payload: auth }) => {
+            return produce(state, draft => {
+                draft.auth = auth.data;
+                draft.authError = null;
+                draft.error[auth.payload.type] = false;
+            })
+        },
         [UNIQUE_FAILURE]: (state, { payload: error }) => {
             if (error.data.value === '') {
                 return produce(state, draft => {
@@ -128,6 +135,11 @@ const auth = handleActions(
             return produce(state, draft => {
                 draft.error[error.data.type] = true;
             })},
+        [PASSWORD_CHECK]: (state, action) => {
+            return produce(state, draft => {
+                draft.error.passwordConfirm = action.payload;
+            })
+        }
     },
     initialState
 );

@@ -6,36 +6,6 @@
     color: $black;
     padding-bottom: 1rem;
   }
-  .error {
-    color: $burgundy;
-    text-align: center;
-    font-size: 0.7rem;
-    margin-top: 0.2rem;
-  }
-}
-
-.subForm {
-  & + & {
-    margin-top: 1rem;
-  }
-}
-
-.input {
-  height: 1rem;
-  font-size: 0.6rem;
-  border: none;
-  border-bottom: 1px solid $lightBlue;
-  padding-bottom: 0.5rem;
-  outline: none;
-  color: $oc-gray-7;
-  width: 100%;
-  &:focus {
-    color: $black;
-    border-bottom: 1px solid $black;
-  }
-  & + & {
-    margin-top: 1rem;
-  }
 }
 
 .footer {
