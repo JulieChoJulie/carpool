@@ -13,8 +13,16 @@ export const tempSetUser = createAction(TEMP_SET_USER, user => user);
 export const profile = createAction(PROFILE);
 
 const profileSaga = createRequestSaga(PROFILE, authAPI.profile);
+function profileFailureSaga() {
+    try {
+        localStorage.removeItem('user');
+    } catch (e) {
+        console.log('localStorage is not working.')
+    }
+}
 export function* userSaga() {
     yield takeLatest(PROFILE, profileSaga);
+    yield takeLatest(PROFILE_FAILURE, profileFailureSaga)
 }
 
 const initialState = {
