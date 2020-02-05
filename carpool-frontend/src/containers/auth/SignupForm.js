@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm, signup, unique, passwordCheck } from "../../modules/auth";
+import { changeField, initializeForm, signup, unique, passwordCheck, emailCheck } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
+import * as EmailValidator from 'email-validator';
 
 const SignupForm = () => {
+    const [typingTimeout, setTypingTimeout] = useState(0);
     const dispatch = useDispatch();
     const { form, auth, authError, error } = useSelector(({ auth }) => ({
         form: auth.signup,
@@ -12,8 +14,36 @@ const SignupForm = () => {
         error: auth.error
     }));
 
+    const uniqueDispatch = (name, value, form) => {
+        const usernameLength = name === 'username' && value.length > 4;
+        if (name === 'passwordConfirm') {
+            const result = form.password === form.passwordConfirm;
+            dispatch (
+                passwordCheck(!result)
+            )
+        }
+        if (name === 'email' && value !== '') {
+            dispatch(
+                emailCheck(!EmailValidator.validate(value))
+            );
+        }
+        if (value !== '' || (error[name] === true && value === '')) {
+            if (name !== 'username' || usernameLength) {
+                if(name !== 'email' || !error.emailValidation) {
+                    dispatch(
+                        unique({
+                            type: name,
+                            value: value
+                        })
+                    )
+                }
+            }
+        }
+    };
+
     const onChange = e => {
         const { value, name } = e.target;
+        clearTimeout(typingTimeout);
         dispatch(
             changeField({
                 form: 'signup',
@@ -21,26 +51,17 @@ const SignupForm = () => {
                 value,
             })
         );
+        if (name === 'email' || name === 'passwordConfirm' || name === 'username') {
+            setTypingTimeout(setTimeout(function () {
+                uniqueDispatch(name, value, form);
+            }, 1000));
+        }
     };
 
     const onBlur = e => {
+        clearTimeout(typingTimeout);
         const { name, value } = e.target;
-        const usernameLength = name === 'username' && value.length > 4;
-        if (name === 'passwordConfirm') {
-            const result = form.password === form.passwordConfirm;
-            dispatch (
-                passwordCheck(!result)
-            )
-        } else if (value !== '' || (error[name] === true && value === '')) {
-            if (name !== 'username' || usernameLength) {
-                dispatch(
-                    unique({
-                        type: name,
-                        value: form[name]
-                    })
-                )
-            }
-        }
+        uniqueDispatch(name, value, form);
     };
 
 

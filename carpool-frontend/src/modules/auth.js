@@ -13,6 +13,7 @@ const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] = createRequestActionTypes('auth/
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
 const [UNIQUE, UNIQUE_SUCCESS, UNIQUE_FAILURE] = createRequestActionTypes('auth/UNIQUE');
 const PASSWORD_CHECK = 'auth/PASSWORD_CHECK';
+const EMAIL_CHECK = 'auth/EMAIL_CHECK';
 
 export const changeField = createAction(
     CHANGE_FIELD,
@@ -50,7 +51,7 @@ export const login = createAction(
 );
 
 export const passwordCheck = createAction(PASSWORD_CHECK, boolean => boolean);
-
+export const emailCheck = createAction(EMAIL_CHECK, boolean => boolean);
 // create Saga
 const signupSaga = createRequestSaga(SIGNUP, authAPI.signup);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
@@ -86,6 +87,7 @@ const initialState = {
         username: null,
         email: null,
         passwordConfirm: null,
+        emailValidation: null,
     }
 };
 
@@ -138,6 +140,11 @@ const auth = handleActions(
         [PASSWORD_CHECK]: (state, action) => {
             return produce(state, draft => {
                 draft.error.passwordConfirm = action.payload;
+            })
+        },
+        [EMAIL_CHECK]: (state, action) => {
+            return produce(state, draft => {
+                draft.error.emailValidation = action.payload;
             })
         }
     },

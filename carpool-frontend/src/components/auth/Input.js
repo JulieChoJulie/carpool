@@ -2,12 +2,15 @@ import React from 'react';
 import './Input.scss';
 import { MdDone } from "react-icons/md";
 
+
 const Input = ({ onChange, onBlur, error, type, form, name }) => {
     const errorMessage = {
+        'emailValidation': 'This is not a valid email address.',
         'usernameLength': `This must be longer than 4 characters.`,
         'username': `The username '${form.username}' is already taken.`,
         'email': 'The email you entered is already in use.',
-        'passwordConfirm': 'These passwords do not match.'
+        'passwordConfirm': 'These passwords do not match.',
+        'password': 'The password must include at least one upper case and lower case and it must be longer than 6 characters.'
     };
 
     let nameUpperCase = name.toUpperCase();
@@ -26,19 +29,31 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
 
     // verify if the input needs check and error message
     const ownCheck = (
-        type === 'signup' && (
-            name === 'email' ||
-            name === 'username' ||
-            name === 'passwordConfirm'
-        )
+        type === 'signup' && name !== 'cell'
     );
 
     // check if the username is longer than 4 characters
     const usernameLength =
         (name === 'username' && form.username !== '') ? form.username.length > 4 : true;
 
+    const emailValidation =
+        (name === 'email' ? !error.emailValidation : true);
+
+    // check if the password is longer than 6 characters
+    // and if the password has at least one upper case
+    // and if the password has at least one lower case
+    let passwordCheck = true;
+    if (name === 'password' && form[name] !== '') {
+        const length = form[name].length <= 6;
+        const upperCase = form[name].toUpperCase() === form[name];
+        const lowerCase = form[name].toLowerCase() === form[name];
+        if (upperCase ||  lowerCase || length) {
+            passwordCheck = false;
+        }
+    }
+
     // verify if unique Check test is passed;
-    const check = (
+    const uniqueCheck = (
         !error[name] &&
         form[name] !== '' &&
         error[name] !== null &&
@@ -58,13 +73,17 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
                     onBlur={onBlur}
                     type={inputType}
                 />
-                { ownCheck && check && (<MdDone />) }
+                { ownCheck && uniqueCheck && passwordCheck && emailValidation && (<MdDone />) }
             </div>
             { !usernameLength && (
                 <div className="error">{errorMessage.usernameLength}</div>
 
             )}
-            { ownCheck && error[name] && (
+            { !emailValidation && (
+                <div className="error">{errorMessage.emailValidation}</div>
+
+            )}
+            { ownCheck && usernameLength && (error[name] || !passwordCheck) && (
                 <div className="error">{errorMessage[name]}</div>
             )}
 
