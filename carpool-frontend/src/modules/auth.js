@@ -123,8 +123,6 @@ const auth = handleActions(
         }),
         [UNIQUE_SUCCESS]: (state, { payload: auth }) => {
             return produce(state, draft => {
-                draft.auth = auth.data;
-                draft.authError = null;
                 draft.error[auth.payload.type] = false;
             })
         },

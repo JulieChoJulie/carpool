@@ -8,3 +8,6 @@ export const signup = ({ username, password, email, cell }) =>
 
 export const uniqueCheck = ({ type, value }) =>
     client.post('/api/auth/join/uniqueCheck', { type, value })
+
+export const profile = () =>
+    client.get('/api/auth/profile')

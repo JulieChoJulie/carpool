@@ -18,6 +18,7 @@ export default function createRequestSaga(type, request) {
             const res = {};
             res.data = response.data;
             res.payload = action.payload;
+
             yield put({
                 type: SUCCESS,
                 payload: res,

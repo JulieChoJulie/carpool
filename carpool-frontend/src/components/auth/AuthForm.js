@@ -50,14 +50,16 @@ const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur }) => {
                     error={error}
                     form={form}
                 />
-                <Input
-                    onChange={onChange}
-                    type={type}
-                    name="passwordConfirm"
-                    error={error}
-                    form={form}
-                    onBlur={onBlur}
-                />
+                { type === 'signup' && (
+                    <Input
+                        onChange={onChange}
+                        type={type}
+                        name="passwordConfirm"
+                        error={error}
+                        form={form}
+                        onBlur={onBlur}
+                    />
+                )}
                 <Button color="burgundy" fullWidth>{text[type]}</Button>
             </form>
             <div className="footer">

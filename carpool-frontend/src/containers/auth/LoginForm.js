@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
+import { withRouter } from 'react-router-dom';
+import { profile } from '../../modules/user';
 
-const LoginForm = () => {
+const LoginForm = ({ history }) => {
+    const [error, setError] = useState(null);
     const dispatch = useDispatch();
-    const { form, auth, authError } = useSelector(({ auth }) => ({
+    const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
         form: auth.login,
         auth: auth.auth,
-        authError: auth.authError
+        authError: auth.authError,
+        user: user.user,
     }));
 
     const onChange = e => {
@@ -35,13 +39,25 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (authError) {
-            console.log(authError);
-            return;
+           if (authError.status === 401) {
+               setError('The password you entered is not correct.')
+           } else if (authError.status === 404) {
+               setError('The username you entered is not registered.')
+           } else {
+               setError('Internal Server Error!')
+           }
         }
         if (auth) {
             console.log(auth);
+            dispatch(profile());
         }
-    }, [auth, authError])
+    }, [auth, authError, dispatch]);
+
+    useEffect(() => {
+        if (user) {
+            history.push('/');
+        }
+    }, [history, user]);
 
     return (
         <AuthForm
@@ -49,8 +65,9 @@ const LoginForm = () => {
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
+            error={error}
         />
     );
 };
 
-export default LoginForm;
+export default withRouter(LoginForm);

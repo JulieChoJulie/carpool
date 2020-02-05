@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, signup, unique, passwordCheck, emailCheck } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 import * as EmailValidator from 'email-validator';
+import { profile } from '../../modules/user'
+import { withRouter } from 'react-router-dom';
 
-const SignupForm = () => {
+const SignupForm = ({ history }) => {
     const [typingTimeout, setTypingTimeout] = useState(0);
     const dispatch = useDispatch();
-    const { form, auth, authError, error } = useSelector(({ auth }) => ({
+    const { form, auth, authError, error, user } = useSelector(({ auth, user }) => ({
         form: auth.signup,
         auth: auth.auth,
         authError: auth.authError,
-        error: auth.error
+        error: auth.error,
+        user: user.user,
     }));
 
     const uniqueDispatch = (name, value, form, password) => {
@@ -41,8 +44,10 @@ const SignupForm = () => {
         }
     };
 
+    // no need to use useCallback due to deps [form]
+    // render it everytime form is changed
     const onChange = e => {
-        const { value, name } = e.target;
+        const {name, value} = e.target;
         clearTimeout(typingTimeout);
         dispatch(
             changeField({
@@ -56,24 +61,33 @@ const SignupForm = () => {
                 uniqueDispatch('passwordConfirm', form.passwordConfirm, form, value);
             }, 600));
         }
-        if (name === 'email' || name === 'passwordConfirm' || name === 'username') {
+        if ((name === 'email' && EmailValidator.validate(value))|| name === 'passwordConfirm' || name === 'username') {
             setTypingTimeout(setTimeout(function () {
                 uniqueDispatch(name, value, form);
             }, 600));
         }
     };
 
+    // no need to use useCallback due to deps [form]
+    // render it everytime form is changed
     const onBlur = e => {
-        clearTimeout(typingTimeout);
-        const { name, value } = e.target;
-        uniqueDispatch(name, value, form);
+            clearTimeout(typingTimeout);
+            const { name, value } = e.target;
+            uniqueDispatch(name, value, form);
+
     };
 
-
+    // no need to use useCallback due to deps [form]
+    // render it everytime form is changed
     const onSubmit = e => {
         e.preventDefault();
         const { username, password, cell, email } = form;
-        if (!error.username && !error.email && !error.passwordConfirm && username.length > 4) {
+        if (!error.username
+            && !error.email
+            && !error.passwordConfirm
+            && username.length > 4
+            && !error.emailVerification
+        ) {
             dispatch(signup({username, cell, email, password}));
         }
     };
@@ -86,11 +100,18 @@ const SignupForm = () => {
     useEffect(() => {
         if (auth) {
             console.log(auth);
+            dispatch(profile());
         }
         if (authError) {
             console.log(authError)
         }
-    }, [auth, authError]);
+    }, [auth, authError, dispatch]);
+
+    useEffect(() => {
+        if (user) {
+            history.push('/')
+        }
+    }, [history, user])
 
     return (
         <AuthForm
@@ -104,4 +125,4 @@ const SignupForm = () => {
     )
 };
 
-export default SignupForm;
+export default withRouter(SignupForm);
