@@ -1,0 +1,28 @@
+@import '../../styles/utils';
+
+.header {
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  border-bottom: 0.1rem solid $burgundy;
+}
+
+.wrapper {
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .logo {
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  .right {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.spacer {
+  height: 4rem;
+}

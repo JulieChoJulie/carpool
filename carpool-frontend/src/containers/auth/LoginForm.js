@@ -29,7 +29,11 @@ const LoginForm = ({ history }) => {
     const onSubmit = e => {
         e.preventDefault();
         const { username, password } = form;
-        dispatch(login({ username, password }));
+        if (username === '' || password === '') {
+            setError('The username and password should be filled.')
+        } else {
+            dispatch(login({ username, password }));
+        }
     };
 
     // initialize the form when the comp is first rendered;

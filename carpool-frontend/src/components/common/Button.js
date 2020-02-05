@@ -1,8 +1,17 @@
 import React from 'react';
 import './Button.scss';
 import classNames from 'classnames';
+import { withRouter } from 'react-router-dom';
 
-const Button = ({ color, fullWidth, children, onClick }) => {
+const Button = ({ to, history, color, fullWidth, children, ...rest }) => {
+    const onClick = e => {
+        if (to) {
+            history.push(to);
+        }
+        if (rest.onClick) {
+            rest.onClick(e)
+        }
+    }
     return (
         <div>
             <button
@@ -17,4 +26,4 @@ const Button = ({ color, fullWidth, children, onClick }) => {
     );
 };
 
-export default Button;
+export default withRouter(Button);
