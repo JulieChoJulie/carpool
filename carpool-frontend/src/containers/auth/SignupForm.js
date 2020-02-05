@@ -14,20 +14,20 @@ const SignupForm = () => {
         error: auth.error
     }));
 
-    const uniqueDispatch = (name, value, form) => {
+    const uniqueDispatch = (name, value, form, password) => {
         const usernameLength = name === 'username' && value.length > 4;
-        if (name === 'passwordConfirm') {
-            const result = form.password === form.passwordConfirm;
-            dispatch (
-                passwordCheck(!result)
-            )
-        }
         if (name === 'email' && value !== '') {
             dispatch(
                 emailCheck(!EmailValidator.validate(value))
             );
         }
-        if (value !== '' || (error[name] === true && value === '')) {
+        if (name === 'passwordConfirm') {
+            const passwordValue = password ? password : form.password;
+            const result = value === passwordValue;
+            dispatch (
+                passwordCheck(!result)
+            )
+        } else if (value !== '' || (error[name] === true && value === '')) {
             if (name !== 'username' || usernameLength) {
                 if(name !== 'email' || !error.emailValidation) {
                     dispatch(
@@ -51,10 +51,15 @@ const SignupForm = () => {
                 value,
             })
         );
+        if (name === 'password' && form.passwordConfirm !== '') {
+            setTypingTimeout(setTimeout(function () {
+                uniqueDispatch('passwordConfirm', form.passwordConfirm, form, value);
+            }, 600));
+        }
         if (name === 'email' || name === 'passwordConfirm' || name === 'username') {
             setTypingTimeout(setTimeout(function () {
                 uniqueDispatch(name, value, form);
-            }, 1000));
+            }, 600));
         }
     };
 

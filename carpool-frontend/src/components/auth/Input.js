@@ -33,7 +33,7 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
     );
 
     // check if the username is longer than 4 characters
-    const usernameLength =
+    const usernameLengthCheck =
         (name === 'username' && form.username !== '') ? form.username.length > 4 : true;
 
     const emailValidation =
@@ -43,7 +43,7 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
     // and if the password has at least one upper case
     // and if the password has at least one lower case
     let passwordCheck = true;
-    if (name === 'password' && form[name] !== '') {
+    if ((name === 'password' || name === 'passwordConfirm') && form.password !== '' ) {
         const length = form[name].length <= 6;
         const upperCase = form[name].toUpperCase() === form[name];
         const lowerCase = form[name].toLowerCase() === form[name];
@@ -57,9 +57,8 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
         !error[name] &&
         form[name] !== '' &&
         error[name] !== null &&
-        usernameLength
+        usernameLengthCheck
     );
-
 
     return (
         <div className="subForm">
@@ -73,9 +72,9 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
                     onBlur={onBlur}
                     type={inputType}
                 />
-                { ownCheck && uniqueCheck && passwordCheck && emailValidation && (<MdDone />) }
+                { ownCheck && uniqueCheck && emailValidation && passwordCheck && (<MdDone />) }
             </div>
-            { !usernameLength && (
+            { !usernameLengthCheck && (
                 <div className="error">{errorMessage.usernameLength}</div>
 
             )}
@@ -83,7 +82,7 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
                 <div className="error">{errorMessage.emailValidation}</div>
 
             )}
-            { ownCheck && usernameLength && (error[name] || !passwordCheck) && (
+            { ownCheck && usernameLengthCheck && (error[name] || (!passwordCheck && name === "password")) && (
                 <div className="error">{errorMessage[name]}</div>
             )}
 
