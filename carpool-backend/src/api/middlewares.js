@@ -18,15 +18,19 @@ exports.isNotLoggedIn = (req, res, next) => {
 
 // excluding password
 exports.serialize = (req, res) => {
-    const { email, nick, cell, provider, snsId, id } = req.user;
-    res.json({
-        email,
-        nick,
-        cell,
-        provider,
-        snsId,
-        id
-    });
+    if (req.user) {
+        const { email, username, cell, provider, snsId, id } = req.user;
+        res.json({
+            email,
+            username,
+            cell,
+            provider,
+            snsId,
+            id
+        });
+    } else {
+        res.sendStatus(404);
+    }
 }
 
 exports.isOwner = (req, res) => {

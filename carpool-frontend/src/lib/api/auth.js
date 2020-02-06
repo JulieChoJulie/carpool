@@ -11,3 +11,6 @@ export const uniqueCheck = ({ type, value }) =>
 
 export const profile = () =>
     client.get('/api/auth/profile')
+
+export const logout = () =>
+    client.post('/api/auth/logout')

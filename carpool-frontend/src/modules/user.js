@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, call } from 'redux-saga/effects';
 import * as authAPI from '../lib/api/auth';
 import createRequestSaga, {
     createRequestActionTypes
@@ -8,9 +8,11 @@ import createRequestSaga, {
 // temp user save after refreshing the page.
 const TEMP_SET_USER = 'user/TEMP_SET_USER';
 const [PROFILE, PROFILE_SUCCESS, PROFILE_FAILURE] = createRequestActionTypes('auth/CHECK');
+const LOGOUT = 'user/LOGOUT';
 
 export const tempSetUser = createAction(TEMP_SET_USER, user => user);
 export const profile = createAction(PROFILE);
+export const logout = createAction(LOGOUT);
 
 const profileSaga = createRequestSaga(PROFILE, authAPI.profile);
 function profileFailureSaga() {
@@ -20,6 +22,16 @@ function profileFailureSaga() {
         console.log('localStorage is not working.')
     }
 }
+
+function* logoutSaga() {
+    try {
+        yield call(authAPI.logout);
+        localStorage.removeItem('user');
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export function* userSaga() {
     yield takeLatest(PROFILE, profileSaga);
     yield takeLatest(PROFILE_FAILURE, profileFailureSaga)
@@ -45,6 +57,10 @@ export default handleActions(
             ...state,
             user: null,
             profileError: error
+        }),
+        [LOGOUT]: state => ({
+            ...state,
+            user: null,
         })
     },
     initialState

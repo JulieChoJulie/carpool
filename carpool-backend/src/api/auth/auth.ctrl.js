@@ -22,6 +22,7 @@ exports.uniqueCheck = async (req, res, next) => {
             res.sendStatus(200);
         }
     } catch (err) {
+        console.log(err)
         next(err)
     }
 }
@@ -42,17 +43,19 @@ exports.joinPost = async (req, res, next) => {
             cell,
             password: hash,
             provider: 'local'});
-        res.send({"id": user.id, "username": user.username});
+        // res.send({"id": user.id, "username": user.username});
+        loginFunction(req, res, next);
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
             res.sendStatus(409);
         }
         next(err);
     }
-}
+};
 
 /* POST api/auth/login */
-exports.login = (req, res, next) => {
+const loginFunction = (req, res, next) => {
+    console.log('**************HERE')
     passport.authenticate('local', (authError, user, info) => {
         if (authError) {
             console.error(authError);
@@ -75,10 +78,11 @@ exports.login = (req, res, next) => {
         });
     })(req, res, next);
 };
+exports.login = loginFunction;
 
 /* POST api/auth/logout */
 exports.logout = (req, res, next) => {
     req.logout();
     req.session.destroy();
-    res.status(302).redirect('/');
+    res.sendStatus(200);
 };
