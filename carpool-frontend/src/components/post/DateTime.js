@@ -7,7 +7,7 @@ const DateTime = () => {
     const onChange = date => setDate(date);
 
     return (
-        <div>
+        <div className="dateTime">
             <DateTimePicker
                 onChange={onChange}
                 value={date}

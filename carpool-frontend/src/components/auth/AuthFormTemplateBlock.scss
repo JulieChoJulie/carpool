@@ -15,6 +15,7 @@
 }
 
 .boxTemplate {
+  padding: 2rem;
   @include media('>767px') {
     width: 50%;
   }

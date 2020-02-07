@@ -1,25 +1,33 @@
 @import '../../styles/utils';
 
 .write {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   @media (max-width: 768px) {
     padding: 0.7rem;
   }
+  @media (max-width: 600px) {
+    position: relative;
+  }
   @media (max-width: 320px) {
-    padding: 0;
+    margin: 0.1rem;
+    width: 98%;
   }
 }
 
 .writeBox {
   width: 100%;
-  padding: 0.6rem;
-  @media (max-width: 320px) {
+  padding: 1rem;
+  @media (max-width: 600px) {
+    position: absolute;
     padding: 0rem;
+    margin: 0;
+    top: 0.1rem;
+  }
+  @media (max-width: 320px) {
     font-size: 0.5rem;
+    top: 0.1rem;
   }
 }
 
@@ -34,8 +42,8 @@ label {
   flex-wrap: wrap;
   color: hsl(0,0%,20%);
   label {
-    position: relative;
-    top: 0.2rem;
+    //position: relative;
+    //top: 0.2rem;
     margin: 0 0.5rem;
   }
   & + & {
@@ -73,9 +81,12 @@ label {
     }
   }
   .number {
+    // mv the input up;
+    position: relative;
+    bottom: 0.2rem;
     svg {
       position: relative;
-      top: 0.2rem;
+      top: 0.2rem; // mv svg down back to original position
       cursor: pointer;
     }
   }
@@ -106,4 +117,19 @@ label {
       -moz-appearance:textfield;
     }
   }
+
+  &.two {
+    .price {
+      margin-left: 2rem;
+    }
+  }
 }
+
+.one-way {
+  border: 1px dotted $lightBrown;
+  padding: 0.5rem;
+  & + & {
+    margin-top: 0.5rem;
+
+  }
+ }

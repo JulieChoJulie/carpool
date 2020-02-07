@@ -20,7 +20,6 @@ $black: #20292f;
 }
 
 .box {
-  padding: 2rem;
   margin: 1rem;
   background: white;
   border: 0.1rem solid $burgundy;
@@ -28,9 +27,10 @@ $black: #20292f;
   color: $lightBlue;
   @media (max-width: 768px) {
     padding: 0.5rem;
+    margin: 1rem auto;
   }
   @media (max-width: 320px) {
-    padding: 0.3rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    margin: 0;
   }
 }
