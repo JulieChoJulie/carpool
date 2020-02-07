@@ -34,7 +34,8 @@ function* logoutSaga() {
 
 export function* userSaga() {
     yield takeLatest(PROFILE, profileSaga);
-    yield takeLatest(PROFILE_FAILURE, profileFailureSaga)
+    yield takeLatest(PROFILE_FAILURE, profileFailureSaga);
+    yield takeLatest(LOGOUT, logoutSaga);
 }
 
 const initialState = {

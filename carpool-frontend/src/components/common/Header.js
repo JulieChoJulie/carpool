@@ -12,6 +12,7 @@ const Header = ({ user, onLogout}) => {
                     <Link to="/" className="logo">CARPOOL</Link>
                     {user ? (
                         <div className="right">
+                            <span>{user.username}</span>
                             <Button color="burgundy" onClick={onLogout}>Logout</Button>
                         </div>
                     ): (

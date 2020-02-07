@@ -12,9 +12,25 @@ $black: #20292f;
 @mixin button() {
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.6rem;
   font-weight: bold;
   padding: 0.25rem 1rem;
   outline: none;
   cursor: pointer;
+}
+
+.box {
+  padding: 2rem;
+  margin: 1rem;
+  background: white;
+  border: 0.1rem solid $burgundy;
+  border-radius: 2px;
+  color: $lightBlue;
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
+  @media (max-width: 320px) {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
 }

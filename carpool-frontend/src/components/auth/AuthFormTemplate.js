@@ -4,8 +4,8 @@ import './AuthFormTemplateBlock.scss';
 
 const AuthFormTemplate = ({children}) => {
     return (
-        <div className="AuthFormTemplateBlock">
-            <div className="Box">
+        <div className="templateBlock">
+            <div className="box boxTemplate">
                 <Link className="Logo" to="/">CARPOOL</Link>
                 {children}
             </div>

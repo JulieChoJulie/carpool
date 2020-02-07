@@ -1,0 +1,63 @@
+@import '../../styles/utils';
+
+//react-datetime-picker
+.react-datetime-picker__wrapper {
+  display: flex;
+  justify-content: center;
+  border: $burgundy;
+  color: $lightBrown;
+  svg {
+    position: relative;
+    bottom: 0.1rem;
+  }
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    font-size: 0.7rem;
+  }
+}
+
+.react-datetime-picker__inputGroup__input {
+  &.react-datetime-picker__inputGroup__month {
+    color: hsl(0,0%,20%);
+  }
+  &.react-datetime-picker__inputGroup__day {
+    color: hsl(0,0%,20%);
+  }
+  &.react-datetime-picker__inputGroup__year {
+    color: hsl(0,0%,20%);
+  }
+  &.react-datetime-picker__inputGroup__hour {
+    color: hsl(0,0%,20%);
+  }
+  &.react-datetime-picker__inputGroup__minute {
+    color: hsl(0,0%,20%);
+  }
+  &.react-datetime-picker__inputGroup__amPm {
+    color: hsl(0,0%,20%);
+    option {
+      color: blue;
+    }
+  }
+}
+
+.react-datetime-picker__inputGroup__leadingZero {
+  color: hsl(0,0%,20%);
+}
+
+select option {
+  margin: 40px;
+  background: red;
+  color: #fff;
+  text-shadow: 0 1px 0 red;
+}
+
+.react-datetime-picker__calendar-button__icon {
+  &.react-datetime-picker__button__icon {
+    rect {
+      stroke: $lightBrown;
+    }
+    line {
+      stroke: $lightBrown;
+    }
+  }
+}

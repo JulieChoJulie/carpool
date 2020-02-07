@@ -8,7 +8,7 @@
 }
 
 .wrapper {
-  height: 4rem;
+  height: 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,9 +20,13 @@
   .right {
     display: flex;
     align-items: center;
+    span {
+      margin: 1rem;
+      font-size: 0.8rem;
+    }
   }
 }
 
 .spacer {
-  height: 4rem;
+  height: 3rem;
 }

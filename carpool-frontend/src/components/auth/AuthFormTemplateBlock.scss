@@ -1,6 +1,6 @@
 @import '../../styles/utils';
 
-.AuthFormTemplateBlock {
+.templateBlock {
   position: absolute;
   left: 0;
   right: 0;
@@ -14,13 +14,7 @@
   align-items: center;
 }
 
-.Box {
-  padding: 2rem;
-  margin: 1rem;
-  background: white;
-  border: 0.1rem solid $burgundy;
-  border-radius: 2px;
-  color: $lightBlue;
+.boxTemplate {
   @include media('>767px') {
     width: 50%;
   }

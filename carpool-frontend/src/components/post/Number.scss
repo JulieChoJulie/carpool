@@ -1,0 +1,14 @@
+@import '../../styles/utils';
+
+.number {
+  svg {
+    @media (max-width: 411px) {
+      font-size: 1rem;
+    }
+    color: $burgundy;
+  }
+
+  span {
+    margin: 0.7rem;
+  }
+}
