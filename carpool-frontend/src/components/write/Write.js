@@ -5,7 +5,7 @@ import Button from "../common/Button";
 import Ride from './Ride';
 import Offering from './Offering';
 
-const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit }) => {
+const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit, error }) => {
     return (
         <Responsive addclass="write">
             <div className="box writeBox">
@@ -33,10 +33,13 @@ const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit }) =>
                             onChange={() => onChangeRoundtrip(true)} />
                         <label htmlFor="round-trip">Round trip</label>
                     </div>
+                    <ul className="rideList">
                     {isRoundTrip ?
                         rides.map((ride, index) =><li key={index}><Ride ride={ride} onChange={onChange}/></li>)
-                        : <Ride ride={rides[0]} onChange={onChange}/>
+                        : <li><Ride ride={rides[0]} key="0" onChange={onChange}/></li>
                     }
+                    </ul>
+                    {error !== null ? <div className="error">{error}</div> : ''}
                     <Button color="burgundy" fullWidth>POST</Button>
                 </form>
             </div>

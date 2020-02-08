@@ -72,10 +72,10 @@ const write = handleActions(
                 isRoundTrip: value
             }
         ),
-        [WRITE_POST_SUCCESS]: (state, { payload: postId }) => (
+        [WRITE_POST_SUCCESS]: (state, { payload: post }) => (
             {
                 ...state,
-                postId
+                postId: post.data.id
             }
         ),
         [WRITE_POST_FAILURE]: (state, { payload: postError }) => (
