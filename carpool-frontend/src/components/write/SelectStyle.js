@@ -21,7 +21,7 @@ const styles = (size, minWidth) => ({
         };
         (size === 'flex: 1' ? res.flex = 1 : (res.width = `${size}rem`));
         if (minWidth) {
-            res['min-width'] = `${minWidth}`
+            res['minWidth'] = `${minWidth}`
         }
         return res;
     },

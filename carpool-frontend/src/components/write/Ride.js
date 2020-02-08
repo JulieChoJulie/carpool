@@ -18,8 +18,21 @@ const DropdownIndicator = (props: ElementConfig<typeof components.DropdownIndica
 };
 
 
-const Ride = ({ value, onChange }) => {
-    return (
+const Ride = ({ ride, onChange }) => {
+    const valueFormat = (key, value) => {
+        if (value === '') {
+            const label = key[0].toUpperCase() + key.slice(1);
+            return {
+                label: label,
+                value: key
+            }
+        }
+        return {
+            label: value,
+            value,
+        }
+    }
+      return (
         <div className="one-way">
             <div className="form-group fullWidth destination">
                 <Select
@@ -27,10 +40,9 @@ const Ride = ({ value, onChange }) => {
                     id="from"
                     styles={styles('flex: 1', '8rem')}
                     options={cityOptions}
-                    value={value}
-                    onChange={onChange}
+                    value={valueFormat('from', ride.from)}
+                    onChange={(e) => onChange(e, 'from', ride.id)}
                     autoFocus
-                    name="from"
                     placeholder="From"
                     components={{ DropdownIndicator }}
                 />
@@ -40,25 +52,30 @@ const Ride = ({ value, onChange }) => {
                     id="to"
                     styles={styles('flex: 1', '7rem')}
                     options={cityOptions}
-                    value={value}
-                    onChange={onChange}
+                    value={valueFormat('to', ride.to)}
+                    onChange={(e) => onChange(e, 'to', ride.id)}
                     autoFocus
-                    name="from"
+                    name="to"
                     placeholder="To"
                     components={{ DropdownIndicator }}
                 />
             </div>
             <div className="form-group">
                 <label style={{ position: 'inherit'}}>Leaving At</label>
-                <DateTime />
+                <DateTime date={ride.when} onChange={(e) => onChange(e, 'when', ride.id)}/>
             </div>
             <div className="form-group two">
                 <label style={{ position: 'inherit'}}>Seats: </label>
-                <Number seats="1"/>
+                <Number seats={ride.seats} id={ride.id} onChange={onChange} />
                 <div className="form-group price">
                     <label style={{ position: 'inherit'}}>Price: </label>
                     <span>$</span>
-                    <input name="price" type="number"/>
+                    <input
+                        name="price"
+                        type="number"
+                        value={ride.price}
+                        onChange={(e) => onChange(e.target, 'price', ride.id)}
+                    />
                     <span>&#47; seat</span>
                 </div>
             </div>

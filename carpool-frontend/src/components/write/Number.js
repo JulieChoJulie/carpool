@@ -3,11 +3,11 @@ import { TiPlus, TiMinus } from "react-icons/ti";
 import './Number.scss';
 
 
-const Number = ({ seats }) => {
+const Number = ({ seats, id, onChange }) => {
     return (
         <div className="number">
             <TiPlus/>
-            <span>{seats}</span>
+            <input value={seats} onChange={(e) => onChange(e.target, 'seats', id)}/>
             <TiMinus/>
 
         </div>

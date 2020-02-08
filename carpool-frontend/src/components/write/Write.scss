@@ -29,6 +29,13 @@
     font-size: 0.5rem;
     top: 0.1rem;
   }
+  @media (min-width: 560px) {
+    .two {
+      .price {
+        margin-left: 2rem;
+      }
+    }
+  }
 }
 
 label {
@@ -39,11 +46,12 @@ label {
 .form-group {
   display: flex;
   justify-content: flex-start;
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
   flex-wrap: wrap;
   color: hsl(0,0%,20%);
   label {
-    //position: relative;
-    //top: 0.2rem;
     margin: 0 0.5rem;
   }
   & + & {
@@ -90,7 +98,7 @@ label {
       cursor: pointer;
     }
   }
-  &.price {
+  &.two {
     input {
       border-radius: 4px;
       border: 1px solid $lightBrown;
@@ -118,11 +126,6 @@ label {
     }
   }
 
-  &.two {
-    .price {
-      margin-left: 2rem;
-    }
-  }
 }
 
 .one-way {

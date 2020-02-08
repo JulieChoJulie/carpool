@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import './DateTime.scss';
 
-const DateTime = () => {
-    const [date, setDate] = useState(new Date());
-    const onChange = date => setDate(date);
-
+const DateTime = ({ date, onChange }) => {
     return (
         <div className="dateTime">
             <DateTimePicker
@@ -13,6 +10,7 @@ const DateTime = () => {
                 value={date}
                 clearIcon={null}
                 minDate={new Date()}
+                name="when"
             />
         </div>
     );

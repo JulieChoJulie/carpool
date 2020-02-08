@@ -11,7 +11,15 @@ const optionsOffering = [
     {value: false, 'label': 'Looking for'}
 ];
 
-const Write = ({value, onChange}) => {
+const offeringValue = (value) => {
+    const label = value ? 'Offering' : 'Looking for';
+    return {
+        value: value,
+        label: label
+    }
+};
+
+const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip }) => {
     return (
         <Responsive addclass="write">
             <div className="box writeBox">
@@ -23,21 +31,35 @@ const Write = ({value, onChange}) => {
                             id="offering"
                             styles={styles('8')}
                             options={optionsOffering}
-                            value={value}
-                            onChange={onChange}
+                            value={offeringValue(offering)}
+                            onChange={(e) => onChange(e, 'offering')}
                             autoFocus
                             name="offering"
                         />
                     </div>
                     <div className="form-group trip">
-                        <input type="radio" id="one-way" name="trip" />
+                        <input
+                            type="radio"
+                            id="one-way"
+                            name="trip"
+                            value={false}
+                            checked={!isRoundTrip}
+                            onChange={() => onChangeRoundtrip(false)}/>
                         <label for="one-way">One way</label>
 
-                        <input type="radio" id="round-trip" name="trip" />
+                        <input
+                            type="radio"
+                            id="round-trip"
+                            name="trip"
+                            value={true}
+                            checked={isRoundTrip}
+                            onChange={() => onChangeRoundtrip(true)} />
                         <label htmlFor="round-trip">Round trip</label>
                     </div>
-                    <Ride value={value} onChange={onChange} />
-                    <Ride value={value} onChange={onChange}/>
+                    {isRoundTrip ?
+                        rides.map(ride => <Ride ride={ride} key={ride.id} onChange={onChange}/>)
+                        : <Ride ride={rides[0]} key={rides[0].id} onChange={onChange}/>
+                    }
                 </form>
                 <Button color="burgundy" fullWidth>POST</Button>
             </div>
