@@ -6,7 +6,6 @@ import produce from 'immer';
 
 const INITIALIZE = 'write/INITIALIZE';
 const CHANGE_FIELD = 'write/CHANGE_FIELD';
-const CHANGE_OFFERING = 'write/CHANGE_OFFERING';
 const CHANGE_ROUNDTRIP = 'write/CHANGE_ROUNDTRIP';
 const [
     WRITE_POST,
@@ -20,7 +19,6 @@ export const changeField = createAction(CHANGE_FIELD, ({ key, value, id}) => ({
     value,
     id
 }));
-export const changeOffering = createAction(CHANGE_OFFERING, value => value);
 export const changeRoundtrip = createAction(CHANGE_ROUNDTRIP, value => value)
 export const writePost = createAction(WRITE_POST, ({ rides }) => ({ rides }));
 
@@ -31,7 +29,6 @@ export function* writeSaga() {
 }
 const initialState = {
     isRoundTrip: true,
-    offering: true,
     rides: [
         {
             id: 0,
@@ -40,6 +37,7 @@ const initialState = {
             from: '',
             price: 10,
             seats: 1,
+            offering: true,
         },
         {
             id: 1,
@@ -48,6 +46,7 @@ const initialState = {
             from: '',
             price: 10,
             seats: 1,
+            offering: true,
         }
     ],
     postId: null,
@@ -58,16 +57,15 @@ const write = handleActions(
     {
         [INITIALIZE]: state => initialState,
         [CHANGE_FIELD]: (state, { payload: { key, value, id }}) => {
+            if (id === -1 ) {
+                return produce(state, draft => {
+                    draft.rides = draft.rides.map(ride => ride.key === value);
+                })
+            }
             return produce(state, draft => {
                 draft.rides[id][key] = value;
             })
         },
-        [CHANGE_OFFERING]: (state, { payload: value }) => (
-            {
-            ...state,
-            offering: value
-            }
-        ),
         [CHANGE_ROUNDTRIP]: (state, { payload: value }) => (
             {
                 ...state,

@@ -1,16 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import Write from '../../components/write/Write';
 import { useSelector, useDispatch } from "react-redux";
-import {changeField, changeRoundtrip, initialize, changeOffering, writePost } from "../../modules/write";
+import {changeField, changeRoundtrip, initialize, writePost } from "../../modules/write";
 import { withRouter } from 'react-router-dom';
-
 
 const WriteContainer = ({ history }) => {
     const dispatch = useDispatch();
-    const { rides, isRoundTrip, offering, postId, postError } = useSelector(({ write }) => ({
+    const { rides, isRoundTrip, postId, postError } = useSelector(({ write }) => ({
         rides: write.rides,
         isRoundTrip: write.isRoundTrip,
-        offering: write.offering,
         postId: write.postId,
         postError: write.postError
     }));
@@ -24,7 +22,11 @@ const WriteContainer = ({ history }) => {
         }
 
         if (name === 'offering') {
-            dispatch(changeOffering(value))
+            dispatch(changeField ({
+                key: 'offering',
+                value: value,
+                id: -1
+            }))
         } else {
             dispatch(changeField({
                 key: name,
@@ -36,7 +38,9 @@ const WriteContainer = ({ history }) => {
         dispatch
     ]);
 
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault();
+        console.log(rides)
         if (!isRoundTrip) {
             const ride = rides[0];
             dispatch(writePost({ ride }));
@@ -67,7 +71,6 @@ const WriteContainer = ({ history }) => {
         onChange={onChange}
         isRoundTrip={isRoundTrip}
         rides={rides}
-        offering={offering}
         onChangeRoundtrip={onChangeRoundtrip}
         onSubmit={onSubmit}
     />

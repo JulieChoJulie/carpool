@@ -1,41 +1,18 @@
 import React from 'react';
-import Select from 'react-select';
 import './Write.scss';
 import Responsive from '../common/Responsive';
 import Button from "../common/Button";
 import Ride from './Ride';
-import styles from './SelectStyle';
+import Offering from './Offering';
 
-const optionsOffering = [
-    {value: true, 'label': 'Offering'},
-    {value: false, 'label': 'Looking for'}
-];
-
-const offeringValue = (value) => {
-    const label = value ? 'Offering' : 'Looking for';
-    return {
-        value: value,
-        label: label
-    }
-};
-
-const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip, onSubmit }) => {
+const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit }) => {
     return (
         <Responsive addclass="write">
             <div className="box writeBox">
                 <form onSubmit={onSubmit}>
                     <div className="form-group">
-                        <label for="offering">Offering:</label>
-                        <Select
-                            classNamePrefix="select"
-                            id="offering"
-                            styles={styles('8')}
-                            options={optionsOffering}
-                            value={offeringValue(offering)}
-                            onChange={(e) => onChange(e, 'offering')}
-                            autoFocus
-                            name="offering"
-                        />
+                        <label htmlFor="offering">Offering:</label>
+                        <Offering offering={rides[0].offering} onChange={onChange}/>
                     </div>
                     <div className="form-group trip">
                         <input
@@ -45,7 +22,7 @@ const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip, onS
                             value={false}
                             checked={!isRoundTrip}
                             onChange={() => onChangeRoundtrip(false)}/>
-                        <label for="one-way">One way</label>
+                        <label htmlFor="one-way">One way</label>
 
                         <input
                             type="radio"
@@ -57,10 +34,10 @@ const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip, onS
                         <label htmlFor="round-trip">Round trip</label>
                     </div>
                     {isRoundTrip ?
-                        rides.map(ride => <Ride ride={ride} key={ride.id} onChange={onChange}/>)
-                        : <Ride ride={rides[0]} key={rides[0].id} onChange={onChange}/>
+                        rides.map((ride, index) =><li key={index}><Ride ride={ride} onChange={onChange}/></li>)
+                        : <Ride ride={rides[0]} onChange={onChange}/>
                     }
-                <Button color="burgundy" fullWidth>POST</Button>
+                    <Button color="burgundy" fullWidth>POST</Button>
                 </form>
             </div>
         </Responsive>

@@ -16,4 +16,8 @@ const DateTime = ({ date, onChange }) => {
     );
 };
 
-export default React.memo(DateTime);
+const propsEqual = (prevProp, nextProp) => {
+    return prevProp.date === nextProp.date
+}
+
+export default React.memo(DateTime, propsEqual);
