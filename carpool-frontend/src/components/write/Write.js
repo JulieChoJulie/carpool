@@ -19,11 +19,11 @@ const offeringValue = (value) => {
     }
 };
 
-const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip }) => {
+const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip, onSubmit }) => {
     return (
         <Responsive addclass="write">
             <div className="box writeBox">
-                <form>
+                <form onSubmit={onSubmit}>
                     <div className="form-group">
                         <label for="offering">Offering:</label>
                         <Select
@@ -60,11 +60,11 @@ const Write = ({ rides, onChange, isRoundTrip, offering , onChangeRoundtrip }) =
                         rides.map(ride => <Ride ride={ride} key={ride.id} onChange={onChange}/>)
                         : <Ride ride={rides[0]} key={rides[0].id} onChange={onChange}/>
                     }
-                </form>
                 <Button color="burgundy" fullWidth>POST</Button>
+                </form>
             </div>
         </Responsive>
     );
 };
 
-export default Write;
+export default React.memo(Write);

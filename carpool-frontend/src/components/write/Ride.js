@@ -83,4 +83,4 @@ const Ride = ({ ride, onChange }) => {
     );
 };
 
-export default Ride;
+export default React.memo(Ride);

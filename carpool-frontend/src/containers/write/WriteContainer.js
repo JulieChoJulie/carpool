@@ -1,14 +1,18 @@
 import React, { useEffect, useCallback } from 'react';
 import Write from '../../components/write/Write';
 import { useSelector, useDispatch } from "react-redux";
-import {changeField, changeRoundtrip, initialize, changeOffering } from "../../modules/write";
+import {changeField, changeRoundtrip, initialize, changeOffering, writePost } from "../../modules/write";
+import { withRouter } from 'react-router-dom';
 
-const WriteContainer = () => {
+
+const WriteContainer = ({ history }) => {
     const dispatch = useDispatch();
-    const { rides, isRoundTrip, offering } = useSelector(({ write }) => ({
+    const { rides, isRoundTrip, offering, postId, postError } = useSelector(({ write }) => ({
         rides: write.rides,
         isRoundTrip: write.isRoundTrip,
         offering: write.offering,
+        postId: write.postId,
+        postError: write.postError
     }));
 
     const onChange = useCallback((e, name, id) => {
@@ -32,23 +36,41 @@ const WriteContainer = () => {
         dispatch
     ]);
 
+    const onSubmit = () => {
+        if (!isRoundTrip) {
+            const ride = rides[0];
+            dispatch(writePost({ ride }));
+        } else {
+            dispatch(writePost({ rides }));
+        }
+    }
+
     const onChangeRoundtrip = useCallback((boolean) => {
         dispatch(changeRoundtrip(boolean))
     }, [dispatch]);
 
     // initialize the form when it's unmount
-    useEffect(() => {
-        return () => {
-            dispatch(initialize());
-        }
+    useEffect(() =>{
+        dispatch(initialize());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (postId) {
+            history.push(`/post/${postId}`);
+        }
+        if (postError) {
+            console.log(postError);
+        }
+    }, [history, postId, postError]);
+
     return <Write
         onChange={onChange}
         isRoundTrip={isRoundTrip}
         rides={rides}
         offering={offering}
         onChangeRoundtrip={onChangeRoundtrip}
+        onSubmit={onSubmit}
     />
 };
 
-export default WriteContainer;
+export default withRouter(WriteContainer);

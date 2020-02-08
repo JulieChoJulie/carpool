@@ -16,4 +16,4 @@ const DateTime = ({ date, onChange }) => {
     );
 };
 
-export default DateTime;
+export default React.memo(DateTime);

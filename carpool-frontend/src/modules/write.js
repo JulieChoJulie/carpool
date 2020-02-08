@@ -1,10 +1,18 @@
 import { createAction, handleActions } from 'redux-actions';
+import createRequestSaga, { createRequestActionTypes } from "../lib/createRequestSaga";
+import * as postsAPI from '../lib/api/posts';
+import { takeLatest } from 'redux-saga/effects';
 import produce from 'immer';
 
 const INITIALIZE = 'write/INITIALIZE';
 const CHANGE_FIELD = 'write/CHANGE_FIELD';
 const CHANGE_OFFERING = 'write/CHANGE_OFFERING';
 const CHANGE_ROUNDTRIP = 'write/CHANGE_ROUNDTRIP';
+const [
+    WRITE_POST,
+    WRITE_POST_SUCCESS,
+    WRITE_POST_FAILURE
+] = createRequestActionTypes('write/WRITE_POST');
 
 export const initialize = createAction(INITIALIZE);
 export const changeField = createAction(CHANGE_FIELD, ({ key, value, id}) => ({
@@ -14,7 +22,13 @@ export const changeField = createAction(CHANGE_FIELD, ({ key, value, id}) => ({
 }));
 export const changeOffering = createAction(CHANGE_OFFERING, value => value);
 export const changeRoundtrip = createAction(CHANGE_ROUNDTRIP, value => value)
+export const writePost = createAction(WRITE_POST, ({ rides }) => ({ rides }));
 
+// create saga
+const writePostSaga = createRequestSaga(WRITE_POST, postsAPI.writePost);
+export function* writeSaga() {
+    yield takeLatest(WRITE_POST, writePostSaga);
+}
 const initialState = {
     isRoundTrip: true,
     offering: true,
@@ -35,8 +49,9 @@ const initialState = {
             price: 10,
             seats: 1,
         }
-    ]
-
+    ],
+    postId: null,
+    postError: null,
 };
 
 const write = handleActions(
@@ -57,6 +72,18 @@ const write = handleActions(
             {
                 ...state,
                 isRoundTrip: value
+            }
+        ),
+        [WRITE_POST_SUCCESS]: (state, { payload: postId }) => (
+            {
+                ...state,
+                postId
+            }
+        ),
+        [WRITE_POST_FAILURE]: (state, { payload: postError }) => (
+            {
+                ...state,
+                postError
             }
         )
     },

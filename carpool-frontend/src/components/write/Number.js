@@ -14,4 +14,4 @@ const Number = ({ seats, id, onChange }) => {
     );
 };
 
-export default Number;
+export default React.memo(Number);
