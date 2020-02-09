@@ -1,0 +1,48 @@
+@import "../../styles/utils";
+
+.first {
+  &.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    .username {
+      margin-right: 1rem;
+      flex-direction: row;
+      display: flex;
+      button {
+        margin-left: 0.5rem;
+      }
+    }
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      button {
+        margin-right: 1rem;
+      }
+      .saveIcon {
+        cursor: pointer;
+        margin: 0;
+        svg {
+          position: relative;
+          top: 0.2rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+.second {
+  &.row {
+    svg {
+      font-size: 2rem;
+      position: relative;
+      top: 0.6rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      color: $lightBrown;
+    }
+  }
+}

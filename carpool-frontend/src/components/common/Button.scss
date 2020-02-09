@@ -5,9 +5,10 @@
 
   &.white {
     color: $burgundy;
-    background: $lightBeige;
+    background: white;
+    border: 1px solid $burgundy;
     &:hover {
-      background: $lightBlue;
+      background: $lightBeige;
     }
   }
 

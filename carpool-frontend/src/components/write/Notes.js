@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 
-const Details = ({ onChange, details }) => {
-    const [isDetails, setDetails] = useState(false);
+const Notes = ({ onChange, notes }) => {
+    const [isNotes, setNotes] = useState(false);
 
     return (
-        <div className="addDetails" onClick={() => setDetails(true)}>
+        <div className="addDetails" onClick={() => setNotes(true)}>
             <IoIosAddCircleOutline />Add Details
-            {isDetails &&
+            {isNotes &&
             <div className="details">
                 <textarea
                     type="text"
-                    value={details}
-                    onChange={(e) => onChange(e.target.value, 'details')}
+                    value={notes}
+                    onChange={(e) => onChange(e.target.value, 'notes')}
                 />
             </div>
             }
@@ -20,4 +20,4 @@ const Details = ({ onChange, details }) => {
     );
 };
 
-export default Details;
+export default Notes;

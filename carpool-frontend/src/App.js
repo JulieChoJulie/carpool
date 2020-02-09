@@ -17,7 +17,7 @@ const App = () => {
           <Route component={RegisterPage} path="/signup" />
           <Route component={ProfilePage} path="/users/@:username/profile" />
           <Route component={WritePage} path="/post" exact />
-          <Route component={DetailsPage} path="/post/:id" />
+          <Route component={DetailsPage} path="/posts/:id" />
           <Route component={TripPage} path="/users/@:username/trip" />
           <Route component={SavePage} path="/users/@:username/save" />
         </>

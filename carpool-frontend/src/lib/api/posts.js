@@ -1,4 +1,4 @@
 import client from './client';
 
-export const writePost = ({ rides }) =>
-    client.post('/api/posts', { rides })
+export const writePost = ({ rides, notes }) =>
+    client.post('/api/posts', { rides, notes })

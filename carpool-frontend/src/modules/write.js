@@ -20,7 +20,7 @@ export const changeField = createAction(CHANGE_FIELD, ({ key, value, id}) => ({
     id
 }));
 export const changeRoundtrip = createAction(CHANGE_ROUNDTRIP, value => value)
-export const writePost = createAction(WRITE_POST, ({ rides, details }) => ({ rides, details }));
+export const writePost = createAction(WRITE_POST, ({ rides, notes }) => ({ rides, notes }));
 
 // create saga
 const writePostSaga = createRequestSaga(WRITE_POST, postsAPI.writePost);
@@ -49,7 +49,7 @@ const initialState = {
             offering: true,
         }
     ],
-    details: '',
+    notes: '',
     postId: null,
     postError: null,
 };
