@@ -44,7 +44,6 @@ const WriteContainer = ({ history }) => {
         // return an array of two number
         // arr[0] indicates whether all city fields are filled.
         // arr[1] indicates whether ride.to and ride.from are the same city
-
         return requiredRides.reduce((acc, ride) => {
             if (ride.to.length === 0 || ride.from.length === 0) {
                 acc[0] = 1;
