@@ -20,7 +20,7 @@ export const changeField = createAction(CHANGE_FIELD, ({ key, value, id}) => ({
     id
 }));
 export const changeRoundtrip = createAction(CHANGE_ROUNDTRIP, value => value)
-export const writePost = createAction(WRITE_POST, ({ rides }) => ({ rides }));
+export const writePost = createAction(WRITE_POST, ({ rides, details }) => ({ rides, details }));
 
 // create saga
 const writePostSaga = createRequestSaga(WRITE_POST, postsAPI.writePost);
@@ -49,6 +49,7 @@ const initialState = {
             offering: true,
         }
     ],
+    details: '',
     postId: null,
     postError: null,
 };
@@ -61,6 +62,11 @@ const write = handleActions(
                 return produce(state, draft => {
                     draft.rides = draft.rides.map(ride => ride.key === value);
                 })
+            } else if (id === -2) {
+                return {
+                    ...state,
+                    [key]: value
+                }
             }
             return produce(state, draft => {
                 draft.rides[id][key] = value;

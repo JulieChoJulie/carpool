@@ -4,8 +4,9 @@ import Responsive from '../common/Responsive';
 import Button from "../common/Button";
 import Ride from './Ride';
 import Offering from './Offering';
+import Details from './Details';
 
-const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit, error }) => {
+const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit, error, details }) => {
     return (
         <Responsive addclass="write">
             <div className="box writeBox">
@@ -39,6 +40,8 @@ const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit, erro
                         : <li><Ride ride={rides[0]} key="0" onChange={onChange}/></li>
                     }
                     </ul>
+                    <Details onChange={onChange} details={details} />
+
                     {error !== null ? <div className="error">{error}</div> : ''}
                     <Button color="burgundy" fullWidth>POST</Button>
                 </form>

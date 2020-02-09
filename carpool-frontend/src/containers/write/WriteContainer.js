@@ -7,27 +7,28 @@ import { withRouter } from 'react-router-dom';
 const WriteContainer = ({ history }) => {
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
-    const { rides, isRoundTrip, postId, postError, user } = useSelector(({ write, user }) => ({
+    const { rides, isRoundTrip, postId, postError, user, details } = useSelector(({ write, user }) => ({
         rides: write.rides,
         isRoundTrip: write.isRoundTrip,
         postId: write.postId,
         postError: write.postError,
-        user: user.user
+        user: user.user,
+        details: write.details,
     }));
-
     const onChange = useCallback((e, name, id) => {
         let value;
-        if (e instanceof Date) {
+        if (e instanceof Date || name === 'details') {
             value = e;
         } else {
             (e.value !== 'undefined' ? value = e.value : value = e.target.value)
         }
 
-        if (name === 'offering') {
+        if (name === 'offering' || name === 'details') {
+            console.log(value);
             dispatch(changeField ({
-                key: 'offering',
+                key: name,
                 value: value,
-                id: -1
+                id: (name === 'offering' ? -1 : -2)
             }))
         } else {
             dispatch(changeField({
@@ -70,7 +71,7 @@ const WriteContainer = ({ history }) => {
                 setError('**The departure and arrival cannot be the same city.**')
             }
         } else {
-            dispatch(writePost({ rides: requiredRides }))
+            dispatch(writePost({ rides: requiredRides, details }))
         }
     }
 
@@ -99,6 +100,7 @@ const WriteContainer = ({ history }) => {
         onChangeRoundtrip={onChangeRoundtrip}
         onSubmit={onSubmit}
         error={error}
+        details={details}
     />
 };
 
