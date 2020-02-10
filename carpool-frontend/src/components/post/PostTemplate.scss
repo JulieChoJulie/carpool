@@ -1,8 +1,33 @@
+@import '../../styles/utils';
+
 .postTemplate {
   flex: 1;
-  justify-items: center;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-top: 1rem;
-  text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+  .commentTemplate {
+    border: 1px solid $burgundy;
+    margin: 1rem;
+    margin-top: 0;
+    border-top: none;
+    padding: 0.3rem;
+  }
+  .date {
+    padding-left: 0.3rem;
+    color: $oc-gray-6;
+    font-size: 0.6rem;
+    @media (max-width: 500px) {
+      font-size: 0.4rem;
+    }
+  }
+  span {
+    &.username {
+      font-weight: bold;
+    }
+  }
+  @media (max-width: 500px) {
+    font-size: 0.5rem;
+  }
 }

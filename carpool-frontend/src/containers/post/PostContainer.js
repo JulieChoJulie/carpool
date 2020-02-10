@@ -3,7 +3,7 @@ import Post from '../../components/post/Post';
 
 const PostContainer = ({ post }) => {
     return (
-        <Post post={post}/>
+        <Post post={post} />
     );
 };
 

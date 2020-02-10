@@ -1,13 +1,13 @@
 import React from 'react';
-import Comment from '../../components/post/Comment';
-import CommentInsert from '../../components/post/CommentInsert';
+import Comments from '../../components/post/Comments';
 
-const CommentContainer = ({ comments, onInsert }) => {
+const CommentContainer = ({ comments }) => {
+    const onInsert = () => {
+
+    }
+    const onChange = () => {}
     return (
-        <>
-            <CommentInsert onInsert={onInsert}/>
-            <Comment comments={comments}/>
-        </>
+      <Comments comments={comments} onInsert={onInsert} onChange={onChange}/>
     );
 };
 

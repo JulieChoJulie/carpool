@@ -1,0 +1,45 @@
+@import '../../styles/utils';
+
+.commentInsert {
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  border-top: 3px solid $lightBeige;
+  padding-right: 0.5rem;
+  font-size: 0.8rem;
+  @media (max-width: 500px) {
+    font-size: 0.6rem;
+  }
+  .username {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    @media (max-width: 500px) {
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      flex-shrink: 1;
+    }
+  }
+  input {
+    flex: 1;
+    overflow-x: hidden;
+    height: 1.5rem;
+    border: 1px solid $lightBlue;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    background: transparent;
+    svg {
+      font-size: 0.8rem;
+      color: $burgundy;
+      background: transparent;
+    }
+  }
+}

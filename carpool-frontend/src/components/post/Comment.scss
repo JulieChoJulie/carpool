@@ -1,0 +1,16 @@
+.comment {
+  margin-left: 0.4rem;
+  .username {
+    font-size: 0.7rem;
+    @media (max-width: 500px) {
+      font-size: 0.5rem;
+    }
+  }
+  .content {
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    @media (max-width: 500px) {
+      font-size: 0.5rem;
+    }
+  }
+}

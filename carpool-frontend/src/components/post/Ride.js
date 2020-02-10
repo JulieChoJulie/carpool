@@ -1,25 +1,22 @@
 import React from 'react';
-import { IoIosArrowRoundForward } from 'react-icons/io';
+import dateFormat from './dateFormat';
+import './Ride.scss';
 
 const Ride = ({ ride }) => {
     return (
         <div className="ride">
-            <div className="cities">
-                {ride.from}
-                <IoIosArrowRoundForward/>
-                {ride.to}
+            <div className="cities item">
+                <span className="label">Where: </span>
+                {ride.from} <span className="label"> -> </span> {ride.to}
             </div>
-            <div className="when">
-                Leaving at {ride.when}
+            <div className="when item">
+                <span className="label">When: </span>{dateFormat(ride.when)}
             </div>
-            <div className="seats">
-                Seats: {ride.available} &#47; {ride.seats}
+            <div className="seats item">
+                <span className="label">Seats:</span> {ride.available} &#47; {ride.seats}
             </div>
-            <div className="price">
-                Price: $ {ride.price} &#47; seat
-            </div>
-            <div className="details">
-                {ride.details}
+            <div className="price item">
+                <span className="label">Price</span>: $ {ride.price} &#47; seat
             </div>
         </div>
     );
