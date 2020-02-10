@@ -30,8 +30,8 @@ const fakeDataPost = {
             "id": 2,
             "seats": 4,
             "available": 3,
-            "to": "Arnprior",
-            "from": "Aylmer",
+            "to": "Niagara-on-the-lake",
+            "from": "Niagara-on-the-lake",
             "when": "2020-02-11T04:23:51.000Z",
             "status": true,
             "offering": false,
@@ -72,7 +72,7 @@ const DetailsPage = () => {
         <>
             <Header/>
             <PostTemplate>
-                <PostContainer post={fakeDataPost}/>
+                <PostContainer/>
                 <CommentTemplate>
                     <CommentContainer comments={fakeDataPost.comments}/>
                 </CommentTemplate>

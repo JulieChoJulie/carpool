@@ -1,6 +1,12 @@
 @import '../../styles/utils';
 
-.ride {
+.rideBlock {
+  display: flex;
+  flex-direction: row;
+}
+
+.rideBlock>.ride {
+  flex: 1;
   border: 1px dotted $lightBrown;
   margin: 0.3rem;
   padding: 0.3rem;
@@ -16,12 +22,31 @@
   }
 }
 
-.item {
+.rideBlock>.ride>.item {
   flex: 0 50%;
+  flex-wrap: wrap;
   @media (max-width: 700px) {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
     & + & {
       margin-left: 0.2rem;
+    }
+  }
+}
+
+.rideBlock>.reserve {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.5rem;
+  svg {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    font-size: 0.3rem;
+    svg {
+      font-size: 1rem;
     }
   }
 }

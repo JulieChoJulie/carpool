@@ -7,7 +7,7 @@ import { FiDownload } from 'react-icons/fi';
 import './Post.scss';
 import dateFormat from './dateFormat';
 
-const Post = ({ post }) => {
+const Post = ({ post, reserve }) => {
     const { rides, notes, updatedAt, user } = post;
     return (
         <div className="post">
@@ -31,7 +31,7 @@ const Post = ({ post }) => {
             </div>
             <ul className="rideList second row">
             {rides.map((ride, index) => (
-                <li key={index}><Ride ride={ride} when={dateFormat(ride.when)} /></li>
+                <li key={index}><Ride ride={ride} reserve={reserve} /></li>
             ))}
             </ul>
             {post.notes.length > 0 &&
