@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../components/common/Header';
 import PostContainer from '../containers/post/PostContainer';
 import PostTemplate from '../components/post/PostTemplate';
 import CommentContainer from '../containers/post/CommentContainer';
 import CommentTemplate from "../components/post/CommentTemplate";
+import HeaderContainer from "../containers/common/HeaderContainer";
 
 const fakeDataPost = {
     "id": 1,
@@ -70,7 +70,7 @@ const fakeDataPost = {
 const DetailsPage = () => {
     return (
         <>
-            <Header/>
+            <HeaderContainer/>
             <PostTemplate>
                 <PostContainer/>
                 <CommentTemplate>

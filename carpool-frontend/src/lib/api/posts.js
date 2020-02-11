@@ -5,6 +5,3 @@ export const writePost = ({ rides, notes }) =>
 
 export const readPost = id =>
     client.get(`/api/posts/${id}`)
-
-export const getPartners = rideId =>
-    client.get(`/api/action/ride/${rideId}/partners`)

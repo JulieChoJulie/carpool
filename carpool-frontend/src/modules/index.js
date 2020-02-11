@@ -11,11 +11,13 @@ const rootReducer = combineReducers({
     loading,
     user,
     write,
-    post
+    post,
 });
 
 export function* rootSaga() {
-    yield all([authSaga(), userSaga(), writeSaga(), postSaga()]);
+    yield all([
+        authSaga(), userSaga(), writeSaga(), postSaga()
+    ]);
 }
 
 export default rootReducer;

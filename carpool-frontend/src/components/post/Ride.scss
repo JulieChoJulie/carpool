@@ -20,6 +20,14 @@
       flex: 0 0 auto;
     }
   }
+  &.isSoldout {
+    background: $lightBeige;
+    border: none;
+    color: $lightBlue;
+    .label {
+      color:$lightBlue;
+    }
+  }
 }
 
 .rideBlock>.ride>.item {
@@ -48,5 +56,9 @@
     svg {
       font-size: 1rem;
     }
+  }
+  &.soldout {
+    color: red;
+    cursor: default;
   }
 }

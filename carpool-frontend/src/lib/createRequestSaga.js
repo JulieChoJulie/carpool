@@ -15,17 +15,17 @@ export default function createRequestSaga(type, request) {
         yield put(startLoading(type)); // start loading
         try {
             const response = yield call(request, action.payload);
-            const res = {};
-            res.data = response.data;
-            res.payload = action.payload;
-
+            const res = {
+                data: response.data,
+                payload: action.payload
+            }
             yield put({
                 type: SUCCESS,
                 payload: res,
             });
         } catch (e) {
             const error = {};
-            if (e.config.data) {
+            if (e && e.config && e.config.data) {
                 error.data = JSON.parse(e.config.data);
             }
             const status =parseInt(e.message.slice(-3));
