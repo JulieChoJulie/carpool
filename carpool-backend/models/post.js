@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => (
             allowNull: false,
             defaultValue: true,
         },
+        notes: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
     },{
         timestamps: true,
         paranoid: true,

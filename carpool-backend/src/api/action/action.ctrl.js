@@ -1,22 +1,31 @@
 const { User, Ride, Post } = require('../../../models');
 const { postFormat } = require('../posts/helper');
 const { Op } = require('sequelize');
+const { serializeUser } = require('../middlewares');
 
 /* POST /action/ride/:rideId/add */
 exports.joinRide = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
         const ride = await Ride.findOne({ where: { id: req.params.rideId } });
-        const partner = await user.addPartnerRides(ride);
-        console.log(partner);
-        if (partner === undefined) {
-            // the user already added the ride
-            res.sendStatus(409); // conflict
+        if (ride.available > 0 ) {
+            const partner = await user.addPartnerRides(ride);
+            if (partner === undefined) {
+                // the user already added the ride
+                res.sendStatus(409); // conflict
+            }
+            const seats = ride.seats;
+            if (partner === 0) {
+                // the user already added the ride
+                res.sendStatus(409); // conflict
+            }
+            const available = seats - partner.length;
+            await ride.update({ available: available } );
+            res.status(200).send(partner);
+        } else {
+            res.sendStatus(403); //Forbidden
         }
-        const seats = ride.seats;
-        const available = seats - partner.length;
-        await ride.update({ available: available } );
-        res.status(200).send(partner);
+
     } catch (err) {
         console.error(err);
         next(err);
@@ -29,7 +38,6 @@ exports.cancelRide = async (req, res, next) => {
         const user = await User.findOne({ where: { id: req.user.id } });
         const ride = await Ride.findOne({ where: { id: req.params.rideId } });
         const partner = await user.removePartnerRides(ride);
-        console.log(partner)
         if (partner === 0) {
             // the user already cancelled the ride
             res.sendStatus(409); // conflict
@@ -84,6 +92,31 @@ exports.deleteSave = async (req, res, next) => {
         await user.removeSavePosts(post);
         res.sendStatus(200)
     } catch (err) {
+        next(err);
+    }
+}
+
+/* GET /api/action/ride/:rideId/partners */
+exports.getUserPartners = async (req, res, next) => {
+    try {
+        const ride = await Ride.findOne({ where : { id : req.params.rideId }});
+        const partners = await ride.getPartnerUsers();
+        const serializedPartners = partners.map(partner => serializeUser(partner));
+        res.status(200).send(serializedPartners);
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+}
+
+/* GET /api/action/userPartners */
+exports.getRidePartners = async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        const partners = await user.getPartnerRides();
+        res.status(200).send(partners);
+    } catch (err) {
+        console.log(err);
         next(err);
     }
 }

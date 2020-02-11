@@ -2,7 +2,7 @@ exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
     } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
     }
 };
 
@@ -31,6 +31,11 @@ exports.serialize = (req, res) => {
     } else {
         res.sendStatus(404);
     }
+};
+
+exports.serializeUser = (user) => {
+    const { username, id } = user;
+    return { username, id };
 }
 
 exports.isOwner = (req, res) => {
@@ -46,6 +51,6 @@ exports.isOwner = (req, res) => {
     if (user.id === req.user.id) {
         next();
     } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
     }
 }

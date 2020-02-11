@@ -5,7 +5,7 @@ const { serialize } = require('../middlewares');
 
 /* GET api/auth/profile */
 exports.profile = (req, res) => {
-    res.send(serialize(req, res));
+    res.status(200).send(serialize(req, res));
 };
 
 /* POST  api/auth/join/uniqueCheck */
@@ -55,7 +55,6 @@ exports.joinPost = async (req, res, next) => {
 
 /* POST api/auth/login */
 const loginFunction = (req, res, next) => {
-    console.log('**************HERE')
     passport.authenticate('local', (authError, user, info) => {
         if (authError) {
             console.error(authError);

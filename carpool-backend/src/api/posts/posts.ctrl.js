@@ -18,11 +18,15 @@ exports.readFeed = async (req, res, next) => {
 exports.write = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
-        const { rides } = req.body;
+        const { rides, notes } = req.body;
         if (!rides) {
             res.redirect('/');
         }
-        const post = await Post.create({ userId: req.user.id }, { transaction: t });
+        const post = await Post.create({
+                userId: req.user.id,
+                notes: notes,
+            },
+            { transaction: t });
         const postId = post.id;
         const result = await Promise.all(rides.map(ride => {
             const { from, to, seats, when, price, offering } = ride;
