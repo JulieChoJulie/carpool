@@ -1,3 +1,5 @@
+const { Post, Comment, User, Ride } = require('../../models');
+
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
@@ -38,19 +40,34 @@ exports.serializeUser = (user) => {
     return { username, id };
 }
 
-exports.isOwner = (req, res) => {
-    let user;
-    if (!!req.params.userId) {
-        user = req.params.userId;
+exports.isOwner = async (req, res, next) => {
+    let userId = -1;
+    if (!!req.params.rideId) {
+        const ride = await Ride.findOne({
+            where: { id: req.params.rideId },
+            include: [
+                {
+                    model: Post,
+                    attributes: ['userId']
+                }
+            ]
+        });
+        if (ride === null) {
+            res.sendStatus(404); // not found
+        }
+        userId = ride.post.userId;
+    } else if (!!req.params.userId) {
+        userId = req.params.userId;
     } else if (!!req.params.commentId) {
-        user = req.params.commentId;
-    } else {
-        user = req.params.id;
+        const comment = await Comment.findOne({ where: { id: req.params.commentId }});
+        userId = comment.userId;
+    } else if (!!req.params.id) {
+        const post = await Post.findOne({ where: { id: req.params.id }});
+        userId = post.userId;
     }
-
-    if (user.id === req.user.id) {
+    if (userId === req.user.id) {
         next();
     } else {
-        res.sendStatus(401);
+        res.sendStatus(403); // Forbidden
     }
 }

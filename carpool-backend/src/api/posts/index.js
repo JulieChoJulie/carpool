@@ -11,6 +11,7 @@ posts.get('/:id', postsCtrl.readPost);
 posts.put('/:id', isLoggedIn, isOwner, postsCtrl.editPost);
 posts.delete('/:id', isLoggedIn, isOwner, postsCtrl.deletePost);
 posts.delete('/:id/ride/:rideId', isLoggedIn, isOwner, postsCtrl.deleteRide);
+posts.get('/:id/getOwner', isLoggedIn, isOwner, postsCtrl.getOwner);
 
 posts.post('/:id/comments', isLoggedIn, postsCtrl.writeComment);
 posts.get('/:id/comments', postsCtrl.readComment);

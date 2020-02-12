@@ -307,3 +307,20 @@ exports.readPostsByUser = async (req, res, next) => {
         next(err);
     }
 }
+
+
+/* GET api/posts/:id/getOwner */
+// with isLoggedIn, isOwner middlewares before this.
+exports.getOwner = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
+        if (post === null) {
+            res.sendStatus(404); // Not Found
+        }
+        res.status(200).send(post);
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+}

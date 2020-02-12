@@ -36,6 +36,7 @@ const NtoM = (N, M, through) => {
 // make tables for trip and save;
 NtoM('User', 'Post', 'Save');
 NtoM('User', 'Ride', 'Partner');
+NtoM('User', 'Ride', 'Request');
 
 module.exports = db;
 
