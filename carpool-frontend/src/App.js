@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
 import TripPage from './pages/TripPage';
 import SavePage from './pages/SavePage';
+import ErrorPage from './pages/ErrorPage';
 
 const App = () => {
     return (
@@ -16,10 +17,11 @@ const App = () => {
           <Route component={LoginPage} path="/login" />
           <Route component={RegisterPage} path="/signup" />
           <Route component={ProfilePage} path="/users/@:username/profile" />
-          <Route component={WritePage} path="/post" exact />
-          <Route component={DetailsPage} path="/posts/:id" />
+          <Route component={WritePage} path={["/post", '/posts/:id/edit']} exact />
+          <Route component={DetailsPage} path="/posts/:id" exact />
           <Route component={TripPage} path="/users/@:username/trip" />
           <Route component={SavePage} path="/users/@:username/save" />
+          <Route component={ErrorPage} path="/error/:status" />
         </>
     );
 };

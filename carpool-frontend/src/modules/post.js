@@ -6,16 +6,23 @@ import createRequestSaga, {
     createRequestActionTypes
 } from '../lib/createRequestSaga';
 import produce from "immer";
+import * as authAPI from "../lib/api/auth";
 
 const [GET_POST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('post/GET_POST');
 const UNLOAD_POST = 'post/UNLOAD_POST';
+const [EDIT_POST, EDIT_POST_SUCCESS, EDIT_POST_FAILURE] = createRequestActionTypes('post/EDIT_POST');
+const [DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAILURE] = createRequestActionTypes('post/DELETE_POST');
 
-export const getPost = createAction(GET_POST);
-export const unloadPost = createAction(UNLOAD_POST);
+export const getPost = createAction(GET_POST, id => id);
+export const unloadPost = createAction(UNLOAD_POST, id => id);
+export const editPost = createAction(EDIT_POST, id => id);
+export const deletePost = createAction(DELETE_POST, id => id);
+
 const getPostSaga = createRequestSaga(GET_POST, postAPI.readPost);
+const editPostSaga = createRequestSaga(EDIT_POST, postAPI.editPost);
+const deletePostSaga = createRequestSaga(DELETE_POST, postAPI.deletePost);
 
-
-
+/* /api/action... */
 const [GET_RIDE_PARTNERS, GET_RIDE_PARTNERS_SUCCESS, GET_RIDE_PARTNERS_FAILURE] =createRequestActionTypes('action/GET_RIDE_PARTNERS');
 const [ADD_RIDE, ADD_RIDE_SUCCESS, ADD_RIDE_FAILURE] = createRequestActionTypes('action/ADD_RIDE');
 const [CANCEL_RIDE, CANCEL_RIDE_SUCCESS, CANCEL_RIDE_FAILURE] = createRequestActionTypes('action/CANCEL_RIDE');
@@ -33,6 +40,8 @@ export function* postSaga() {
     yield takeLatest(ADD_RIDE, addRideSaga);
     yield takeLatest(CANCEL_RIDE, cancelRideSaga);
     yield takeLatest(GET_RIDE_PARTNERS, getRidePartnersSaga);
+    yield takeLatest(EDIT_POST, editPostSaga);
+    yield takeLatest(DELETE_POST, deletePostSaga);
 }
 
 const initialState = {
@@ -103,7 +112,7 @@ const post = handleActions(
         [CANCEL_RIDE_FAILURE]: (state, { payload: error }) => ({
             ...state,
             toggleError: { status: error.status, type: 'cancel' }
-        })
+        }),
     },
     initialState
 );

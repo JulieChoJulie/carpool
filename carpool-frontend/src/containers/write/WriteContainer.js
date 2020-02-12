@@ -1,20 +1,27 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import Write from '../../components/write/Write';
 import { useSelector, useDispatch } from "react-redux";
-import {changeField, changeRoundtrip, initialize, writePost } from "../../modules/write";
+import {
+    changeField, changeRoundtrip, initialize, writePost, getOwner
+} from "../../modules/write";
 import { withRouter } from 'react-router-dom';
 
-const WriteContainer = ({ history }) => {
+const WriteContainer = ({ history, match }) => {
+    const isEdit = match.params && (match.params.id);
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
-    const { rides, isRoundTrip, postId, postError, user, notes } = useSelector(({ write, user }) => ({
+    const {
+        rides, isRoundTrip, postId, postError, user, notes, isOwner
+    } = useSelector(({ write, user }) => ({
         rides: write.rides,
         isRoundTrip: write.isRoundTrip,
         postId: write.postId,
         postError: write.postError,
         user: user.user,
         notes: write.notes,
+        isOwner: write.isOwner,
     }));
+
     const onChange = useCallback((e, name, id) => {
         let value;
         if (e instanceof Date || name === 'notes') {
@@ -72,17 +79,25 @@ const WriteContainer = ({ history }) => {
         } else {
             dispatch(writePost({ rides: requiredRides, notes }))
         }
-    }
+    };
 
     const onChangeRoundtrip = useCallback((boolean) => {
         dispatch(changeRoundtrip(boolean))
     }, [dispatch]);
 
-    // initialize the form when it's unmount
+    // when it's on editing mode, fill out the form.
     useEffect(() =>{
-        dispatch(initialize());
-    }, [dispatch]);
+        if (isEdit) {
+            dispatch(getOwner(isEdit));
+            // if the user is not the writer
+            if (isOwner !== null && isOwner !== 200) {
+                history.push(`/error/${isOwner}`);
+            }
+        }
+    }, [dispatch, isEdit, isOwner, history]);
 
+
+    // after submiting
     useEffect(() => {
         if (postId) {
             history.push(`/posts/${postId}`);
@@ -92,15 +107,24 @@ const WriteContainer = ({ history }) => {
         }
     }, [history, postId, postError]);
 
-    return <Write
-        onChange={onChange}
-        isRoundTrip={isRoundTrip}
-        rides={rides}
-        onChangeRoundtrip={onChangeRoundtrip}
-        onSubmit={onSubmit}
-        error={error}
-        notes={notes}
-    />
+    // initialize the form when it's unmounted.
+    useEffect(() => {
+        return (() => dispatch(initialize()));
+    }, [dispatch])
+
+    if (!isEdit || isOwner === 200) {
+        return <Write
+            onChange={onChange}
+            isRoundTrip={isRoundTrip}
+            rides={rides}
+            onChangeRoundtrip={onChangeRoundtrip}
+            onSubmit={onSubmit}
+            error={error}
+            notes={notes}
+        />
+    } else {
+        return null;
+    }
 };
 
 export default withRouter(WriteContainer);

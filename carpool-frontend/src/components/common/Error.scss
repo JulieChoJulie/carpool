@@ -1,0 +1,10 @@
+@import '../../styles/utils';
+
+.errorBlock {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+}

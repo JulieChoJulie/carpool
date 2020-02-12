@@ -4,10 +4,10 @@ import { withRouter } from 'react-router-dom';
 import {
     getPost, unloadPost, getRidePartners, addRide, cancelRide
 } from '../../modules/post';
-// import { getRidePartners, addRide, cancelRide } from '../../modules/action';
+import { setOriginalPost } from "../../modules/write";
 import Post from '../../components/post/Post';
 
-const PostContainer = ({ match }) => {
+const PostContainer = ({ match, history }) => {
     const postId = match.params.id;
     const dispatch = useDispatch();
     const {
@@ -46,6 +46,13 @@ const PostContainer = ({ match }) => {
         (!isReserve ?  dispatch(addRide(rideId)) : dispatch(cancelRide(rideId)));
     };
 
+    const isOwn = user && post.user.id === user.id;
+
+    const onEdit = () => {
+        dispatch(setOriginalPost(post));
+        history.push(`/posts/${post.id}/edit`);
+    }
+
     useEffect(() => {
         dispatch(getPost(postId));
         if (user && user.id) {
@@ -65,6 +72,8 @@ const PostContainer = ({ match }) => {
               toggleRide={toggleRide}
               user={user}
               errorMsg={errorMsg}
+              isOwn={isOwn}
+              onEdit={onEdit}
         />
     );
 };
