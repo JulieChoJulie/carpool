@@ -149,6 +149,7 @@ exports.deleteRide = async (req, res, next) => {
                 transaction: t
             }
         );
+        console.log(JSON.stringify(ride));
         if (ride[0] === 0) {
             res.sendStatus(404); // Not Found
         } else {
@@ -156,7 +157,7 @@ exports.deleteRide = async (req, res, next) => {
             const rides = await Ride.findAll({
                 where: {
                     [Op.and]: [
-                        { staxtus: true },
+                        { status: true },
                         { postId: req.params.id }
                     ]
                 }

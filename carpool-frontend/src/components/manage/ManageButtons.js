@@ -3,7 +3,7 @@ import AskRemoveModal from './AskRemoveModal';
 import { Link } from "react-router-dom";
 import { MdDelete, MdEdit } from 'react-icons/md';
 
-const ManageButtons = ({ onRemove, postId }) => {
+const ManageButtons = ({ onRemove, id, isEdit, obj, type }) => {
     const [modal, setModal] = useState(false);
     const onRemoveClick = () => {
         setModal(true);
@@ -15,18 +15,22 @@ const ManageButtons = ({ onRemove, postId }) => {
 
     const onConfirm = () => {
         setModal(false);
-        onRemove(postId);
+        if(type === 'ride') {
+            onRemove(obj.postId, obj.id)
+        } else {
+            onRemove(id);
+        }
     };
 
     return (
         <div className="buttons">
-            <Link className="editIcon" to={`/posts/${postId}/edit`}><MdEdit/></Link>
+            { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><MdEdit/></Link>}
             <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>
             <AskRemoveModal
                 visible={modal}
                 onConfirm={onConfirm}
                 onCancel={onCancel}
-                obj='post'
+                obj={type}
             />
         </div>
     );

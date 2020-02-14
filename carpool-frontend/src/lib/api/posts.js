@@ -14,3 +14,6 @@ export const editPost = id =>
 
 export const getOwner = id =>
     client.get(`/api/posts/${id}/getOwner`)
+
+export const deleteRide = (postId, rideId) =>
+    client.delete(`/api/posts/${postId}/ride/${rideId}`)

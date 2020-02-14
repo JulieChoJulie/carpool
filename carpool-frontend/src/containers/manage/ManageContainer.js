@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPassenger, getMyPosts, cancelPassenger } from '../../modules/manage';
-import { deletePost } from '../../lib/api/posts';
+import { deletePost, deleteRide } from '../../lib/api/posts';
 import ManageTemplate from "../../components/manage/ManageTemplate";
 import Manage from "../../components/manage/Manage";
 import { withRouter } from 'react-router-dom';
@@ -32,9 +32,14 @@ const ManageContainer = ({ history }) => {
         }
     };
 
-    const onEdit = () => {
-
-    };
+    const onRemoveRide = async (postId, rideId) => {
+        try {
+            await deleteRide(postId, rideId);
+            dispatch(getMyPosts());
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
 
     useEffect(() => {
@@ -56,6 +61,7 @@ const ManageContainer = ({ history }) => {
                 onAccept={onAccept}
                 onCancel={onCancel}
                 onRemove={onRemove}
+                onRemoveRide={onRemoveRide}
             />
         </ManageTemplate>
     );

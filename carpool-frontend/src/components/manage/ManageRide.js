@@ -2,12 +2,13 @@ import React from 'react';
 import Passenger from "./Passenger";
 import Request from "./Request";
 import Ride from '../post/Ride';
+import ManageButtons from './ManageButtons';
 import './ManageRide.scss';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { TiEdit } from 'react-icons/ti';
 import { AiFillSetting } from 'react-icons/ai';
 
-const ManageRide = ({ ride, onAccept, onCancel }) => {
+const ManageRide = ({ ride, onAccept, onCancel, onRemoveRide }) => {
     return (
         <div className="ManageRide">
             <div className="reservation">
@@ -28,9 +29,16 @@ const ManageRide = ({ ride, onAccept, onCancel }) => {
             </div>
             <div className="rideBlock">
                 <Ride ride={ ride } />
-                <span className="button">
-                    <span className="deleteIcon"><MdDelete/></span>
-                </span>
+                <ManageButtons
+                    onRemove={onRemoveRide}
+                    obj={ride}
+                    isEdit={false}
+                    type='ride'
+                />
+                {/*<span className="button">*/}
+                    {/*<span className="deleteIcon"><MdDelete/></span>*/}
+                {/*</span>*/}
+
             </div>
         </div>
     );

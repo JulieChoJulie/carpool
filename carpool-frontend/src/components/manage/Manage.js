@@ -2,7 +2,15 @@ import React from 'react';
 import ManagePost from "./ManagePost";
 import LoginError from "../common/LoginError";
 
-const Manage = ({ loading, myPosts, user, onAccept, onCancel, onRemove }) => {
+const Manage = ({
+                    loading,
+                    myPosts,
+                    user,
+                    onAccept,
+                    onCancel,
+                    onRemove,
+                    onRemoveRide
+}) => {
     if (loading || !myPosts) {
         return null;
     }
@@ -18,6 +26,7 @@ const Manage = ({ loading, myPosts, user, onAccept, onCancel, onRemove }) => {
                         onAccept={onAccept}
                         onCancel={onCancel}
                         onRemove={onRemove}
+                        onRemoveRide={onRemoveRide}
                     />)
             }
         </>
