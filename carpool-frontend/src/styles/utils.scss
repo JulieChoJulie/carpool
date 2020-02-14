@@ -40,3 +40,17 @@ $black: #20292f;
   text-align: center;
   margin-top: 0.2rem;
 }
+
+.template {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .label {
+    color: $lightBrown;
+    font-size: 0.8rem;
+    font-weight: bold;
+    @media (max-width: 500px) {
+      font-size: 0.6rem;
+    }
+  }
+}

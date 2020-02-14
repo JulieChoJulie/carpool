@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
-    getPost, unloadPost, getRidePartners, addRide, cancelRide
+    getPost, unloadPost, addRide, cancelRide
 } from '../../modules/post';
 import { setOriginalPost } from "../../modules/write";
 import Post from '../../components/post/Post';
@@ -56,7 +56,7 @@ const PostContainer = ({ match, history }) => {
     useEffect(() => {
         dispatch(getPost(postId));
         if (user && user.id) {
-            dispatch(getRidePartners());
+            // get ride request status
         }
         return (() => {
             dispatch(unloadPost());

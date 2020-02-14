@@ -16,7 +16,7 @@ action.post('/ride/:rideId/user/:userId/add', isLoggedIn, isOwner, actionCtrl.ad
 action.post('/ride/:rideId/user/:userId/cancel', isLoggedIn, isOwner, actionCtrl.cancelPassenger);
 action.get('/ride/:rideId/passengers', isLoggedIn, actionCtrl.getPassengers);
 action.get('ride/:rideId/requests', isLoggedIn, actionCtrl.getRequests);
-
+action.get('/posts/manage', isLoggedIn, actionCtrl.getMyPost);
 
 action.get('/trip', isLoggedIn, actionCtrl.getTrip);
 action.get('/save', isLoggedIn, actionCtrl.getSave);

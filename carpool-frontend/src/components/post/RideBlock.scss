@@ -1,0 +1,28 @@
+@import '../../styles/utils';
+
+.rideBlock {
+  display: flex;
+  flex-direction: row;
+}
+
+.rideBlock>.reserve {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.5rem;
+  svg {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    font-size: 0.3rem;
+    svg {
+      font-size: 1rem;
+    }
+  }
+  &.soldout {
+    color: red;
+    cursor: default;
+  }
+}

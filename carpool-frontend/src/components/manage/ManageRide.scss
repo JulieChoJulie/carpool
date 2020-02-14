@@ -1,0 +1,39 @@
+@import '../../styles/utils';
+
+.ManageRide>.reservation {
+  padding-left: 0.2rem;
+  display: flex;
+  flex-direction: row;
+  .item {
+    flex: 0 50%;
+    .user {
+      display: flex;
+      flex-direction: row;
+      .username {
+        margin-right: 0.3rem;
+        color: $oc-gray-7;
+      }
+    }
+    .label {
+      font-size: 0.7rem;
+      color: $burgundy;
+    }
+  }
+}
+
+.item + item {
+  padding-left: 0.3rem;
+}
+
+.ManageRide>.rideBlock {
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      font-size: 1rem;
+      cursor: pointer;
+      color: $lightBrown;
+    }
+  }
+}

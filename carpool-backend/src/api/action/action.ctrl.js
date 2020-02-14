@@ -1,5 +1,5 @@
 const { User, Ride, Post } = require('../../../models');
-const { postFormat } = require('../posts/helper');
+const { postFormat, myPostFormat } = require('../posts/helper');
 const { sequelize } = require('../../../models');
 const { Op, transaction } = require('sequelize');
 const { serializeUser } = require('../middlewares');
@@ -17,7 +17,7 @@ const getUserRequestsFunc = async (req, res, next) => {
 
         const requests = await ride.getRequestUsers(req.condition);
         /* [{
-        /     ...user,
+        /     user,
         /     "Request": {
         /         "userId": 1,
         /         "rideId": 1,
@@ -63,6 +63,12 @@ exports.addRequest = async (req, res, next) => {
             // forbidden: no seats available
             if (ride.available === 0) {
                 res.status(403).end(); //forbidden
+            }
+            const partner = await user.getPartnerRides({ where: { id: req.params.rideId }});
+            console.log(JSON.stringify(partner))
+            if (partner.length > 0) {
+                res.status(400).end(); // the user already added in passenger
+                return;
             }
             const request = await user.addRequestRides(ride);
             if (request === undefined) {
@@ -200,15 +206,21 @@ exports.addPassenger = async (req, res, next) => {
             return;
         }
 
+        // remove the request
+        const removeRequest = await user.removeRequestRide(ride, { transaction: t });
 
         // update available seats in the ride
-        const available = ride.seats - partner.length;
+        const available = ride.seats - 1;
         await ride.update({ available: available }, { transaction: t });
 
         await t.commit();
 
-        // array of obj {passengerId, rideId, and timestamp}
-        res.status(200).send(partner);
+        const userPartner = await ride.getPartnerUsers({ where: { id: user.id }});
+        console.log(JSON.stringify(userPartner));
+        const serializedPartner = serializeUser(userPartner[0], 'Partner');
+        console.log(JSON.stringify(serializedPartner));
+        // array of obj { ...user, Parter: {userId, rideId}}
+        res.status(200).send(serializedPartner);
     } catch (err) {
         await t.rollback();
         console.error(err);
@@ -231,9 +243,6 @@ exports.cancelPassenger = async (req, res, next) => {
             res.status(400).end(); // Bad Request
             return;
         }
-
-        // remove the request
-        const removeRequest = await user.removeRequestRide(ride, { transaction: t });
 
         // update available seats in the ride
         const available = ride.available + 1;
@@ -258,7 +267,7 @@ exports.getPassengers = async (req, res, next) => {
             return;
         }
         const partners = await ride.getPartnerUsers();
-        const serializedPartners = partners.map(partner => serializeUser(partner));
+        const serializedPartners = partners.map(partner => serializeUser(partner, "Partner"));
         res.status(200).send(serializedPartners);
     } catch (err) {
         console.log(err);
@@ -270,10 +279,22 @@ exports.getPassengers = async (req, res, next) => {
 exports.getRequests = async (req, res, next) => {
     try {
         const requests = getUserRequestsFunc(req, res);
-        res.status(200).send(requests);
+        const serializedRequests = requests.map(request => serializeUser(request, "Request"));
+        res.status(200).send(serializedRequests);
     } catch (err) {
         console.log(err);
         next(err);
+    }
+}
+
+/* GET /api/action/posts/manage */
+exports.getMyPost = async (req, res, next) => {
+    try {
+        const posts = await Post.findAll(myPostFormat(req.user.id));
+        res.send(posts);
+
+    } catch (err) {
+        console.log(err);
     }
 }
 

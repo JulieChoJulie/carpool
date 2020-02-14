@@ -35,9 +35,13 @@ exports.serialize = (req, res) => {
     }
 };
 
-exports.serializeUser = (user) => {
+exports.serializeUser = (user, type) => {
     const { username, id } = user;
-    return { username, id };
+    return {
+        username,
+        id,
+        [type]: user[type]
+    }
 }
 
 exports.isOwner = async (req, res, next) => {

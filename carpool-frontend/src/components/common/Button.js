@@ -3,7 +3,7 @@ import './Button.scss';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 
-const Button = ({ to, history, color, fullWidth, children, ...rest }) => {
+const Button = ({ to, history, color, fullWidth, small, children, ...rest }) => {
     const onClick = e => {
         if (to) {
             history.push(to);
@@ -16,7 +16,7 @@ const Button = ({ to, history, color, fullWidth, children, ...rest }) => {
         <div>
             <button
                 className={
-                    classNames('Button', color , { fullWidth })
+                    classNames('Button', color , { small }, { fullWidth })
                 }
                 onClick={onClick}
             >

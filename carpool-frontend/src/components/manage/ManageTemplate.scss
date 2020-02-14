@@ -1,0 +1,11 @@
+@import '../../styles/utils';
+
+.manageTemplate {
+  padding: 1rem;
+  h2 {
+    color: $lightBrown;
+  }
+  @media (max-width: 450px) {
+    font-size: 0.5rem;
+  }
+}

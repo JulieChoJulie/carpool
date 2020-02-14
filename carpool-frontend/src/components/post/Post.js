@@ -1,5 +1,5 @@
 import React from 'react';
-import Ride from './Ride';
+import RideBlock from './RideBlock';
 import { MdPerson, MdDelete } from 'react-icons/md';
 import { IoIosBody, IoIosCar } from "react-icons/io";
 import { TiEdit } from 'react-icons/ti';
@@ -41,7 +41,6 @@ const Post = ({
                     (<><span className="editIcon" onClick={onEdit}><TiEdit/></span>
                     <span className="deleteIcon"><MdDelete/></span></>)
                     }
-
                 </span>
             </div>
             <div className="offering">
@@ -54,7 +53,7 @@ const Post = ({
             <ul className="rideList second row">
             {rides.map((ride, index) => (
                 <li key={index}>
-                    <Ride ride={ride} ridePartners={ridePartners} toggleRide={toggleRide} />
+                    <RideBlock ride={ride} ridePartners={ridePartners} toggleRide={toggleRide} />
                 </li>
             ))}
             </ul>

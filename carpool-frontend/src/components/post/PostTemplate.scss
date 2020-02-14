@@ -1,12 +1,8 @@
 @import '../../styles/utils';
 
 .postTemplate {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   margin-top: 1rem;
-  font-size: 0.8rem;
   .commentTemplate {
     border: 1px solid $burgundy;
     margin: 1rem;

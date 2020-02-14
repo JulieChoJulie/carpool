@@ -3,7 +3,7 @@ import './PostTemplate.scss';
 
 const PostTemplate = ({ children }) => {
     return (
-        <div className="postTemplate">
+        <div className="postTemplate template">
             {children}
          </div>
     );
