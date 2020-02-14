@@ -16,8 +16,7 @@ const styles = (size, minWidth) => ({
     container: (provided, state) => {
         const res = {
             ...provided,
-            // 'marginTop': '0.2rem',
-            'fontSize': '0.8rem',
+            'fontSize': '0.7rem',
         };
         (size === 'flex: 1' ? res.flex = 1 : (res.width = `${size}rem`));
         if (minWidth) {

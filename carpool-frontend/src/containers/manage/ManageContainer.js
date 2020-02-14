@@ -32,6 +32,11 @@ const ManageContainer = ({ history }) => {
         }
     };
 
+    const onEdit = () => {
+
+    };
+
+
     useEffect(() => {
         dispatch(getMyPosts());
     }, [dispatch]);
