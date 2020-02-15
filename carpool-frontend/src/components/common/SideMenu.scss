@@ -1,0 +1,93 @@
+@import '../../styles/utils';
+
+.sideMenu {
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem;
+  padding-left: 0;
+  padding-top: 0.2rem;
+  font-size: 0.8rem;
+  width: 6rem;
+  // when the screen is small
+  @media (max-width: 768px) {
+    position: fixed;
+    flex-direction: row;
+    justify-content: flex-end;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.5);
+    &.isMenuClosed {
+      display: none;
+    }
+  }
+  .closeButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    svg {
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: white;
+    }
+    @media (min-width: 769px) {
+      display: none;
+    };
+  }
+  ul {
+    display: block;
+    list-style-type: none;
+    padding: 0rem;
+    background: white;
+    li {
+      a {
+        padding-left: 0.5rem;
+      }
+    }
+    li + li {
+      margin-top: 1rem;
+    }
+    .topSideMenu {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      width: 10rem;
+      margin: 0;
+      li {
+        flex-shrink: 1;
+        margin: 1rem;
+        margin-left: 0.2rem;
+        &.firstList {
+          outline-bottom: 1px solid $oc-gray-5
+        }
+      }
+      .topSideMenu {
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        svg {
+          cursor: pointer;
+        }
+        .username {
+          position: relative;
+          bottom: 0.1rem;
+          margin-left: 0.4rem;
+        }
+        button {
+          position: relative;
+          bottom: 0.2rem;
+          border: 2px solid $lightBlue;
+          border-radius: 3px;
+          margin-left: 0.3rem;
+          padding: 0.2rem;
+          background: white;
+        }
+      }
+    }
+  }
+}

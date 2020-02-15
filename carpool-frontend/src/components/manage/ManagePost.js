@@ -2,7 +2,6 @@ import React from 'react';
 import './ManagePost.scss';
 import ManageRide from "./ManageRide";
 import ManageButtons from './ManageButtons';
-import Manage from "./Manage";
 
 const ManagePost = ({ post, onAccept, onCancel, onRemove, onRemoveRide }) => {
     return (

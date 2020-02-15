@@ -6,6 +6,7 @@ import post, { postSaga } from './post';
 import manage, { manageSaga } from './manage';
 import loading from './loading';
 import write, { writeSaga } from './write';
+import menu from './menu';
 
 const rootReducer = combineReducers({
     auth,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     write,
     post,
     manage,
+    menu,
 });
 
 export function* rootSaga() {
