@@ -4,6 +4,7 @@ import PostTemplate from '../components/post/PostTemplate';
 import CommentContainer from '../containers/post/CommentContainer';
 import CommentTemplate from "../components/post/CommentTemplate";
 import HeaderContainer from "../containers/common/HeaderContainer";
+import SideMenuContainer from "../containers/common/SideMenuContainer";
 
 const fakeDataPost = {
     "id": 1,
@@ -71,12 +72,15 @@ const DetailsPage = () => {
     return (
         <>
             <HeaderContainer/>
-            <PostTemplate>
-                <PostContainer/>
-                <CommentTemplate>
-                    <CommentContainer comments={fakeDataPost.comments}/>
-                </CommentTemplate>
-            </PostTemplate>
+            <div className="container">
+                <SideMenuContainer/>
+                <PostTemplate>
+                    <PostContainer/>
+                    <CommentTemplate>
+                        <CommentContainer comments={fakeDataPost.comments}/>
+                    </CommentTemplate>
+                </PostTemplate>
+            </div>
         </>
     );
 };

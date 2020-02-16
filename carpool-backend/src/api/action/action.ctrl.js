@@ -109,7 +109,7 @@ exports.getRideStatus = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id }});
         const partners = await user.getPartnerRides();
-        const obj = {}; // key: ride.id, value: 1(booked), 0(request sent)
+        const obj = {}; // key: ride.id, value: 1(booked), -1(request sent)
         if (partners.length !== 0 ) {
             partners.map(partner => {
                 obj[partner.id]  = 1;
@@ -119,7 +119,7 @@ exports.getRideStatus = async (req, res, next) => {
         if (requests.length !== 0) {
             requests.map(request => {
                 if (obj[request.id] === undefined) {
-                    obj[request.id] = 0;
+                    obj[request.id] = -1;
                 }
             })
         }

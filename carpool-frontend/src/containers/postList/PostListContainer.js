@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { readPosts } from '../../modules/posts';
 import Post from "../../components/post/Post";
+import PostContainer from "./PostContainer";
 
 const PostListContainer = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const PostListContainer = () => {
 
     return (
         <div className="containerContent">
-            {JSON.stringify(posts)}
+            {posts.map(post => <PostContainer post={post}/>)}
         </div>
     );
 };

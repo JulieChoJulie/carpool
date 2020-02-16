@@ -7,24 +7,23 @@ import {
 import { setOriginalPost } from "../../modules/write";
 import Post from '../../components/post/Post';
 
-const PostContainer = ({ match, history }) => {
-    const postId = match.params.id;
+const PostContainer = ({ post, history }) => {
+    const postId = post.id;
     const dispatch = useDispatch();
     const {
-        post,
-        postError,
+        postsError,
         status,
         error,
         user,
         loading } = useSelector(
-        ({ post, user, loading }) => ({
+        ({ post, user, loading, posts }) => ({
             post: post.post,
-            postError: post.postError,
+            postsError: posts.postError,
             status: post.status,
             error: [post.statusError, post.toggleError],
             user: user.user,
-            loading: loading['post/GET_POST'],
-    }));
+            loading: loading['posts/READ_POSTS'],
+        }));
 
     const errorMsg = (error) => {
         if (error[0] !== null) {
@@ -69,7 +68,6 @@ const PostContainer = ({ match, history }) => {
     }
 
     useEffect(() => {
-        dispatch(getPost(postId));
         if (user && user.id) {
             // get ride request status
             dispatch(getStatus());
@@ -83,7 +81,7 @@ const PostContainer = ({ match, history }) => {
         <Post post={post}
               status={status}
               loading={loading}
-              postError={postError}
+              postError={postsError}
               error={error}
               toggleRide={toggleRide}
               user={user}

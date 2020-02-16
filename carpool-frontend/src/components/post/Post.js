@@ -9,7 +9,7 @@ import dateFormat from './dateFormat';
 
 const Post = ({
                   post,
-                  ridePartners,
+                  status,
                   postError,
                   loading,
                   toggleRide,
@@ -28,6 +28,15 @@ const Post = ({
     if (loading || !post) {
         return null;
     }
+
+    const rideStatus = (rideId) => {
+        const rideIdStr = rideId.toString();
+        return (!status.hasOwnProperty(rideIdStr) ? '0' : status[rideIdStr]);
+        // 0 => no request
+        // 1 => booked
+        // -1 => request sent
+    }
+
     const { rides, notes, updatedAt, user } = post;
     return (
         <div className="post">
@@ -53,7 +62,7 @@ const Post = ({
             <ul className="rideList second row">
             {rides.map((ride, index) => (
                 <li key={index}>
-                    <RideBlock ride={ride} ridePartners={ridePartners} toggleRide={toggleRide} />
+                    <RideBlock ride={ride} status={rideStatus(ride.id)} toggleRide={toggleRide} />
                 </li>
             ))}
             </ul>

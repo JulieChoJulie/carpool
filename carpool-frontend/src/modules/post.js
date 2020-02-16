@@ -20,19 +20,27 @@ export const unloadPost = createAction(UNLOAD_POST, id => id);
 const getPostSaga = createRequestSaga(GET_POST, postAPI.readPost);
 
 /* /api/action... */
-const [ADD_RIDE, ADD_RIDE_SUCCESS, ADD_RIDE_FAILURE] = createRequestActionTypes('action/ADD_RIDE');
+const [ADD_REQUEST, ADD_REQUEST_SUCCESS, ADD_REQUEST_FAILURE] = createRequestActionTypes('action/ADD_REQUEST');
+const [CANCEL_REQUEST, CANCEL_REQUEST_SUCCESS, CANCEL_REQUEST_FAILURE] = createRequestActionTypes('action/CANCEL_REQUEST');
 const [CANCEL_RIDE, CANCEL_RIDE_SUCCESS, CANCEL_RIDE_FAILURE] = createRequestActionTypes('action/CANCEL_RIDE');
+const [GET_STATUS, GET_STATUS_SUCCESS, GET_STATUS_FAILURE] = createRequestActionTypes('action/GET_STATUS');
 
-export const addRide = createAction(ADD_RIDE);
+export const addRequest = createAction(ADD_REQUEST);
+export const cancelRequest = createAction(CANCEL_REQUEST);
 export const cancelRide = createAction(CANCEL_RIDE);
+export const getStatus = createAction(GET_STATUS);
 
-const addRideSaga = createRequestSaga(ADD_RIDE, actionAPI.addRide);
+const addRequestSaga = createRequestSaga(ADD_REQUEST, actionAPI.addRequest);
+const cancelRequestSaga = createRequestSaga(CANCEL_REQUEST, actionAPI.cancelRequest);
 const cancelRideSaga = createRequestSaga(CANCEL_RIDE, actionAPI.cancelRide);
+const getStatusSaga = createRequestSaga(GET_STATUS, actionAPI.getRideStatus);
 
 export function* postSaga() {
     yield takeLatest(GET_POST, getPostSaga);
-    yield takeLatest(ADD_RIDE, addRideSaga);
+    yield takeLatest(ADD_REQUEST, addRequestSaga);
+    yield takeLatest(CANCEL_REQUEST, cancelRequestSaga);
     yield takeLatest(CANCEL_RIDE, cancelRideSaga);
+    yield takeLatest(GET_STATUS, getStatusSaga);
 }
 
 const initialState = {
@@ -44,9 +52,8 @@ const initialState = {
         notes: ''
     },
     postError: null,
-    ridePartners: [
-    ],
-    partnersError: null,
+    status: {},
+    statusError: null,
     toggleError: null,
 };
 
@@ -63,32 +70,28 @@ const post = handleActions(
             postError: error,
         }),
         [UNLOAD_POST]: () => initialState,
-        [ADD_RIDE_SUCCESS]: (state, { payload: result }) => (
-            produce(state, draft => {
-                draft.ridePartners.push(result.payload);
-                draft.toggleError = null;
-                const index = draft.post.rides.findIndex(r => r.id === result.payload);
-                draft.post.rides[index].available -= 1;
-            })
-        ),
-        [ADD_RIDE_FAILURE]: (state, { payload: error }) => ({
+        [ADD_REQUEST_FAILURE]: (state, { payload: error }) => ({
             ...state,
-            toggleError: { status: error.status, type: 'add' }
+            toggleError: { status: error.status, type: 'added' }
         }),
-        [CANCEL_RIDE_SUCCESS]: (state, { payload: result }) => (
-            produce(state, draft => {
-                draft.ridePartners.splice(
-                    draft.ridePartners.findIndex(r => r.id === result.payload),
-                    1);
-                draft.toggleError = null;
-                const index = draft.post.rides.findIndex(r => r.id === result.payload);
-                draft.post.rides[index].available += 1;
-            })
-        ),
+        [CANCEL_REQUEST_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            toggleError: { status: error.status, type: 'cancelled' }
+        }),
+        [GET_STATUS_SUCCESS]: (state, { payload: result }) => ({
+            ...state,
+            status: result.data,
+            statusError: null
+        }),
+        [GET_STATUS_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            status: null,
+            statusError: error.status
+        }),
         [CANCEL_RIDE_FAILURE]: (state, { payload: error }) => ({
             ...state,
-            toggleError: { status: error.status, type: 'cancel' }
-        }),
+            toogleError: { status: error.status, type: 'cancelled' }
+        })
     },
     initialState
 );

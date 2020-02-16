@@ -1,15 +1,5 @@
 import client from "./client";
 
-export const getUserPartners = rideId =>
-    client.get(`/api/action/ride/${rideId}/partners`)
-
-export const getRidePartners = () =>
-    client.get(`/api/action/ridePartners`); // req.user
-
-export const addRide = (rideId, userId) =>
-    client.post(`/api/action/ride/${rideId}/user/${userId}/add`);
-
-
 /* passengers */
 export const cancelRide = rideId =>
     client.post(`/api/action/ride/${rideId}/cancel`);
@@ -21,7 +11,7 @@ export const cancelRequest = rideId =>
     client.post(`/api/action/ride/${rideId}/request/cancel`);
 
 export const getRideStatus = () =>
-    client.get('rides/status');
+    client.get('/api/action/rides/status');
 
 /* drivers */
 export const addPassenger = ({ rideId, userId }) =>

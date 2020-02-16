@@ -7,7 +7,7 @@ const { postFormat } = require('./helper');
 exports.readFeed = async (req, res, next) => {
     try {
         const posts = await Post.findAll(postFormat());
-        res.send(posts)
+        res.status(200).send(posts);
     } catch (err) {
         console.error(err);
         next(err);
