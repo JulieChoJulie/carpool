@@ -7,7 +7,11 @@ import createRequestSaga, {
 } from '../lib/createRequestSaga';
 import produce from "immer";
 
-const [GET_POST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('post/GET_POST');
+const [
+    GET_POST,
+    GET_POST_SUCCESS,
+    GET_POST_FAILURE
+] = createRequestActionTypes('post/GET_POST');
 const UNLOAD_POST = 'post/UNLOAD_POST';
 
 export const getPost = createAction(GET_POST, id => id);

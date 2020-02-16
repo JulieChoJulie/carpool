@@ -1,6 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
 import createRequestSaga, { createRequestActionTypes } from "../lib/createRequestSaga";
-import * as postAPI from '../lib/api/posts';
 import * as actionAPI from '../lib/api/action';
 import { takeLatest } from 'redux-saga/effects';
 import produce from 'immer';
