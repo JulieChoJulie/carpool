@@ -1,0 +1,23 @@
+@import '../../styles/utils';
+
+.postBlock>.rideBlock {
+  border: 1px solid $lightBrown;
+  border-radius: 4px;
+  &.reservation {
+    background: $lightBeige;
+  }
+  margin: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0.5rem;
+  .firstRow {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+  .where {
+    font-size: 0.8rem;
+    color: $lightBrown;
+  }
+}

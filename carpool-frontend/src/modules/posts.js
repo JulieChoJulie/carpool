@@ -21,17 +21,16 @@ export function* postsSaga() {
 const initialState = {
     posts: [],
     postsError: null,
+    status: {}
 }
 
 const posts = handleActions({
     [READ_POSTS_SUCCESS]: (state, { payload: res }) => ({
         ...state,
-        posts: res.data,
+        posts: res.data.posts,
+        status: (!!res.data.status ? res.data.status : {}),
         postsError: null,
     }),
-    // [READ_POSTS_SUCCESS]: (state, { payload: res }) => {
-    //     console.log(JSON.stringify(res.data));
-    // },
     [READ_POSTS_FAILURE]: (state, { payload: error }) => ({
         ...state,
         posts: initialState.readPosts,

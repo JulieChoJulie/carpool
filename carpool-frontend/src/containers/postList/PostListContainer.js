@@ -1,26 +1,39 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { readPosts } from '../../modules/posts';
-import Post from "../../components/post/Post";
+import { getStatus } from '../../modules/post';
+import Post from "../../components/postList/Post";
 import PostContainer from "./PostContainer";
+import PostListTemplate from "../../components/postList/PostListTemplate";
 
 const PostListContainer = () => {
     const dispatch = useDispatch();
-    const { posts, postsError, loading } = useSelector(({ posts, loading }) => ({
+    const { posts, status, postsError, loading, user } = useSelector(({ posts, loading, user }) => ({
         posts: posts.posts,
+        status: posts.status,
         postsError: posts.postsError,
-        loading: loading['posts/READ_POSTS']
+        loading: loading['posts/READ_POSTS'],
+        user: user.user,
     }))
 
     useEffect(() => {
         dispatch(readPosts());
+
     }, [dispatch]);
 
-    return (
-        <div className="containerContent">
-            {posts.map(post => <PostContainer post={post}/>)}
-        </div>
-    );
+    if (!posts || loading) {
+        return null
+    } else {
+        return (
+            <div>
+                <PostListTemplate>
+                {posts.map(post =>
+                    <Post key={post.id} user={user} post={post} status={status}/>)
+                }
+                </PostListTemplate>
+            </div>
+        );
+    }
 };
 
 export default PostListContainer;

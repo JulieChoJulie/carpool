@@ -1,0 +1,39 @@
+@import '../../styles/utils';
+
+.postBlock {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $burgundy;
+  border-radius: 4px;
+  padding: 0.3rem;
+  margin: 1rem;
+  width: 40%;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+  .firstRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .username {
+      font-weight: bold;
+    }
+    .postWhen {
+      color: $oc-gray-6;
+    }
+  }
+  .offering {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    svg {
+      margin-right: 0.3rem;
+    }
+  }
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+  }
+}
