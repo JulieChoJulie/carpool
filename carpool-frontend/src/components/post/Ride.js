@@ -3,7 +3,7 @@ import dateFormat from './dateFormat';
 import classNames from 'classnames';
 import './Ride.scss';
 
-const Ride = ({ ride, isSoldout }) => {
+const Ride = ({ ride, isSoldout, status }) => {
     return (
         <div className={classNames('ride', { isSoldout })}>
             <div className="cities item">

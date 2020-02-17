@@ -21,11 +21,6 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
         <>
             {user ? (
                 <div className={classNames("sideMenu", { isMenuClosed })}>
-                    <div
-                        className="closeButton"
-                        onClick={onClick}>
-                        <MdClose/>
-                    </div>
                     <ul>
                         <li className="firstList">
                             <div className="topSideMenu">
@@ -44,6 +39,11 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                         </li>
                         <li>
                             <NavLink activeStyle={activeStyle} to="/1">
+                                Find Rides
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink activeStyle={activeStyle} to="/1">
                                 My Profile
                             </NavLink>
                         </li>
@@ -55,11 +55,6 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                         <li>
                             <NavLink activeStyle={activeStyle} to="/1">
                                 Messages
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink activeStyle={activeStyle} to="/1">
-                                Find Rides
                             </NavLink>
                         </li>
                         <li>
@@ -83,6 +78,11 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                             </NavLink>
                         </li>
                     </ul>
+                    <div
+                        className="closeButton"
+                        onClick={onClick}>
+                        <MdClose/>
+                    </div>
                 </div>) : null}
 
         </>

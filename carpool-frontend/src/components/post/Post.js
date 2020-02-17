@@ -62,7 +62,7 @@ const Post = ({
             <ul className="rideList second row">
             {rides.map((ride, index) => (
                 <li key={index}>
-                    <RideBlock ride={ride} status={rideStatus(ride.id)} toggleRide={toggleRide} />
+                    <RideBlock isOwn={isOwn} ride={ride} status={rideStatus(ride.id)} toggleRide={toggleRide} />
                 </li>
             ))}
             </ul>

@@ -25,6 +25,7 @@
   }
   p {
     margin-bottom: 3rem;
+    font-size: 0.7rem;
   }
   .buttons {
     display: flex;
@@ -34,6 +35,8 @@
     }
     .Button.burgundy {
       width: 5rem;
+      padding: 0.2rem;
+      font-size: 0.7rem;
     }
   }
 };

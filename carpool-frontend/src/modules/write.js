@@ -66,7 +66,10 @@ const write = handleActions(
         [CHANGE_FIELD]: (state, { payload: { key, value, id }}) => {
             if (id === -1 ) {
                 return produce(state, draft => {
-                    draft.rides = draft.rides.map(ride => ride.key === value);
+                    draft.rides = draft.rides.map(ride => {
+                        ride[key] = value;
+                        return ride;
+                    })
                 })
             } else if (id === -2) {
                 return {

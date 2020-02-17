@@ -12,13 +12,19 @@
   justify-content: center;
   cursor: pointer;
   font-size: 0.5rem;
+  width: 30px;
   svg {
-    font-size: 1.5rem;
+    font-size: 1rem;
+  }
+  button {
+    font-size: 0.4rem;
+    padding: 0.1rem;
+    margin-top: 0.1rem;
   }
   @media (max-width: 700px) {
     font-size: 0.3rem;
     svg {
-      font-size: 1rem;
+      font-size: 0.7rem;
     }
   }
   &.soldout {
