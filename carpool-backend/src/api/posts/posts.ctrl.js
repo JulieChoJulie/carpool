@@ -2,12 +2,18 @@ const { Post, Comment, User, Ride } = require('../../../models');
 const { sequelize } = require('../../../models');
 const { Op, transaction } = require('sequelize');
 const { postFormat } = require('./helper');
+const { getStatus } = require('../action/action.ctrl');
 
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
     try {
         const posts = await Post.findAll(postFormat());
-        res.status(200).send(posts);
+        if (req.user) {
+            const status = await getStatus(req, next);
+            res.status(200).send({ posts: posts, status: status });
+        } else {
+            res.status(200).send({ posts });
+        }
     } catch (err) {
         console.error(err);
         next(err);
@@ -289,7 +295,7 @@ exports.filterPost = async (req, res, next) => {
             model: Post,
             attributes: ['updatedAt', 'createdAt'],
         },
-        order: !!newest ? [[Post, 'createdAt', 'DESC']] : [[Post, 'updateAt', 'ASC']]
+        order: !!newest ? [[Post, 'updatedAt', 'DESC']] : [[Post, 'updatedAt', 'ASC']]
     });
 
     res.status(200).send(rides);

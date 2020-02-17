@@ -102,17 +102,16 @@ exports.cancelRequest = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
-/* GET /action/rides/status */
-exports.getRideStatus = async (req, res, next) => {
+const getStatus = async (req, next) => {
     try {
-        const user = await User.findOne({ where: { id: req.user.id }});
+        const user = await User.findOne({where: {id: req.user.id}});
         const partners = await user.getPartnerRides();
         const obj = {}; // key: ride.id, value: 1(booked), -1(request sent)
-        if (partners.length !== 0 ) {
+        if (partners.length !== 0) {
             partners.map(partner => {
-                obj[partner.id]  = 1;
+                obj[partner.id] = 1;
             })
         }
         const requests = await user.getRequestRides();
@@ -123,7 +122,18 @@ exports.getRideStatus = async (req, res, next) => {
                 }
             })
         }
+        return obj;
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+}
 
+exports.getStatus = getStatus;
+/* GET /action/rides/status */
+exports.getRideStatus = async (req, res, next) => {
+    try {
+        const obj = await getStatus(req, next);
         res.status(200).send(obj);
 
     } catch (err) {

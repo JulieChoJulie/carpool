@@ -19,13 +19,14 @@ exports.postFormat = (field, value) => {
             },
             {
                 model: Ride,
-                where: { status: true }
+                where: { status: true },
             },
             {
                 model: User,
                 attributes: ['id', 'username']
             }
-        ]
+        ],
+        order: [['updatedAt', 'DESC']]
     };
     const obj = {};
     obj[field] = value;
