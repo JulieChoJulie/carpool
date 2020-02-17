@@ -3,6 +3,23 @@
 
 .postListTemplate {
   padding: 1rem;
+  h1 {
+    text-align: center;
+  }
+  p {
+    text-align: center;
+    font-size: 1rem;
+  }
+  a {
+    text-align: center;
+    button {
+      &.fullWidth {
+        text-align: center;
+        width: 60%;
+      }
+    }
+  }
+
   h2 {
     color: $lightBrown;
   }
