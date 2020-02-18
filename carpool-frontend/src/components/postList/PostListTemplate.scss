@@ -3,6 +3,7 @@
 
 .postListTemplate {
   padding: 1rem;
+  flex: 1;
   h1 {
     text-align: center;
   }
@@ -17,6 +18,14 @@
         text-align: center;
         width: 60%;
       }
+    }
+    &.signup {
+      text-decoration: underline;
+      color: $oc-gray-7;
+      margin: 0.3rem auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
     }
   }
 

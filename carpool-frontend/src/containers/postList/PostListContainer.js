@@ -24,13 +24,11 @@ const PostListContainer = () => {
         return null
     } else {
         return (
-            <div>
-                <PostListTemplate username={user.username}>
-                {posts.map(post =>
-                    <Post key={post.id} user={user} post={post} status={status}/>)
-                }
-                </PostListTemplate>
-            </div>
+            <PostListTemplate user={user}>
+            {posts.map(post =>
+                <Post key={post.id} user={user} post={post} status={status}/>)
+            }
+            </PostListTemplate>
         );
     }
 };
