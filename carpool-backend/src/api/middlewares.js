@@ -64,6 +64,7 @@ exports.isOwner = async (req, res, next) => {
         userId = req.params.userId;
     } else if (!!req.params.commentId) {
         const comment = await Comment.findOne({ where: { id: req.params.commentId }});
+        console.log(JSON.stringify(comment))
         userId = comment.userId;
     } else if (!!req.params.id) {
         const post = await Post.findOne({ where: { id: req.params.id }});

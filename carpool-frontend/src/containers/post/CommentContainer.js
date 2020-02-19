@@ -1,13 +1,46 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { onChange, onInsert, deleteComment, editComment } from '../../modules/post';
 import Comments from '../../components/post/Comments';
 
-const CommentContainer = ({ comments }) => {
-    const onInsert = () => {
+const CommentContainer = () => {
+    const dispatch = useDispatch();
+    const { comments, postId, postError, user, commentEdit, comment, loading } = useSelector(({ post, user, loading }) => ({
+        comments: post.post.comments,
+        postId: post.post.id,
+        postError: post.postError,
+        user: user.user,
+        commentEdit: post.commentEdit,
+        comment: post.comment,
+        loading: loading['post/GET_POST']
+    }));
 
-    }
-    const onChange = () => {}
+    const onInsertInput = () => {
+        dispatch(onInsert({ postId, content: comment }));
+    };
+    const onRemove = (commentId) => {
+        dispatch(deleteComment({ postId, commentId }));
+    };
+
+    const onEditComment = (commentId, content) => {
+        dispatch(editComment({ postId, commentId, content }));
+    };
+    const onChangeValue = (e) => {
+        dispatch(onChange({ type: e.target.name, value: e.target.value }));
+    };
+
     return (
-      <Comments comments={comments} onInsert={onInsert} onChange={onChange}/>
+      <Comments
+          comments={comments}
+          onInsert={onInsertInput}
+          onEdit={onEditComment}
+          onRemove={onRemove}
+          onChange={onChangeValue}
+          user={user}
+          comment={comment}
+          commentEdit={commentEdit}
+          loading={loading}
+      />
     );
 };
 

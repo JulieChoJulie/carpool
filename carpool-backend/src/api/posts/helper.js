@@ -9,13 +9,13 @@ exports.postFormat = (field, value) => {
             {
                 model: Comment,
                 where: { status: true },
-                attributes: ['content', 'createdAt', 'userId'],
+                attributes: ['content', 'updatedAt', 'userId', 'id'],
                 include: {
                     model: User,
                     attributes: ['id', 'username']
                 },
-                order: [['createdAt', 'DESC']],
-                limit: 2
+                order: [['updatedAt', 'DESC']],
+                limit: 50,
             },
             {
                 model: Ride,

@@ -30,6 +30,9 @@
     border-radius: 4px;
     margin-right: 0.5rem;
     padding-left: 0.5rem;
+    &.readOnly {
+      border: none;
+    }
   }
   button {
     cursor: pointer;

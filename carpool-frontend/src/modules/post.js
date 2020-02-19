@@ -13,11 +13,25 @@ const [
     GET_POST_FAILURE
 ] = createRequestActionTypes('post/GET_POST');
 const UNLOAD_POST = 'post/UNLOAD_POST';
+const ON_CHANGE = 'post/ON_CHANGE';
+const [ON_INSERT, ON_INSERT_SUCCESS, ON_INSERT_FAILURE] = createRequestActionTypes('post/ON_INSERT');
+const [EDIT_COMMENT, EDIT_COMMENT_SUCCESS, EDIT_COMMENT_FAILURE] = createRequestActionTypes('post/EDIT_COMMENT');
+const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] = createRequestActionTypes('post/DELETE_COMMENT');
 
 export const getPost = createAction(GET_POST, id => id);
 export const unloadPost = createAction(UNLOAD_POST, id => id);
+export const onChange = createAction(ON_CHANGE, comment => comment);
+export const onInsert = createAction(ON_INSERT,
+    ({ postId, content }) => ({ postId, content }));
+export const editComment = createAction(EDIT_COMMENT,
+    ({ postId, commentId, content }) => ({ postId, commentId, content }));
+export const deleteComment = createAction(DELETE_COMMENT,
+    ({ postId, commentId }) => ({ postId, commentId }));
 
 const getPostSaga = createRequestSaga(GET_POST, postAPI.readPost);
+const onInsertSaga = createRequestSaga(ON_INSERT, postAPI.writeComment);
+const editCommentSaga = createRequestSaga(EDIT_COMMENT, postAPI.editComment);
+const deleteCommentSaga = createRequestSaga(DELETE_COMMENT, postAPI.deleteComment);
 
 /* /api/action... */
 const [ADD_REQUEST, ADD_REQUEST_SUCCESS, ADD_REQUEST_FAILURE] = createRequestActionTypes('action/ADD_REQUEST');
@@ -41,6 +55,9 @@ export function* postSaga() {
     yield takeLatest(CANCEL_REQUEST, cancelRequestSaga);
     yield takeLatest(CANCEL_RIDE, cancelRideSaga);
     yield takeLatest(GET_STATUS, getStatusSaga);
+    yield takeLatest(ON_INSERT, onInsertSaga);
+    yield takeLatest(EDIT_COMMENT, editCommentSaga);
+    yield takeLatest(DELETE_COMMENT, deleteCommentSaga);
 }
 
 const initialState = {
@@ -49,9 +66,13 @@ const initialState = {
         user: {
             username: '',
         },
-        notes: ''
+        notes: '',
+        comments: [],
     },
+    comment: '',
+    commentEdit: '',
     postError: null,
+    commentError: null,
     status: {},
     statusError: null,
     toggleError: null,
@@ -91,6 +112,45 @@ const post = handleActions(
         [CANCEL_RIDE_FAILURE]: (state, { payload: error }) => ({
             ...state,
             toogleError: { status: error.status, type: 'cancelled' }
+        }),
+        [ON_CHANGE]: (state, { payload: res }) => ({
+            ...state,
+            [res.type]: res.value,
+        }),
+        [ON_INSERT_SUCCESS]: (state, { payload: res }) => {
+            const comment = res.data;
+            console.log('here')
+            return produce(state, draft => {
+                draft.post.comments.push(comment);
+                draft.commentError = null;
+            })
+        },
+        [EDIT_COMMENT_SUCCESS]: (state, { payload: res }) => {
+            const comment = res.data;
+            return produce(state, draft => {
+                draft.post.comments = draft.post.comments.map(c => {
+                    if (c.id === comment.id) {
+                        return comment;
+                    } else {
+                        return c;
+                    }
+                });
+                draft.commentError = null;
+            })
+        },
+        [EDIT_COMMENT_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            commentError: error.status,
+        }),
+        [DELETE_COMMENT_SUCCESS]: (state, { payload: res }) => {
+            return produce(state, draft => {
+                const index = draft.post.comments.findIndex(c => c.id === res.payload.commentId);
+                draft.post.comments.splice(index, 1);
+            })
+        },
+        [DELETE_COMMENT_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            commentError: error.status
         })
     },
     initialState

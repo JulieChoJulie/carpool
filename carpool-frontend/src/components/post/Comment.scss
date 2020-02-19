@@ -1,4 +1,7 @@
 .comment {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin-left: 0.4rem;
   .username {
     font-size: 0.7rem;
@@ -11,6 +14,30 @@
     font-size: 0.7rem;
     @media (max-width: 500px) {
       font-size: 0.5rem;
+    }
+  }
+  svg {
+    cursor: pointer;
+  }
+
+  .btn {
+    margin-left: 0.3rem;
+    cursor: pointer;
+  }
+  .info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .editing {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    margin-right: 0.4rem;
+    .content {
+      flex: 1;
+      margin-right: 0.4rem;
     }
   }
 }

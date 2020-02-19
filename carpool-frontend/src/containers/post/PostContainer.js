@@ -90,6 +90,7 @@ const PostContainer = ({ match, history }) => {
               errorMsg={errorMsg}
               isOwn={isOwn}
               onEdit={onEdit}
+              loggedInUser={user}
         />
     );
 };

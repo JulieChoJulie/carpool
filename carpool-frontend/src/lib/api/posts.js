@@ -20,3 +20,16 @@ export const getOwner = id =>
 
 export const deleteRide = (postId, rideId) =>
     client.delete(`/api/posts/${postId}/ride/${rideId}`);
+
+
+/* comments */
+
+export const writeComment = ({ postId, content }) => {
+     console.log('here')
+    client.post(`/api/posts/${postId}/comments`, { content });
+}
+export const editComment = ({ postId, commentId, content }) =>
+    client.put(`/api/posts/${postId}/comments/${commentId}`, { content });
+
+export const deleteComment = ({ postId, commentId }) =>
+    client.delete(`/api/posts/${postId}/comments/${commentId}`);

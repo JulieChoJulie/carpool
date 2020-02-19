@@ -16,7 +16,8 @@ const Post = ({
                   error,
                   errorMsg,
                   isOwn,
-                  onEdit
+                  onEdit,
+                  loggedInUser,
               }) => {
     if (postError) {
         if (postError.status && postError.status === 404) {
@@ -62,7 +63,7 @@ const Post = ({
             <ul className="rideList second row">
             {rides.map((ride, index) => (
                 <li key={index}>
-                    <RideBlock isOwn={isOwn} ride={ride} status={rideStatus(ride.id)} toggleRide={toggleRide} />
+                    <RideBlock user={loggedInUser} isOwn={isOwn} ride={ride} status={rideStatus(ride.id)} toggleRide={toggleRide} />
                 </li>
             ))}
             </ul>

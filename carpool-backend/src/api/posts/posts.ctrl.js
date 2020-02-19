@@ -59,10 +59,14 @@ exports.write = async (req, res, next) => {
 /* GET api/posts/:id */
 exports.readPost = async (req, res, next) => {
     try {
+        console.log(req.params.id);
+        console.log('*********')
         const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         if (post === null) {
-            res.sendStatus(404); // Not Found
+            res.status(404).end(); // Not Found
+            return;
         }
+        console.log(JSON.stringify(post))
         res.status(200).send(post);
     } catch (err) {
         console.error(err);
@@ -217,7 +221,7 @@ exports.writeComment = async (req, res, next) => {
             postId: req.params.id,
             content: req.body.content
         });
-        res.sendStatus(200);
+        res.status(200).send(comment);
     } catch (err) {
         console.error(err);
         next(err)
@@ -227,9 +231,22 @@ exports.writeComment = async (req, res, next) => {
 /* PATCH api/posts/:id/comments/:commentId */
 exports.editComment = async (req, res, next) => {
     try {
-        const comment = await Comment.update({ content: req.body.content },{ where: { id: req.params.commentId } });
+        const comment = await Comment.update(
+            { content: req.body.content },
+            { where: { id: req.params.commentId } }
+        );
         if (comment[0] !== 0) {
-            res.sendStatus(200);
+            const commentUpdated = await Comment.findOne(
+                {
+                    where: { id: req.params.commentId },
+                    attributes: ['content', 'updatedAt', 'userId', 'id'],
+                    include: {
+                        model: User,
+                        attributes: ['id', 'username']
+                    },
+                }
+            );
+            res.status(200).send(commentUpdated);
         } else {
             res.status(404).send(); // Not Found
         }
