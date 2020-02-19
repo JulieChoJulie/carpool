@@ -1,0 +1,71 @@
+@import '../../styles/utils';
+
+.searchBlock {
+  flex: 1;
+  padding: 1rem;
+  border: 1px solid $burgundy;
+  border-radius: 10px;
+  @media(min-width: 1024px) {
+    margin: 2.5rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 768px) {
+    padding: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .form-group {
+    &.when {
+      display: flex;
+      flex-direction: row;
+      .when {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+    @media (max-width: 768px) {
+      justify-content: flex-start;
+    }
+  }
+  .where {
+    display: flex;
+    flex-direction: column;
+  }
+  .cities {
+    display: flex;
+    flex-direction: row;
+    @media (min-width: 769px) {
+      max-width: 550px;
+      margin-left: 3rem;
+    }
+  }
+  .price {
+    label {
+      margin-bottom: 1rem;
+    }
+    margin-bottom: 1rem;
+  }
+  .input-range__slider {
+    background: $lightBrown;
+    border: 1px solid $lightBrown;
+  }
+  .input-range__label {
+    font-size: 0.6rem;
+  }
+
+  .input-range {
+    .input-range__track {
+      &.input-range__track--background {
+        height: 0.1rem;
+        .input-range__track--active {
+          background: $lightBrown;
+          height: 0.2rem;
+        }
+      }
+    }
+  }
+
+}
+
