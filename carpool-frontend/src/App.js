@@ -11,6 +11,7 @@ import SavePage from './pages/SavePage';
 import ErrorPage from './pages/ErrorPage';
 import ManagePage from './pages/ManagePage';
 import EditPage from './pages/EditPage';
+import FindRides from "./pages/FindRides";
 
 const App = () => {
     return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route component={SavePage} path="/users/@:username/save" />
           <Route component={ErrorPage} path="/error/:status" />
           <Route component={EditPage} path="/posts/:id/edit" exact/>
+          <Route component={FindRides} path="/find-rides" />
         </>
     );
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import './ManageTemplate.scss';
 
 const ManageTemplate = ({ children }) => {
     return (

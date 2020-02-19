@@ -5,7 +5,7 @@ import Button from '../common/Button';
 
 const PostListTemplate = ({ user, children }) => {
     return (
-        <div className="postListTemplate">
+        <div className="postListTemplate template">
             {user !== null ?
                 <>
                 <h1>Welcome! {user.username}</h1>

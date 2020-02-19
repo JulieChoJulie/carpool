@@ -5,13 +5,13 @@ import PostListContainer from "../containers/postList/PostListContainer";
 
 const PostListPage = () => {
     return (
-        <div>
+        <>
             <HeaderContainer />
             <div className="container">
                 <SideMenuContainer/>
                 <PostListContainer/>
             </div>
-        </div>
+        </>
     );
 };
 

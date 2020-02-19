@@ -38,7 +38,7 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink activeStyle={activeStyle} to="/1">
+                            <NavLink activeStyle={activeStyle} to="/find-rides">
                                 Find Rides
                             </NavLink>
                         </li>
