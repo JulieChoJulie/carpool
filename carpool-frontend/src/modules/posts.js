@@ -11,17 +11,32 @@ const [
     READ_POSTS_FAILURE,
 ]= createRequestActionTypes('posts/READ_POSTS');
 
+const [
+    FILTER_RIDES,
+    FILTER_RIDES_SUCCESS,
+    FILTER_RIDES_FAILURE
+] = createRequestActionTypes('posts/FILTER_RIDES');
+
 export const readPosts = createAction(READ_POSTS);
+export const filterRides = createAction(FILTER_RIDES,
+    ({ when, to, from, available, price, offering }) =>
+        ({ when, to, from, available, price, offering })
+);
+
 const readPostsSaga = createRequestSaga(READ_POSTS, postsAPI.readFeed);
+const filterRidesSaga = createRequestSaga(FILTER_RIDES, postsAPI.filterRides);
 
 export function* postsSaga() {
     yield takeLatest(READ_POSTS, readPostsSaga);
+    yield takeLatest(FILTER_RIDES, filterRidesSaga);
 }
 
 const initialState = {
     posts: [],
     postsError: null,
-    status: {}
+    status: {},
+    filterRides: [],
+    filterRidesError: null,
 }
 
 const posts = handleActions({
@@ -35,6 +50,16 @@ const posts = handleActions({
         ...state,
         posts: initialState.readPosts,
         postsError: error.status,
+    }),
+    [FILTER_RIDES_SUCCESS]: (state, { payload: res }) => ({
+        ...state,
+        filterRidesError: null,
+        filterRides: res.data
+    }),
+    [FILTER_RIDES_FAILURE]: (state, { payload: error }) => ({
+        ...state,
+        filterRidesError: error.status,
+        filterRides: [],
     })
 }, initialState);
 

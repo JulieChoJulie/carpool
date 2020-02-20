@@ -1,4 +1,5 @@
 import client from './client';
+import qs from 'qs';
 
 export const writePost = ({ rides, notes }) =>
     client.post('/api/posts', { rides, notes });
@@ -21,11 +22,21 @@ export const getOwner = id =>
 export const deleteRide = (postId, rideId) =>
     client.delete(`/api/posts/${postId}/ride/${rideId}`);
 
+export const filterRides = () => {
+    // const queryString = qs.stringify({
+    //     when,
+    //     to,
+    //     from,
+    //     available,
+    //     price,
+    //     offering,
+    // });
+    return client.get('/api/posts/filter');
+};
 
 /* comments */
 
 export const writeComment = ({ postId, content }) => {
-     console.log('here')
     client.post(`/api/posts/${postId}/comments`, { content });
 }
 export const editComment = ({ postId, commentId, content }) =>
