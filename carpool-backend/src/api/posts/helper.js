@@ -15,7 +15,7 @@ exports.postFormat = (field, value) => {
                     attributes: ['id', 'username']
                 },
                 order: [['updatedAt', 'DESC']],
-                limit: 50,
+                limit: 500,
             },
             {
                 model: Ride,

@@ -8,7 +8,7 @@ const createUser = require('../createUser');
 
 const testUser = {
     "email": "h32cho@gmail.com",
-    "password": "h32cho",
+    "password": "Julie11",
     "username": "Julie",
     "cell": "647-819-7106"
 };
@@ -80,5 +80,8 @@ describe('Action-Logged In', function() {
                 done();
             })
     })
+
+    /* POST /action/ride/:rideId/users/:userId/add */
+    // it('should return 200 on /api/action/ride/:rideId/users/:userId/add')
 
 });

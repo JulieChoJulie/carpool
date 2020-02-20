@@ -1,7 +1,7 @@
 import React from "react";
 import { useTable, useFilters, useSortBy } from "react-table";
 
-export default function Table({ columns, data }) {
+export default function Table({ columns, data, history }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -18,6 +18,10 @@ export default function Table({ columns, data }) {
         useSortBy
     );
 
+    const rowInfo = (rowobject) => {
+        history.push(`posts/${rowobject.id}`);
+    }
+
     return (
         <>
         <table {...getTableProps()}>
@@ -25,7 +29,6 @@ export default function Table({ columns, data }) {
             {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map(column => (
-                        // Table header styling and props to allow sorting
                         <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={
@@ -47,7 +50,7 @@ export default function Table({ columns, data }) {
             {rows.map((row, i) => {
                 prepareRow(row);
                 return (
-                    <tr {...row.getRowProps()}>
+                    <tr {...row.getRowProps({onClick: () => rowInfo(row)}, { style: { cursor: 'pointer' } })}>
                         {row.cells.map(cell => {
                             return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
                         })}

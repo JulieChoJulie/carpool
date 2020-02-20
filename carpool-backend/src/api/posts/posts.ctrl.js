@@ -310,7 +310,11 @@ exports.filterPost = async (req, res, next) => {
         },
         include: {
             model: Post,
-            attributes: ['updatedAt', 'createdAt'],
+            attributes: ['updatedAt', 'createdAt', 'id'],
+            include: {
+                model: User,
+                attributes: ['username']
+            }
         },
         order: !!newest ? [[Post, 'updatedAt', 'DESC']] : [[Post, 'updatedAt', 'ASC']]
     });

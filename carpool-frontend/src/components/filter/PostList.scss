@@ -1,0 +1,21 @@
+@import '../../styles/utils';
+
+.filter {
+  margin-top: 2rem;
+
+  table {
+    width: 100%;
+    text-align: center;
+  }
+  thead  {
+    background: $lightBlue;
+  }
+  tbody {
+    tr {
+      cursor: pointer;
+      &:hover {
+        background: $lightBeige;
+      }
+    }
+  }
+}

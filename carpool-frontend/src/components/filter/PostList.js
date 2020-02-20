@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 import Table from "./Table";
 import dateFormat from '../post/dateFormat';
+import { withRouter } from 'react-router-dom';
+import './PostList.scss';
 
 
-const PostList = ({ rides }) => {
+const PostList = ({ rides, history }) => {
     const columns = useMemo(
         () => [
             {
@@ -26,12 +28,7 @@ const PostList = ({ rides }) => {
                     {
                         Header: "Date",
                         accessor: data => dateFormat(data.when)
-                    }
-                ]
-            },
-            {
-                Header: "Details",
-                columns: [
+                    },
                     {
                         Header: "User",
                         accessor: "post.user.username"
@@ -51,10 +48,10 @@ const PostList = ({ rides }) => {
     }
     return (
         <div className="filter">
-            <Table columns={columns} data={rides} />
+            <Table columns={columns} data={rides} history={history} />
         </div>
     );
 };
 
 
-export default PostList;
+export default withRouter(PostList);
