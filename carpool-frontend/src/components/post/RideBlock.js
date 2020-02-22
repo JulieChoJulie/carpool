@@ -47,13 +47,13 @@ const RideBlock = ({ isOwn, ride, status, toggleRide, user }) => {
             // when the ride is full (sold out)
             return false;
         }
-    }
+    };
 
     return (
         <div className="rideBlock">
             <Ride ride={ ride } isSoldout={isSoldout} />
             { statusResult()}
-            {!statusResult() &&
+            {!statusResult() && statusResult() !== null &&
                 <div className="reserve soldout">
                     <GoTag style={{ color: 'red'}}/>
                     Sold out

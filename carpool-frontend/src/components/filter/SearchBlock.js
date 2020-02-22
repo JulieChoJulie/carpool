@@ -10,40 +10,52 @@ import "react-input-range/lib/css/index.css"
 import Button from "../common/Button";
 
 
-const SearchBlock = () => {
-    const [range, setRange] = useState({ min: 10, max: 30 });
-
-    const onChange = () => {
-
-    };
+const SearchBlock = ({ criteria, onChange, onSubmit }) => {
+    const [range, setRange] = useState({ min: criteria.price[0], max: criteria.price[1] });
+    const [display, setDisplay] = useState({
+       seats: false,
+       offering: false,
+       price: false,
+       when: false,
+       from: false,
+        to: false,
+    });
 
     return (
-        <div className="searchBlock">
+        <form className="searchBlock" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
                 <label htmlFor="offering">Offering:</label>
-                <Offering offering={true} onChange={onChange}/>
+                <Offering offering={criteria.offering} onChange={onChange}/>
             </div>
             <div className="form-group where">
                 <label htmlFor="offering">Where:</label>
                 <div className="cities">
-                    <City ride="" field="from" id="0" onChange={onChange}/>
-                    <City ride="" field="to" id="0" onChange={onChange}/>
+                    <City ride={criteria} field="from" id="0" onChange={onChange}/>
+                    <City ride={criteria} field="to" id="0" onChange={onChange}/>
                 </div>
             </div>
 
             <div className="form-group when">
                 <div className="when">
                     <label style={{ position: 'inherit'}}>From: </label>
-                    <DateTime date={new Date()} onChange={onChange}/>
+                    <DateTime
+                        date={criteria.when[0]}
+                        onChange={(e) => onChange(e, 'when', 0)}
+                        maxDate={criteria.when[1]}
+                    />
                 </div>
                 <div className="when">
                     <label style={{ position: 'inherit'}}>To: </label>
-                    <DateTime date={new Date()} onChange={onChange}/>
+                    <DateTime
+                        date={criteria.when[1]}
+                        onChange={(e) => onChange(e, 'when', 1)}
+                        minDate={criteria.when[0]}
+                        />
                 </div>
             </div>
             <div className="form-group two">
                 <label style={{ position: 'inherit'}}>Seats: </label>
-                <Number seats="0" id="0" onChange={onChange}/>
+                <Number seats={criteria.seats} id="0" onChange={onChange}/>
             </div>
             <div className="form-group price two">
                 <label style={{ position: 'inherit'}}>Price: </label>
@@ -52,12 +64,12 @@ const SearchBlock = () => {
                     maxValue={100}
                     minValue={0}
                     value={range}
-                    onChange={value => setRange(value)}
+                    onChange={value => {setRange(value); onChange({ value: [value.min, value.max] }, 'price')}}
                     allowSameValues={true}
                 />
             </div>
             <Button fullWidth color="burgundy">Search</Button>
-        </div>
+        </form>
     );
 };
 

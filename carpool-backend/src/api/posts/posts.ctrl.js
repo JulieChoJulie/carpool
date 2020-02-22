@@ -267,7 +267,6 @@ exports.deleteComment = async (req, res, next) => {
                     ]}
             }
         );
-        console.log(JSON.stringify(comment))
         if (comment[0] === 0) {
             res.status(404).send(); // Not Found
         } else {
@@ -291,19 +290,20 @@ exports.filterPost = async (req, res, next) => {
         if (key === 'price' || key === 'when') {
             const range = query[key].split('_');
             if (key === 'when') {
-                range[0] = new Date(range[0]);
-                range[1] = new Date(range[1]);
+                range[0] = new Date(parseInt(range[0]));
+                range[1] = new Date(parseInt(range[1]));
             };
             obj[key] = {[Op.lte]: range[1], [Op.gte]: range[0]};
             arr.push(obj);
         } else if (key === 'available') {
             arr.push({ available: { [Op.gte]: query[key] } });
         } else {
-            obj[key] = query[key];
-            arr.push(obj);
+            if(query[key] !== 'Anywhere' && query[key] !== ''){
+                obj[key] = query[key];
+                arr.push(obj);
+            }
         }
     }
-
     const rides = await Ride.findAll({
         where: {
             [Op.and]: [...arr, { status: true }]

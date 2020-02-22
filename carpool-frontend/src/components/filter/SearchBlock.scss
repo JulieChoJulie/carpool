@@ -5,9 +5,11 @@
   padding: 1rem;
   border: 1px solid $burgundy;
   border-radius: 10px;
+  margin-bottom: 2rem;
   @media(min-width: 1024px) {
     margin: 2.5rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
   }
   @media (max-width: 768px) {
     padding: 0.2rem;
@@ -42,10 +44,7 @@
     }
   }
   .price {
-    label {
-      margin-bottom: 1rem;
-    }
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
   .input-range__slider {
     background: $lightBrown;
@@ -56,6 +55,7 @@
   }
 
   .input-range {
+    width: 70%;
     .input-range__track {
       &.input-range__track--background {
         height: 0.1rem;
@@ -65,6 +65,9 @@
         }
       }
     }
+  }
+  .input-range__label--min, .input-range__label--max {
+    bottom: -0.8rem;
   }
 
 }

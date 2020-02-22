@@ -29,5 +29,7 @@ cityArr.forEach(city => {
     options.push({ value: city, label: city });
 });
 
+options.unshift({ value: 'Anywhere' , label: 'Anywhere' });
+
 exports.cities = cityArr;
 exports.cityOptions = options;

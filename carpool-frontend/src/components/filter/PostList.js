@@ -30,8 +30,8 @@ const PostList = ({ rides, history }) => {
                         accessor: data => dateFormat(data.when)
                     },
                     {
-                        Header: "User",
-                        accessor: "post.user.username"
+                        Header: "Price",
+                        accessor: "price"
                     },
                     {
                         Header: "Seats",

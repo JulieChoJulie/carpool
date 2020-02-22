@@ -22,16 +22,29 @@ export const getOwner = id =>
 export const deleteRide = (postId, rideId) =>
     client.delete(`/api/posts/${postId}/ride/${rideId}`);
 
-export const filterRides = () => {
-    // const queryString = qs.stringify({
-    //     when,
-    //     to,
-    //     from,
-    //     available,
-    //     price,
-    //     offering,
-    // });
-    return client.get('/api/posts/filter');
+export const filterRides = (criteria) => {
+    const query = {};
+    for (const key in criteria) {
+        if (criteria[key] !== '') {
+            if (key === 'when') {
+                const when = criteria.when;
+                query.when = Number(new Date(when[0])) + '_' + Number(new Date(when[1]));
+            } else if (key === 'price') {
+                const price = criteria.price;
+                query.price = price[0] + '_' + price[1];
+            } else if (key === 'seats') {
+                console.log('here');
+                console.log('*********')
+                query.available = criteria.seats;
+            } else if (key === 'offering') {
+                query.offering = criteria.offering ? 1 : 0
+            } else {
+                query[key] = criteria[key];
+            }
+        }
+    }
+    const queryString = qs.stringify(query);
+    return client.get(`/api/posts/filter?${queryString}`);
 };
 
 /* comments */
