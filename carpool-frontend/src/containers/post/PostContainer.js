@@ -25,8 +25,7 @@ const PostContainer = ({ match, history }) => {
             user: user.user,
             loading: loading['post/GET_POST'],
     }));
-
-    const errorMsg = (error) => {
+    const errorMsg = (error, user) => {
         if (error[0] !== null) {
             return '**Sorry. The system has failed to pull off your reservation status.**';
         }
@@ -42,6 +41,9 @@ const PostContainer = ({ match, history }) => {
             } else {
                 history.push(`/error/${error[1].status}`);
             }
+        }
+        if (!user) {
+            return `**Please log in to book a ride.`;
         }
         return '';
     };
@@ -66,7 +68,7 @@ const PostContainer = ({ match, history }) => {
     const onEdit = () => {
         dispatch(setOriginalPost(post));
         history.push(`/posts/${post.id}/edit`);
-    }
+    };
 
     useEffect(() => {
         dispatch(getPost(postId));
@@ -86,7 +88,6 @@ const PostContainer = ({ match, history }) => {
               postError={postError}
               error={error}
               toggleRide={toggleRide}
-              user={user}
               errorMsg={errorMsg}
               isOwn={isOwn}
               onEdit={onEdit}

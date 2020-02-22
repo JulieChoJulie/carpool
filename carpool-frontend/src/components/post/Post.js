@@ -73,8 +73,8 @@ const Post = ({
                     <div className="notes content">{notes}</div>
                 </div>
             }
-            {errorMsg(error) !== '' && (
-                <div className="error">{errorMsg(error)}</div>
+            {errorMsg(error, loggedInUser) !== '' && (
+                <div className="error">{errorMsg(error, loggedInUser)}</div>
             )}
         </div>
     );
