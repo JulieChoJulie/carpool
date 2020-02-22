@@ -25,7 +25,8 @@ export const deleteRide = (postId, rideId) =>
 export const filterRides = (criteria) => {
     const query = {};
     for (const key in criteria) {
-        if (criteria[key] !== '') {
+        // if value is neither empty string nor empty array
+        if (criteria[key] !== '' && (!Array.isArray(criteria[key]) || criteria[key].length > 0)) {
             if (key === 'when') {
                 const when = criteria.when;
                 query.when = Number(new Date(when[0])) + '_' + Number(new Date(when[1]));
@@ -33,8 +34,6 @@ export const filterRides = (criteria) => {
                 const price = criteria.price;
                 query.price = price[0] + '_' + price[1];
             } else if (key === 'seats') {
-                console.log('here');
-                console.log('*********')
                 query.available = criteria.seats;
             } else if (key === 'offering') {
                 query.offering = criteria.offering ? 1 : 0

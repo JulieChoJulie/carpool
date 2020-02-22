@@ -21,6 +21,8 @@ const FindRidesContainer = () => {
             (e.value !== 'undefined' ? value = e.value : value = e.target.value)
         }
 
+        console.log(value)
+
         if (name === 'offering') {
             dispatch(onChange ({
                 key: name,

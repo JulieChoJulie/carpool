@@ -21,10 +21,19 @@
   .form-group {
     &.when {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       .when {
         display: flex;
         flex-direction: row;
+        &.fullWidth {
+          flex: 1;
+        }
+        &.dateInput {
+          label {
+            font-size: 0.6rem;
+            margin-left: 2rem;
+          }
+        }
       }
     }
     @media (max-width: 768px) {

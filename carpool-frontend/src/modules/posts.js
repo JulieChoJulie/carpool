@@ -76,7 +76,11 @@ const posts = handleActions({
     [ON_CHANGE]: (state, { payload: res }) => {
         return produce(state, draft => {
             if (typeof res.id === 'number') {
-                draft.criteria[res.key][res.id] = res.value;
+                if (res.id === -1 ) {
+                    draft.criteria[res.key] = [];
+                } else {
+                    draft.criteria[res.key][res.id] = res.value;
+                }
             } else {
                 draft.criteria[res.key] = res.value;
             }

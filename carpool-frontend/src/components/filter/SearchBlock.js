@@ -20,6 +20,17 @@ const SearchBlock = ({ criteria, onChange, onSubmit }) => {
        from: false,
         to: false,
     });
+    const [isAnytime, setAnytime] = useState(false);
+    const onClickRadio = () => {
+        if (isAnytime) {
+            setAnytime(false);
+            onChange(new Date(), 'when', 0);
+            onChange(new Date(), 'when', 1);
+        } else {
+            setAnytime(true);
+            onChange({ value: [] }, 'when', -1);
+        }
+    };
 
     return (
         <form className="searchBlock" onSubmit={(e) => onSubmit(e)}>
@@ -36,7 +47,18 @@ const SearchBlock = ({ criteria, onChange, onSubmit }) => {
             </div>
 
             <div className="form-group when">
-                <div className="when">
+                <div className="when fullWidth">
+                    <label>Date: </label>
+                    <input
+                        type="radio"
+                        id="isAnytime"
+                        name="when"
+                        value={isAnytime}
+                        checked={isAnytime}
+                        onClick={onClickRadio}/>
+                    <label htmlFor="one-way">Any Date</label>
+                </div>
+                <div className="when dateInput">
                     <label style={{ position: 'inherit'}}>From: </label>
                     <DateTime
                         date={criteria.when[0]}
@@ -44,7 +66,7 @@ const SearchBlock = ({ criteria, onChange, onSubmit }) => {
                         maxDate={criteria.when[1]}
                     />
                 </div>
-                <div className="when">
+                <div className="when dateInput">
                     <label style={{ position: 'inherit'}}>To: </label>
                     <DateTime
                         date={criteria.when[1]}
