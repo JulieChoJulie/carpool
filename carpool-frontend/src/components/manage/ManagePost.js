@@ -2,8 +2,10 @@ import React from 'react';
 import './ManagePost.scss';
 import ManageRide from "./ManageRide";
 import ManageButtons from './ManageButtons';
+import Button from "../common/Button";
 
 const ManagePost = ({ post, onAccept, onCancel, onRemove, onRemoveRide }) => {
+    const to = '/posts/' + post.id;
     return (
         <div className="ManagePost">
             <ManageButtons onRemove={onRemove} id={post.id} isEdit={true} type='post'/>
@@ -16,6 +18,7 @@ const ManagePost = ({ post, onAccept, onCancel, onRemove, onRemoveRide }) => {
                     onRemoveRide={onRemoveRide}
                 />
             )}
+            <div className="right"><Button color="white" to={to}>Details &#8594;</Button></div>
         </div>
     );
 };

@@ -2,10 +2,10 @@ import React from 'react';
 import RideBlock from './RideBlock';
 import { MdPerson, MdDelete } from 'react-icons/md';
 import { IoIosBody, IoIosCar } from "react-icons/io";
-import { TiEdit } from 'react-icons/ti';
-import { FiDownload } from 'react-icons/fi';
+import { TiEdit, TiStarOutline, TiStar } from 'react-icons/ti';
 import './Post.scss';
 import dateFormat from './dateFormat';
+import ManageButtons from "../manage/ManageButtons";
 
 const Post = ({
                   post,
@@ -16,8 +16,8 @@ const Post = ({
                   error,
                   errorMsg,
                   isOwn,
-                  onEdit,
                   loggedInUser,
+                  onRemove,
               }) => {
     if (postError) {
         if (postError.status && postError.status === 404) {
@@ -45,11 +45,17 @@ const Post = ({
                 <span className="username">
                     <MdPerson /> @{user.username} <span className="date">{dateFormat(updatedAt)}</span>
                 </span>
-                <span className="buttons">
-                    <span className="saveIcon"><FiDownload/></span>
+                <span className="button">
+                    <span className="saveIcon"><TiStarOutline/></span>
                     {isOwn &&
-                    (<><span className="editIcon" onClick={onEdit}><TiEdit/></span>
-                    <span className="deleteIcon"><MdDelete/></span></>)
+                        <ManageButtons
+                            onRemove={onRemove}
+                            id={post.id}
+                            isEdit={true}
+                            type="post"
+                        />
+                    // (<><span className="editIcon" onClick={onEdit}><TiEdit/></span>
+                    // <span className="deleteIcon"><MdDelete/></span></>)
                     }
                 </span>
             </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import AskRemoveModal from './AskRemoveModal';
 import { Link } from "react-router-dom";
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
+import { TiEdit } from 'react-icons/ti';
 
 const ManageButtons = ({ onRemove, id, isEdit, obj, type }) => {
     const [modal, setModal] = useState(false);
@@ -24,7 +25,7 @@ const ManageButtons = ({ onRemove, id, isEdit, obj, type }) => {
 
     return (
         <div className="buttons">
-            { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><MdEdit/></Link>}
+            { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><TiEdit/></Link>}
             <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>
             <AskRemoveModal
                 visible={modal}

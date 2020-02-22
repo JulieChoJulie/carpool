@@ -48,7 +48,7 @@
         top: 0.1rem;
       }
     }
-    .buttons {
+    .button {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
@@ -58,9 +58,14 @@
       span {
         cursor: pointer;
         margin: 0.3rem;
-        svg {
-          font-size: 1rem;
-        }
+      }
+      svg {
+        font-size: 1rem;
+      }
+      .buttons {
+        position: relative;
+        top: 0.3rem;
+        margin-left: 0.1rem;
       }
       @media (max-width: 500px) {
         flex: 1;

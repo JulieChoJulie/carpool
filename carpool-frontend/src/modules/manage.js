@@ -73,7 +73,7 @@ const manage = handleActions(
                             rideIndex = j;
                         }
                     })
-                )
+                );
                 const requestIndex = draft
                     .myPosts[postIndex]
                     .rides[rideIndex]

@@ -6,6 +6,7 @@ import {
 } from '../../modules/post';
 import { setOriginalPost } from "../../modules/write";
 import Post from '../../components/post/Post';
+import { deletePost } from "../../lib/api/posts";
 
 const PostContainer = ({ match, history }) => {
     const postId = match.params.id;
@@ -25,6 +26,7 @@ const PostContainer = ({ match, history }) => {
             user: user.user,
             loading: loading['post/GET_POST'],
     }));
+
     const errorMsg = (error, user) => {
         if (error[0] !== null) {
             return '**Sorry. The system has failed to pull off your reservation status.**';
@@ -65,9 +67,13 @@ const PostContainer = ({ match, history }) => {
 
     const isOwn = user && post.user.id === user.id;
 
-    const onEdit = () => {
-        dispatch(setOriginalPost(post));
-        history.push(`/posts/${post.id}/edit`);
+    const onRemove = async () => {
+        try {
+            await deletePost(postId);
+            history.push('/');
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     useEffect(() => {
@@ -90,8 +96,8 @@ const PostContainer = ({ match, history }) => {
               toggleRide={toggleRide}
               errorMsg={errorMsg}
               isOwn={isOwn}
-              onEdit={onEdit}
               loggedInUser={user}
+              onRemove={onRemove}
         />
     );
 };

@@ -39,7 +39,7 @@ const ManageContainer = ({ history }) => {
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
 
     useEffect(() => {
