@@ -4,11 +4,11 @@ import * as actionAPI from '../lib/api/action';
 import { takeLatest } from 'redux-saga/effects';
 import produce from 'immer';
 
-const [
-    EDIT_POST,
-    EDIT_POST_SUCCESS,
-    EDIT_POST_FAILURE
-] = createRequestActionTypes('manage/EDIT_POST');
+// const [
+//     EDIT_POST,
+//     EDIT_POST_SUCCESS,
+//     EDIT_POST_FAILURE
+// ] = createRequestActionTypes('manage/EDIT_POST');
 const [
     ADD_PASSENGER,
     ADD_PASSENGER_SUCCESS,
@@ -27,7 +27,7 @@ const [
     GET_MYPOSTS_FAILURE,
 ] = createRequestActionTypes('manage/GET_MYPOSTS');
 
-export const editPost = createAction(EDIT_POST);
+// export const editPost = createAction(EDIT_POST);
 export const addPassenger = createAction(ADD_PASSENGER,
     ({ rideId, userId }) => ({ rideId, userId }));
 export const cancelPassenger = createAction(CANCEL_PASSENGER,
@@ -102,7 +102,12 @@ const manage = handleActions(
                 draft.myPosts[postIndex].rides[rideIndex].available += 1;
             })
 
-        }
+        },
+        [CANCEL_PASSENGER_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            myPostsError: error
+        })
+
 
     },
     initialState

@@ -4,9 +4,6 @@ import Request from "./Request";
 import Ride from '../post/Ride';
 import ManageButtons from './ManageButtons';
 import './ManageRide.scss';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { TiEdit } from 'react-icons/ti';
-import { AiFillSetting } from 'react-icons/ai';
 
 const ManageRide = ({ ride, onAccept, onCancel, onRemoveRide }) => {
     return (

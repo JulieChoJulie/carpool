@@ -4,12 +4,9 @@ import './Post.scss';
 import dateFormat from "../post/dateFormat";
 import Button from "../common/Button";
 import { IoIosCar, IoIosBody } from 'react-icons/io';
-import { TiArrowRightThick } from 'react-icons/ti';
-import { MdArrowForward } from 'react-icons/md';
 
 const Post = ({ post, status }) => {
     const to = '/posts/' + post.id;
-    const space = <span>&#8226;</span>
     return (
         <div className="postBlock">
             <div className="firstRow">

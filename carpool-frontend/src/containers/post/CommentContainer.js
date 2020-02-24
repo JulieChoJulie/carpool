@@ -5,10 +5,9 @@ import Comments from '../../components/post/Comments';
 
 const CommentContainer = () => {
     const dispatch = useDispatch();
-    const { comments, postId, postError, user, commentEdit, comment, loading } = useSelector(({ post, user, loading }) => ({
+    const { comments, postId, user, commentEdit, comment, loading } = useSelector(({ post, user, loading }) => ({
         comments: post.post.comments,
         postId: post.post.id,
-        postError: post.postError,
         user: user.user,
         commentEdit: post.commentEdit,
         comment: post.comment,

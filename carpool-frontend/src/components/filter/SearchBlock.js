@@ -4,7 +4,6 @@ import DateTime from "../write/DateTime";
 import City from "../write/City";
 import Offering from "../write/Offering";
 import Number from "../write/Number";
-import { IoIosArrowRoundForward } from 'react-icons/io';
 import './SearchBlock.scss';
 import "react-input-range/lib/css/index.css"
 import Button from "../common/Button";
@@ -12,14 +11,7 @@ import Button from "../common/Button";
 
 const SearchBlock = ({ criteria, onChange, onSubmit }) => {
     const [range, setRange] = useState({ min: criteria.price[0], max: criteria.price[1] });
-    const [display, setDisplay] = useState({
-       seats: false,
-       offering: false,
-       price: false,
-       when: false,
-       from: false,
-        to: false,
-    });
+
     const [isAnytime, setAnytime] = useState(false);
     const onClickRadio = () => {
         if (isAnytime) {

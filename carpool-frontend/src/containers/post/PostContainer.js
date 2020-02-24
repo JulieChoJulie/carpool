@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import {
     getPost, unloadPost, addRequest, cancelRequest, cancelRide, getStatus
 } from '../../modules/post';
-import { setOriginalPost } from "../../modules/write";
 import Post from '../../components/post/Post';
 import { deletePost } from "../../lib/api/posts";
 

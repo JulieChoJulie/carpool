@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable, useFilters, useSortBy } from "react-table";
+import { useTable, useSortBy } from "react-table";
 
 export default function Table({ columns, data, history }) {
     const {
@@ -8,13 +8,11 @@ export default function Table({ columns, data, history }) {
         headerGroups,
         rows,
         prepareRow,
-        setFilter
     } = useTable(
         {
             columns,
             data
         },
-        useFilters,
         useSortBy
     );
 

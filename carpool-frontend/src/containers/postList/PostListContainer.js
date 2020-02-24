@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { readPosts } from '../../modules/posts';
-import { getStatus } from '../../modules/post';
 import Post from "../../components/postList/Post";
 import PostListTemplate from "../../components/postList/PostListTemplate";
 
 const PostListContainer = () => {
     const dispatch = useDispatch();
-    const { posts, status, postsError, loading, user } = useSelector(({ posts, loading, user }) => ({
+    const { posts, status, loading, user } = useSelector(({ posts, loading, user }) => ({
         posts: posts.posts,
         status: posts.status,
-        postsError: posts.postsError,
         loading: loading['posts/READ_POSTS'],
         user: user.user,
     }))

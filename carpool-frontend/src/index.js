@@ -12,7 +12,8 @@ import rootReducer, { rootSaga } from './modules';
 import { tempSetUser, profile } from "./modules/user";
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
+const store = createStore(rootReducer,
+    composeWithDevTools(applyMiddleware(sagaMiddleware)));
 
 function loadUser() {
     try {

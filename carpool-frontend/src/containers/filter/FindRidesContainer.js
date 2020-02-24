@@ -7,9 +7,8 @@ import FindRidesTemplate from "../../components/filter/FindRidesTemplate";
 
 const FindRidesContainer = () => {
     const dispatch = useDispatch();
-    const { rides, ridesError, criteria } = useSelector(({ posts }) => ({
+    const { rides, criteria } = useSelector(({ posts }) => ({
         rides: posts.filterRides,
-        ridesError: posts.filterRidesError,
         criteria: posts.criteria,
     }));
 
@@ -35,7 +34,7 @@ const FindRidesContainer = () => {
                 id
             }))
         }
-    }, [dispatch, criteria]);
+    }, [dispatch]);
 
     const onSubmit = (e) => {
         e.preventDefault();

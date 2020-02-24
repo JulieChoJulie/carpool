@@ -2,9 +2,7 @@ import React from 'react';
 import Ride from './Ride';
 import CancelButton from './CancleButton';
 import './RideBlock.scss';
-import { IoMdCheckboxOutline } from 'react-icons/io';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
-import { FiSend } from 'react-icons/fi'
 import { GoTag } from 'react-icons/go';
 import Button from "../common/Button";
 

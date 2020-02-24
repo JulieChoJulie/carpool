@@ -1,5 +1,5 @@
 import React from 'react';
-import Edit from "./Edit";
+// import Edit from "./Edit";
 
 const EditTemplate = ({ children }) => {
     return (

@@ -1,8 +1,8 @@
 import React from 'react';
 import RideBlock from './RideBlock';
-import { MdPerson, MdDelete } from 'react-icons/md';
+import { MdPerson } from 'react-icons/md';
 import { IoIosBody, IoIosCar } from "react-icons/io";
-import { TiEdit, TiStarOutline, TiStar } from 'react-icons/ti';
+import { TiStarOutline } from 'react-icons/ti';
 import './Post.scss';
 import dateFormat from './dateFormat';
 import ManageButtons from "../manage/ManageButtons";

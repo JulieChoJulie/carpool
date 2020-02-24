@@ -91,9 +91,17 @@ const post = handleActions(
             postError: error,
         }),
         [UNLOAD_POST]: () => initialState,
+        [ADD_REQUEST_SUCCESS]: (state, { payload: res }) => ({
+           ...state,
+           toggleError: null,
+        }),
         [ADD_REQUEST_FAILURE]: (state, { payload: error }) => ({
             ...state,
             toggleError: { status: error.status, type: 'added' }
+        }),
+        [CANCEL_REQUEST_SUCCESS]: (state, { payload: res }) => ({
+            ...state,
+            toggleError: null,
         }),
         [CANCEL_REQUEST_FAILURE]: (state, { payload: error }) => ({
             ...state,
@@ -108,6 +116,10 @@ const post = handleActions(
             ...state,
             status: null,
             statusError: error.status
+        }),
+        [CANCEL_RIDE_SUCCESS]: (state, { payload: res }) => ({
+            ...state,
+            toggleError: null,
         }),
         [CANCEL_RIDE_FAILURE]: (state, { payload: error }) => ({
             ...state,
@@ -125,6 +137,10 @@ const post = handleActions(
                 draft.commentError = null;
             })
         },
+        [ON_INSERT_FAILURE]: (state, { payload: res }) => ({
+            ...state,
+            postError: res.status
+        }),
         [EDIT_COMMENT_SUCCESS]: (state, { payload: res }) => {
             const comment = res.data;
             return produce(state, draft => {
