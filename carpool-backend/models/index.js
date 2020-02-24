@@ -16,7 +16,7 @@ db.Ride = require('./ride')(sequelize, Sequelize);
 
 // 1:N relationship
 const oneToN = (one, N) => {
-    db[one].hasMany(db[N]);
+    db[one].hasMany(db[N], {onDelete: 'cascade'});
     db[N].belongsTo(db[one]);
 };
 

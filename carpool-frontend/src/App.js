@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import io from 'socket.io-client';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import DetailsPage from './pages/DetailsPage';
 import LoginPage from './pages/LoginPage';
@@ -16,19 +14,6 @@ import EditPage from './pages/EditPage';
 import FindRides from "./pages/FindRides";
 
 const App = () => {
-    const dispatch = useDispatch();
-    const { user } = useSelector(({ user }) => ({
-        user: user.user,
-    }));
-
-    useEffect(() => {
-        if (user !== null) {
-            const socket = io('http://localhost:4000/user');
-            socket.on('join', data => {
-            });
-        }
-    }, [user]);
-
     return (
         <>
           <Route component={PostListPage} path={['/@:username', '/']} exact />

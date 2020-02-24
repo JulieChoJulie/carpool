@@ -4,6 +4,7 @@ import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 import { withRouter } from 'react-router-dom';
 import { profile } from '../../modules/user';
+import {addNotification} from "../../modules/socket";
 
 const LoginForm = ({ history }) => {
     const [error, setError] = useState(null);
@@ -33,6 +34,7 @@ const LoginForm = ({ history }) => {
             setError('The username and password should be filled.')
         } else {
             dispatch(login({ username, password }));
+            dispatch(addNotification('login', username));
         }
     };
 

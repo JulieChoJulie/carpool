@@ -8,6 +8,8 @@ import loading from './loading';
 import write, { writeSaga } from './write';
 import menu from './menu';
 import posts, { postsSaga } from './posts';
+import socketReducer, { handleNewNotification } from './socket';
+
 
 const rootReducer = combineReducers({
     auth,
@@ -18,6 +20,7 @@ const rootReducer = combineReducers({
     manage,
     menu,
     posts,
+    socketReducer,
 });
 
 export function* rootSaga() {
@@ -27,8 +30,10 @@ export function* rootSaga() {
         writeSaga(),
         postSaga(),
         manageSaga(),
-        postsSaga()
+        postsSaga(),
+        handleNewNotification(),
     ]);
+
 }
 
 export default rootReducer;

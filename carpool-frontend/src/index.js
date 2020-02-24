@@ -10,14 +10,16 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import { tempSetUser, profile } from "./modules/user";
+import { setupSocket } from './modules/socket';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer,
     composeWithDevTools(applyMiddleware(sagaMiddleware)));
 
+const user = localStorage.getItem('user');
+
 function loadUser() {
     try {
-        const user = localStorage.getItem('user');
         if (!user) return;
 
         store.dispatch(tempSetUser(user));
@@ -27,6 +29,7 @@ function loadUser() {
     }
 }
 
+export const socket = setupSocket(store.dispatch);
 sagaMiddleware.run(rootSaga);
 
 loadUser();

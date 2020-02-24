@@ -5,6 +5,8 @@ const session = require('express-session');
 const passport = require('passport');
 require('dotenv').config();
 
+const webSocket = require('./socket');
+
 const { sequelize } = require('../models');
 const passportConfig = require('../passport');
 
@@ -16,7 +18,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(session({
+const sessionMiddleware = session({
     resave: false,
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,
@@ -24,7 +26,8 @@ app.use(session({
         httpOnly: true,
         secure: false,
     },
-}));
+});
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('port', process.env.PORT || 8001);
@@ -46,11 +49,13 @@ app.use((err, req, res, next) => {
     } else {
         res.status(err.status || 500);
     }
-})
+});
 
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
     console.log('Listening on port', + app.get('port'));
 });
+
+webSocket(server, app);
 
 module.exports = app;
