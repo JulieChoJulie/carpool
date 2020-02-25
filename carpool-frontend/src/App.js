@@ -13,6 +13,7 @@ import ManagePage from './pages/ManagePage';
 import EditPage from './pages/EditPage';
 import FindRides from "./pages/FindRides";
 
+
 const App = () => {
     return (
         <>

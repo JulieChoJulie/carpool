@@ -65,7 +65,6 @@ exports.addRequest = async (req, res, next) => {
                 res.status(403).end(); //forbidden
             }
             const partner = await user.getPartnerRides({ where: { id: req.params.rideId }});
-            console.log(JSON.stringify(partner))
             if (partner.length > 0) {
                 res.status(400).end(); // the user already added in passenger
                 return;
@@ -75,6 +74,12 @@ exports.addRequest = async (req, res, next) => {
                 res.status(409).end(); // conflict: request already exists
                 next();
             }
+            const io = req.app.get('io');
+            io.of('/notification').to(driverId).emit('receive', {
+                rideId: ride.id,
+                tite: 'request',
+                type: 'socket/GET_REQUEST',
+            });
             res.status(200).send(request);
         } else {
             res.status(400).end(); // Bad request: request by the driver

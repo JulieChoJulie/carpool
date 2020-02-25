@@ -10,7 +10,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import { tempSetUser, profile } from "./modules/user";
-import { setupSocket } from './modules/socket';
+import { setupSocket, socketLogin } from './modules/socket';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer,
@@ -21,9 +21,10 @@ const user = localStorage.getItem('user');
 function loadUser() {
     try {
         if (!user) return;
-
         store.dispatch(tempSetUser(user));
         store.dispatch(profile());
+        const userJSON   = JSON.parse(user);
+        store.dispatch(socketLogin(userJSON.id));
     } catch (e) {
         console.log('localStorage is not working.');
     }

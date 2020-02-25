@@ -21,7 +21,7 @@
   .right {
     display: flex;
     align-items: center;
-    .username {
+    .top-right {
       margin: 1rem;
       font-size: 0.8rem;
       display: flex;
@@ -29,9 +29,19 @@
       span {
         margin-right: 1rem;
       }
+      .notification {
+        animation-duration: 3s;
+      }
+      svg {
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
     }
-    .username {
-      @media (max-width: 768px) {
+    @media (max-width: 768px) {
+      .username {
+        display: none;
+      }
+      .logout {
         display: none;
       }
     }
