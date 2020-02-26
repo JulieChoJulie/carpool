@@ -138,7 +138,7 @@ exports.deletePost = async (req, res, next) => {
             res.sendStatus(404);
         } else {
             const rides = await Ride.update(
-                { state: false },
+                { status: 0 },
                 { where: { postId: req.params.id } }
             );
             res.sendStatus(200);
@@ -321,9 +321,8 @@ exports.filterPost = async (req, res, next) => {
                 attributes: ['username']
             }
         },
-        order: !!newest ? [[Post, 'updatedAt', 'DESC']] : [[Post, 'updatedAt', 'ASC']]
+        order: [[Post, 'updatedAt', 'DESC']]
     });
-
     res.status(200).send(rides);
 };
 

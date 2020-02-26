@@ -52,10 +52,14 @@ const WriteContainer = ({ history }) => {
         // arr[0] indicates whether all city fields are filled.
         // arr[1] indicates whether ride.to and ride.from are the same city
         return requiredRides.reduce((acc, ride) => {
-            if (ride.to.length === 0 || ride.from.length === 0) {
+            if (ride.to === '' || ride.from === '') {
                 acc[0] = 1;
             } else if (ride.to === ride.from) {
-                acc[1] = 1;
+                if (ride.to === 'Anywhere') {
+                    acc[1] = 0;
+                } else {
+                    acc[1] = 1;
+                }
             }
             return acc;
         }, [0, 0]);
@@ -71,7 +75,7 @@ const WriteContainer = ({ history }) => {
         if (!user) {
             setError('**Log in is required to write a post.**')
         } else if (isError) {
-            if (isError[0]) {
+            if (result[0]) {
                 setError('**Please fill out all fields.**');
             } else {
                 setError('**The departure and arrival cannot be the same city.**')
