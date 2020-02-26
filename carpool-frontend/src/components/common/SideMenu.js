@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import OutsideAlerter from './OnClickOutside';
 import { MdClose, MdSettings } from 'react-icons/md';
 import { FaHome } from 'react-icons/fa';
 import classNames from 'classnames';
@@ -21,6 +22,7 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
         <>
             {user ? (
                 <div className={classNames("sideMenu", { isMenuClosed })}>
+                    <OutsideAlerter onClickOutside={onClick} isClosed={isMenuClosed}>
                     <ul>
                         <li className="firstList">
                             <div className="topSideMenu">
@@ -78,6 +80,7 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                             </NavLink>
                         </li>
                     </ul>
+                    </OutsideAlerter>
                     <div
                         className="closeButton"
                         onClick={onClick}>

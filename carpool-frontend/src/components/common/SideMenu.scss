@@ -37,12 +37,16 @@
       display: none;
     };
   }
+  .outsideClick {
+    display: flex;
+  }
   ul {
     display: block;
     list-style-type: none;
     padding: 0rem;
     margin-top: 0;
     background: white;
+    height: 100%;
     li {
       a {
         padding-left: 0.5rem;
@@ -57,6 +61,7 @@
     @media (max-width: 768px) {
       width: 10rem;
       margin: 0;
+      flex: 1;
       li {
         flex-shrink: 1;
         margin: 1rem;

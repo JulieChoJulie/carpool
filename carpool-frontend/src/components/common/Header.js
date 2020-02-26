@@ -31,7 +31,7 @@ const Header = ({ user, onLogout, isMenuClosed, onClick, alarm, onClickBell, isC
                                 <div>
                                     <div
                                         className={
-                                            classNames('notification', 'animated', 'infinite', { bounce })
+                                            classNames('notification', 'animated', 'infinite', { bounce }, { isClosed })
                                         }
                                         onClick={onClickBell}
                                     >

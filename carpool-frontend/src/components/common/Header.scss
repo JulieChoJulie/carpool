@@ -10,6 +10,7 @@
 
 .wrapper {
   height: 3rem;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,12 +23,13 @@
     display: flex;
     align-items: center;
     .top-right {
-      margin: 1rem;
+      margin: 0rem;
       font-size: 0.8rem;
       display: flex;
       flex-direction: row;
+      align-items: center;
       span {
-        margin-right: 1rem;
+        margin-left: 1rem;
       }
       .triangle {
         border-color: transparent transparent $lightBeige transparent;
@@ -37,18 +39,24 @@
         width: 0px;
         position: relative;
         top: 0.3rem;
+        left: 1rem;
         &.isClosed {
-          display: none;
+          background: transparent;
+          border-color: transparent;
         }
       }
       .notification {
         animation-duration: 3s;
-        position: relative;
-        top: 0.5rem;
+        margin-left: 1rem;
+        &.isClosed {
+          position: static;
+        }
       }
       svg {
         font-size: 1.3rem;
         cursor: pointer;
+        position: relative;
+        top: 0.5rem;
       }
     }
     @media (max-width: 768px) {
@@ -60,6 +68,7 @@
       }
     }
     .menuButton {
+      cursor: pointer;
       font-size: 1rem;
       margin-left: 0.5rem;
       position: relative;

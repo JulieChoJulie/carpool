@@ -33,7 +33,7 @@ const OutsideAlerter = ({ isClosed, onClickOutside, children }) => {
         return <div>{children}</div>;
     }
 
-    return <div ref={wrapperRef}>{children}</div>;
+    return <div className="outsideClick" ref={wrapperRef}>{children}</div>;
 }
 
 export default OutsideAlerter;
