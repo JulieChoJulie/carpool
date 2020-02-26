@@ -2,7 +2,7 @@
 
 .notificationTemplate {
   position: fixed;
-  z-index: 40;
+  z-index: 1;
   top: 3rem;
   right: 1rem;
   width: 100%;
@@ -14,9 +14,11 @@
   &.isClosed {
     display: none;
   }
+
 }
 
 .notificationBlock {
+  z-index: 2;
   width: 310px;
   background: $lightBeige;
   padding: 0.3rem;

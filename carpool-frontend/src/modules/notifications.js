@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import createRequestSaga, { createRequestActionTypes } from "../lib/createRequestSaga";
 import { takeLatest } from 'redux-saga/effects';
 import * as notificationsAPI from '../lib/api/notifications';
+import produce from 'immer';
 
 const [
     GET_NOTI,
@@ -21,11 +22,18 @@ const initialState = {
 }
 
 const notifications = handleActions({
-    [GET_NOTI_SUCCESS]: (state, { payload: res }) => ({
-        ...state,
-        notifications: res.data,
-        error: null,
-    }),
+    [GET_NOTI_SUCCESS]: (state, { payload: res }) => (
+        produce(state, draft => {
+            const arr = res.data.map(n => ({
+                username: n.user.username,
+                ride: n.ride,
+                title: n.title,
+                from: n.from,
+                date: n.createdAt,
+            }));
+            draft.notifications = arr;
+        })
+    ),
     [GET_NOTI_FAILURE]: (state, { payload: error }) => ({
         ...state,
         notifications: null,

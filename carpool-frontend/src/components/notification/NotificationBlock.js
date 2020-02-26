@@ -10,8 +10,16 @@ const NotificationBlock = ({ error, notifications, loading}) => {
     if (!notifications || loading) {
         return null;
     }
+
+    if (notifications.length === 0) {
+        return (
+            <div className="notificationTemplate empty">
+                <div className="content">No notifications.</div>
+            </div>
+        );
+    }
     return (
-        <div className="notificationTemplate">
+        <div className="notificationPage">
             {notifications.map((n, index)=>
                 <Notification key={index} notification={n}/>
             )}
