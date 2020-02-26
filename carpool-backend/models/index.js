@@ -17,8 +17,9 @@ db.Notification = require('./notification')(sequelize, Sequelize);
 
 
 // 1:N relationship
-const oneToN = (one, N) => {
-    db[one].hasMany(db[N], {onDelete: 'cascade', hooks:true});
+const oneToN = (one, N, isOption) => {
+    const opt = !isOption ? {} : { onDelete: 'cascade', hooks: true };
+    db[one].hasMany(db[N], opt);
     db[N].belongsTo(db[one]);
 };
 
@@ -27,6 +28,7 @@ oneToN('Post', 'Ride')
 oneToN('Post', 'Comment');
 oneToN('User', 'Comment');
 oneToN('User', 'Notification');
+oneToN('Ride', 'Notification', false);
 
 // N:M relationship
 const NtoM = (N, M, through) => {

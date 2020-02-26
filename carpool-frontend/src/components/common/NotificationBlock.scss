@@ -35,4 +35,10 @@
       font-size: 0.5rem;
     }
   }
+  a {
+    text-decoration: underline;
+    color: $oc-gray-6;
+    text-align: center;
+    display: block;
+  }
 };

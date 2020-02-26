@@ -1,4 +1,4 @@
-const { User, Ride, Post } = require('../../../models');
+const { User, Ride, Post, Notification } = require('../../../models');
 const { postFormat, myPostFormat } = require('../posts/helper');
 const { sequelize } = require('../../../models');
 const { Op, transaction } = require('sequelize');
@@ -84,6 +84,12 @@ exports.addRequest = async (req, res, next) => {
                 type: 'socket/GET_NOTIFICATION',
                 date: new Date(),
             });
+            const notification = await Notification.create({
+                userId: driverId,
+                rideId: ride.id,
+                title: 'request_add',
+                from: 'requester',
+            });
             res.status(200).send(request);
         } else {
             res.status(400).end(); // Bad request: request by the driver
@@ -114,8 +120,13 @@ exports.cancelRequest = async (req, res, next) => {
                 type: 'socket/GET_NOTIFICATION',
                 date: new Date(),
             });
+            const notification = await Notification.create({
+                userId: driverId,
+                rideId: ride.id,
+                title: 'request_cancel',
+                from: 'requester',
+            });
             res.status(200).send(request);
-            res.status(200).end(); // successfully removed
         } else {
             res.status(400).end() ; // Bad Request ( no request to be removed)
         }
@@ -201,6 +212,14 @@ exports.cancelRide = async (req, res, next) => {
             type: 'socket/GET_NOTIFICATION',
             date: new Date(),
         });
+
+        const notification = await Notification.create({
+            userId: driverId,
+            rideId: ride.id,
+            title: 'passenger_cancel',
+            from: 'requester',
+        });
+
         await ride.update({ available: available }, { transaction: t } );
         await t.commit();
         res.status(200).send(ride);
@@ -277,6 +296,13 @@ exports.addPassenger = async (req, res, next) => {
             date: new Date(),
         });
 
+        const notification = await Notification.create({
+            userId: user.id,
+            rideId: ride.id,
+            title: 'passenger_add',
+            from: 'writer',
+        });
+
         const userPartner = await ride.getPartnerUsers({ where: { id: user.id }});
         const serializedPartner = serializeUser(userPartner[0], 'Partner');
 
@@ -331,6 +357,13 @@ exports.cancelPassenger = async (req, res, next) => {
             from: 'writer',
             type: 'socket/GET_NOTIFICATION',
             date: new Date(),
+        });
+
+        const notification = await Notification.create({
+            userId: user.id,
+            rideId: ride.id,
+            title: 'passenger_cancel',
+            from: 'writer',
         });
 
         res.status(200).send(ride);

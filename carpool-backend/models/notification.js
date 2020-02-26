@@ -1,11 +1,14 @@
 module.exports = (sequelize, DataTypes) => (
     sequelize.define('notification', {
-        content: {
-            type: DataTypes.STRING(100),
+        title: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
+        from: {
+            type: DataTypes.STRING(10),
             allowNull: false,
         }
     }, {
         timestamps: true,
-        paranoid: true,
     })
 )

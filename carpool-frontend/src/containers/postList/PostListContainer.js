@@ -20,10 +20,8 @@ const PostListContainer = () => {
     }, [dispatch]);
 
     const noPost = (
-        <ErrorContainer />
+        <ErrorContainer error={postsError}/>
     )
-
-    console.log(postsError)
 
     if (!posts || loading) {
         return (

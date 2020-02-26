@@ -12,6 +12,7 @@ import ErrorPage from './pages/ErrorPage';
 import ManagePage from './pages/ManagePage';
 import EditPage from './pages/EditPage';
 import FindRides from "./pages/FindRides";
+import NotificationPage from './pages/NotificationPage';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route component={ErrorPage} path="/error/:status" />
           <Route component={EditPage} path="/posts/:id/edit" exact/>
           <Route component={FindRides} path="/find-rides" />
+          <Route component={NotificationPage} path="/@:username/notifications" exact/>
         </>
     );
 };

@@ -62,6 +62,7 @@ const HeaderContainer = () => {
             notifications={notifications}
             isClosed={isClosed}
             onClickOutside={onClickOutside}
+            username={user.username}
         />}
     </>;
 }

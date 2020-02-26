@@ -8,6 +8,7 @@ import loading from './loading';
 import write, { writeSaga } from './write';
 import menu from './menu';
 import posts, { postsSaga } from './posts';
+import notifications, { notificationsSaga} from "./notifications";
 import socketReducer, { handleNewNotification } from './socket';
 
 
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     menu,
     posts,
     socketReducer,
+    notifications
 });
 
 export function* rootSaga() {
@@ -32,6 +34,7 @@ export function* rootSaga() {
         manageSaga(),
         postsSaga(),
         handleNewNotification(),
+        notificationsSaga()
     ]);
 
 }
