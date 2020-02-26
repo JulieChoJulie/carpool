@@ -74,12 +74,15 @@ exports.addRequest = async (req, res, next) => {
                 res.status(409).end(); // conflict: request already exists
                 next();
             }
+            // socket
             const io = req.app.get('io');
             io.of('/notification').to(driverId).emit('receive', {
                 ride: ride,
                 username: user.username,
-                tite: 'request_add',
+                title: 'request_add',
+                from: 'requester',
                 type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
             });
             res.status(200).send(request);
         } else {
@@ -106,8 +109,10 @@ exports.cancelRequest = async (req, res, next) => {
             io.of('/notification').to(driverId).emit('receive', {
                 ride: ride,
                 username: user.username,
-                tite: 'request_cancel',
+                title: 'request_cancel',
+                from: 'requester',
                 type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
             });
             res.status(200).send(request);
             res.status(200).end(); // successfully removed
@@ -166,7 +171,8 @@ exports.cancelRide = async (req, res, next) => {
         // no user/ride => 404 error
         req.userId = req.user.id;
         const {user, ride} = await isUserRideValid(req, res, next);
-
+        const post = await Post.findOne({ where: { id: ride.postId }});
+        const driverId = post.userId;
         /* remove partner
         / partner = 0 (nothing is removed)
         / partner = 1 (one partner is removed
@@ -185,7 +191,16 @@ exports.cancelRide = async (req, res, next) => {
 
         // update the available in the ride
         const available = ride.available + 1;
-
+        // socket
+        const io = req.app.get('io');
+        io.of('/notification').to(driverId).emit('receive', {
+            ride: ride,
+            username: user.username,
+            title: 'passenger_cancel',
+            from: 'requester',
+            type: 'socket/GET_NOTIFICATION',
+            date: new Date(),
+        });
         await ride.update({ available: available }, { transaction: t } );
         await t.commit();
         res.status(200).send(ride);
@@ -203,6 +218,16 @@ exports.addPassenger = async (req, res, next) => {
         // no user/ride => 404 error
         req.userId = req.params.userId;
         const {user, ride} = await isUserRideValid(req, res, next);
+        const post = await Post.findOne({
+            where: { id: ride.postId },
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'username']
+                }
+            ]
+        });
+        const writer = post.user;
 
         req.condition = {
             where: { id: user.id },
@@ -241,10 +266,21 @@ exports.addPassenger = async (req, res, next) => {
 
         await t.commit();
 
+        // socket
+        const io = req.app.get('io');
+        io.of('/notification').to(user.id).emit('receive', {
+            ride: ride,
+            username: writer.username,
+            title: 'passenger_add',
+            from: 'writer',
+            type: 'socket/GET_NOTIFICATION',
+            date: new Date(),
+        });
+
         const userPartner = await ride.getPartnerUsers({ where: { id: user.id }});
-        console.log(JSON.stringify(userPartner));
         const serializedPartner = serializeUser(userPartner[0], 'Partner');
-        console.log(JSON.stringify(serializedPartner));
+
+
         // array of obj { ...user, Parter: {userId, rideId}}
         res.status(200).send(serializedPartner);
     } catch (err) {
@@ -261,7 +297,18 @@ exports.cancelPassenger = async (req, res, next) => {
         // no user/ride => 404 error
         req.userId = req.params.userId;
         const {user, ride} = await isUserRideValid(req, res, next);
-        console.log(JSON.stringify(user));
+
+        const post = await Post.findOne({
+            where: { id: ride.postId },
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'username']
+                }
+            ]
+        });
+        const writer = post.user;
+
         const partner = await user.removePartnerRide(ride, { transaction: t});
 
         if (partner === 0) {
@@ -274,6 +321,17 @@ exports.cancelPassenger = async (req, res, next) => {
         const available = ride.available + 1;
         await ride.update({ available: available }, { transaction: t });
         await t.commit();
+
+        // socket
+        const io = req.app.get('io');
+        io.of('/notification').to(user.id).emit('receive', {
+            ride: ride,
+            username: writer.username,
+            title: 'passenger_cancel',
+            from: 'writer',
+            type: 'socket/GET_NOTIFICATION',
+            date: new Date(),
+        });
 
         res.status(200).send(ride);
 

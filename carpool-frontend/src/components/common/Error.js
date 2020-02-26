@@ -7,12 +7,14 @@ const Error = ({ status }) => {
         '401': 'Unauthorized',
         '403': 'Forbidden',
         '404': 'Not Found',
+        '402': 'No Posts Yet..'
     }
-    console.log(status);
     return (
         <div className="errorBlock">
             {error[status]}...
-            <Button color='burgundy' fullWidth to="/">Go to homepage</Button>
+            {status !== 402 &&
+                <Button color='burgundy' fullWidth to="/">Go to homepage</Button>
+            }
         </div>
     );
 };

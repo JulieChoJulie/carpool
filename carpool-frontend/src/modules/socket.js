@@ -58,7 +58,7 @@ const socketReducer = handleActions({
     }),
     [GET_NOTIFICATION]: (state, { payload: data }) => {
         return produce(state, draft => {
-            draft.notifications.push(data);
+            draft.notifications.unshift(data);
         })
     }
 }, initialState);

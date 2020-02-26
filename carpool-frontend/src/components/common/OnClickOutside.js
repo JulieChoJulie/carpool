@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from "react";
-import PropTypes from "prop-types";
 
 const useOutsideAlerter = (ref, onClickOutside) => {
     /**

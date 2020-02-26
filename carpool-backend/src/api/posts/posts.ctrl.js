@@ -7,6 +7,11 @@ const { getStatus } = require('../action/action.ctrl');
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
     try {
+        const count = await Post.count();
+        if (count === 0) {
+            res.status(402).end();
+            return;
+        }
         const posts = await Post.findAll(postFormat());
         if (req.user) {
             const status = await getStatus(req, next);

@@ -13,10 +13,12 @@ db.User = require('./user')(sequelize, Sequelize);
 db.Post = require('./post')(sequelize, Sequelize);
 db.Comment = require('./comment')(sequelize, Sequelize);
 db.Ride = require('./ride')(sequelize, Sequelize);
+db.Notification = require('./notification')(sequelize, Sequelize);
+
 
 // 1:N relationship
 const oneToN = (one, N) => {
-    db[one].hasMany(db[N], {onDelete: 'cascade'});
+    db[one].hasMany(db[N], {onDelete: 'cascade', hooks:true});
     db[N].belongsTo(db[one]);
 };
 
@@ -24,6 +26,7 @@ oneToN('User', 'Post');
 oneToN('Post', 'Ride')
 oneToN('Post', 'Comment');
 oneToN('User', 'Comment');
+oneToN('User', 'Notification');
 
 // N:M relationship
 const NtoM = (N, M, through) => {

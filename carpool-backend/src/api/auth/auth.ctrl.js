@@ -43,7 +43,6 @@ exports.joinPost = async (req, res, next) => {
             cell,
             password: hash,
             provider: 'local'});
-        // res.send({"id": user.id, "username": user.username});
         loginFunction(req, res, next);
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {

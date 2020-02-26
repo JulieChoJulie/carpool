@@ -58,11 +58,11 @@ const HeaderContainer = () => {
             onClickBell={onClickBell}
             isClosed={isClosed}
         />
-        <NotificationBlock
+        { user && <NotificationBlock
             notifications={notifications}
             isClosed={isClosed}
             onClickOutside={onClickOutside}
-        />
+        />}
     </>;
 }
 
