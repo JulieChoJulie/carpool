@@ -9,11 +9,6 @@ module.exports = (server, app) => {
         socket.on('message', (message) => {
             const data = JSON.parse(message);
             switch (data.type) {
-                case 'socket/ADD_NOTIFICATION':
-                    socket.emit('receive',{
-                        type: 'socket/ADD_NOTIFICATION'
-                    });
-                    break;
                 case 'socket/LOGIN':
                     socket.join(data.payload);
                 default:

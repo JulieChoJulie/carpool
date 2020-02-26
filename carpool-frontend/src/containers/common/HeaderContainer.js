@@ -3,18 +3,20 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from '../../components/common/Header';
 import { logout } from '../../modules/user';
 import {menuToggle} from "../../modules/menu";
+import NotificationBlock from "../../components/common/NotificationBlock";
 
 
 const HeaderContainer = () => {
-    const {user, isMenuClosed, notification } = useSelector(({ user, menu, socketReducer }) => ({
+    const {user, isMenuClosed, notifications } = useSelector(({ user, menu, socketReducer }) => ({
         user: user.user,
         isMenuClosed: menu.isMenuClosed,
-        notification: socketReducer.notification,
+        notifications: socketReducer.notifications,
     }));
 
     const [bounce, setBounce] = useState(false);
     const [unread, setUnread] = useState(false);
     const [notiSave, setNotiSave] = useState([]);
+    const [isClosed, setClose] = useState(true);
 
     const dispatch = useDispatch();
     const onLogout = () => {
@@ -25,25 +27,43 @@ const HeaderContainer = () => {
         dispatch(menuToggle());
     };
 
+    const onClickBell = () => {
+        setClose(!isClosed);
+        setUnread(!unread);
+    }
+
+    const onClickOutside = () => {
+        setClose(true);
+        setUnread(false);
+    }
+
     useEffect(() => {
-        console.log(notification);
-        if (notification.length > notiSave.length) {
+        if (notifications.length > notiSave.length) {
             setBounce(true);
             setUnread(true);
             setTimeout(() => {
                 setBounce(false);
             }, 6500);
-            setNotiSave([...notification]);
+            setNotiSave([...notifications]);
         }
-    }, [notification, notiSave]);
+    }, [notifications, notiSave]);
 
-    return <Header
-        user={user}
-        onLogout={onLogout}
-        onClick={onClick}
-        isMenuClosed={isMenuClosed}
-        alarm={{bounce, unread}}
-    />;
+    return <>
+        <Header
+            user={user}
+            onLogout={onLogout}
+            onClick={onClick}
+            isMenuClosed={isMenuClosed}
+            alarm={{bounce, unread}}
+            onClickBell={onClickBell}
+            isClosed={isClosed}
+        />
+        <NotificationBlock
+            notifications={notifications}
+            isClosed={isClosed}
+            onClickOutside={onClickOutside}
+        />
+    </>;
 }
 
 export default HeaderContainer;

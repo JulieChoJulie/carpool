@@ -9,8 +9,8 @@ const SOCKET_LOGIN = 'socket/LOGIN';
 export const socketLogin = createAction(SOCKET_LOGIN, userId => userId);
 
 /* FROM SOCKET */
-const GET_REQUEST = 'socket/GET_REQUEST';
-export const getRequest = createAction(GET_REQUEST);
+const GET_NOTIFICATION = 'socket/GET_NOTIFICATION';
+export const getNotification = createAction(GET_NOTIFICATION);
 
 const ADD_NOTIFICATION = 'socket/ADD_NOTIFICATION';
 const NOTIFICATION_RECEIVED = 'socket/NOTIFICATION_RECEIVED';
@@ -27,9 +27,9 @@ export const setupSocket = (dispatch) => {
             case ADD_NOTIFICATION:
                 dispatch(notificationReceived());
                 break;
-            case GET_REQUEST:
+            case GET_NOTIFICATION:
                 console.log('here get_request');
-                dispatch(getRequest(data));
+                dispatch(getNotification(data));
                 break;
             default:
                 break;
@@ -48,7 +48,7 @@ export function* handleNewNotification() {
 }
 
 const initialState = {
-    notification: [],
+    notifications: [],
 };
 
 const socketReducer = handleActions({
@@ -56,9 +56,9 @@ const socketReducer = handleActions({
         ...state,
         message: 'it worked',
     }),
-    [GET_REQUEST]: (state, { payload: data }) => {
+    [GET_NOTIFICATION]: (state, { payload: data }) => {
         return produce(state, draft => {
-            draft.notification.push(data);
+            draft.notifications.push(data);
         })
     }
 }, initialState);

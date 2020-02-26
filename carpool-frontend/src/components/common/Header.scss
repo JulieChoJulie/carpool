@@ -29,8 +29,22 @@
       span {
         margin-right: 1rem;
       }
+      .triangle {
+        border-color: transparent transparent $lightBeige transparent;
+        border-style: solid;
+        border-width: 0px 0.6rem 0.6rem 0.6rem;
+        height: 0px;
+        width: 0px;
+        position: relative;
+        top: 0.3rem;
+        &.isClosed {
+          display: none;
+        }
+      }
       .notification {
         animation-duration: 3s;
+        position: relative;
+        top: 0.5rem;
       }
       svg {
         font-size: 1.3rem;

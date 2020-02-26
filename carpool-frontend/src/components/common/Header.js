@@ -8,7 +8,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { FaRegBell, FaBell } from 'react-icons/fa';
 import classNames from "classnames";
 
-const Header = ({ user, onLogout, isMenuClosed, onClick, alarm }) => {
+const Header = ({ user, onLogout, isMenuClosed, onClick, alarm, onClickBell, isClosed }) => {
     const { bounce, unread} = alarm;
     const menuButton = (
         <div
@@ -28,13 +28,17 @@ const Header = ({ user, onLogout, isMenuClosed, onClick, alarm }) => {
                         <div className="right">
                             <div className="top-right">
                                 <span className="username">{user.username}</span>
-                                <span
-                                    className={
-                                        classNames('notification', 'animated', 'infinite', { bounce })
-                                    }
-                                >
-                                    {unread ? <FaBell/> : <FaRegBell/>}
-                                </span>
+                                <div>
+                                    <div
+                                        className={
+                                            classNames('notification', 'animated', 'infinite', { bounce })
+                                        }
+                                        onClick={onClickBell}
+                                    >
+                                        {unread ? <FaBell/> : <FaRegBell/>}
+                                    </div>
+                                    <div className={classNames("triangle", { isClosed })}></div>
+                                </div>
                                 <span className="logout">
                                     <Button color="burgundy" onClick={onLogout}>Logout</Button>
                                 </span>

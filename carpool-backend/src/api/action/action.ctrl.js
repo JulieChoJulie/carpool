@@ -76,9 +76,10 @@ exports.addRequest = async (req, res, next) => {
             }
             const io = req.app.get('io');
             io.of('/notification').to(driverId).emit('receive', {
-                rideId: ride.id,
-                tite: 'request',
-                type: 'socket/GET_REQUEST',
+                ride: ride,
+                username: user.username,
+                tite: 'request_add',
+                type: 'socket/GET_NOTIFICATION',
             });
             res.status(200).send(request);
         } else {
@@ -97,8 +98,18 @@ exports.cancelRequest = async (req, res, next) => {
         // no user/ride => 404 error
         req.userId = req.user.id;
         const { user, ride } = await isUserRideValid(req, res, next);
+        const post = await Post.findOne({ where: { id: ride.postId }});
+        const driverId = post.userId;
         const request = await user.removeRequestRide(ride);
         if (request === 1) {
+            const io = req.app.get('io');
+            io.of('/notification').to(driverId).emit('receive', {
+                ride: ride,
+                username: user.username,
+                tite: 'request_cancel',
+                type: 'socket/GET_NOTIFICATION',
+            });
+            res.status(200).send(request);
             res.status(200).end(); // successfully removed
         } else {
             res.status(400).end() ; // Bad Request ( no request to be removed)
