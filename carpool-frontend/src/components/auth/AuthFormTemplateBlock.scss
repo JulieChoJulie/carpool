@@ -16,16 +16,18 @@
 }
 
 .boxTemplate {
-  padding: 2rem;
-  @include media('>767px') {
-    width: 50%;
+  @media (min-width: 768px) {
+    padding: 2rem;
+    max-width: 70%;
+    min-width: 70%;
   }
-  @include media('<370px') {
-    height: 95%;
-    width: 90%;
+  @media (max-width: 767px) {
+    padding: 1rem;
+    max-width: 90%;
+    min-width: 90%;
+    height: 90%;
   }
 }
-
 .logo {
   display: block;
   padding-bottom: 2rem;
