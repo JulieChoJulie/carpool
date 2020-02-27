@@ -15,9 +15,11 @@
   justify-content: space-between;
   align-items: center;
   .logo {
-    font-size: 1.125rem;
-    font-weight: 800;
-    letter-spacing: 2px;
+    img {
+      height: 2rem;
+      position: relative;
+      top: 1.4rem;
+    }
   }
   .right {
     display: flex;

@@ -13,9 +13,8 @@ const [
     GET_SAVE_FAILURE
 ] = createRequestActionTypes('posts/GET_SAVE');
 
-export const getSave = createAction(GET_SAVE);
-
-const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
+const ADD_UNSAVE ='posts/ADD_UNSAVE';
+const REMOVE_UNSAVE = 'posts/REMOVE_UNSAVE';
 
 
 const [
@@ -33,6 +32,9 @@ const [
 const ON_CHANGE = 'posts/ON_CHANGE';
 const INITIALIZE = 'posts/INITIALIZE';
 
+export const getSave = createAction(GET_SAVE);
+export const addUnsave = createAction(ADD_UNSAVE);
+export const removeUnsave = createAction(REMOVE_UNSAVE);
 export const readPosts = createAction(READ_POSTS);
 export const filterRides = createAction(FILTER_RIDES,
     ({ when, to, from, seats, price, offering }) =>
@@ -40,8 +42,12 @@ export const filterRides = createAction(FILTER_RIDES,
 );
 export const onChange = createAction(ON_CHANGE, res => res);
 export const initialize = createAction(INITIALIZE);
+
+
 const readPostsSaga = createRequestSaga(READ_POSTS, postsAPI.readFeed);
 const filterRidesSaga = createRequestSaga(FILTER_RIDES, postsAPI.filterRides);
+const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
+
 
 export function* postsSaga() {
     yield takeLatest(READ_POSTS, readPostsSaga);
@@ -63,7 +69,8 @@ const initialState = {
         price: [15, 30],
         offering: true
     },
-    saveError: null
+    saveError: null,
+    unsavedPostId: [],
 };
 
 const posts = handleActions({
@@ -111,6 +118,17 @@ const posts = handleActions({
         saveError: error.status,
     }),
     [INITIALIZE]: (state) => initialState,
+    [ADD_UNSAVE]: (state, { payload: id }) => (
+        produce(state, draft => {
+            draft.unsavedPostId.push(id);
+        })
+    ),
+    [REMOVE_UNSAVE]: (state, { payload: id }) => (
+        produce(state, draft => {
+            const index = draft.unsavedPostId.findIndex(p => p === id);
+            draft.unsavedPostId.splice(index, 1);
+        })
+    )
 }, initialState);
 
 export default posts;

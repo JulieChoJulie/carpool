@@ -3,6 +3,7 @@ import Responsive from './Responsive';
 import Button from './Button';
 import './Header.scss';
 import 'animate.css';
+import Logo from '../../lib/img/logo.png';
 import { Link } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FaRegBell, FaBell } from 'react-icons/fa';
@@ -23,7 +24,9 @@ const Header = ({ user, onLogout, isMenuClosed, onClick, alarm, onClickBell, isC
         <>
             <div className="header">
                 <Responsive addclass="wrapper">
-                    <Link to="/" className="logo">CARPOOL</Link>
+                    <Link to="/" className="logo">
+                        <img src={Logo} alt="logo_img" />
+                    </Link>
                     {user ? (
                         <div className="right">
                             <div className="top-right">

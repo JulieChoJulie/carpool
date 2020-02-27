@@ -12,6 +12,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 320px;
 }
 
 .boxTemplate {
@@ -25,11 +26,8 @@
   }
 }
 
-.Logo {
+.logo {
   display: block;
   padding-bottom: 2rem;
   text-align: center;
-  font-weight: bold;
-  letter-spacing: 2px;
-  color: $burgundy;
 }

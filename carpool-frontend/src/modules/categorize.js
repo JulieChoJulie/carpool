@@ -14,16 +14,6 @@ export const postSave = createAction(POST_SAVE, id => id);
 
 const postSaveSaga = createRequestSaga(POST_SAVE, categorizeAPI.postSave);
 
-// const [
-//     GET_SAVE,
-//     GET_SAVE_SUCCESS,
-//     GET_SAVE_FAILURE
-// ] = createRequestActionTypes('categorize/GET_SAVE');
-//
-// export const getSave = createAction(GET_SAVE);
-//
-// const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
-
 const [
     DELETE_SAVE,
     DELETE_SAVE_SUCCESS,
@@ -47,7 +37,6 @@ const statusSaveSaga = createRequestSaga(STATUS_SAVE, categorizeAPI.getSaveStatu
 
 export function* categorizeSaga() {
     yield takeLatest(POST_SAVE, postSaveSaga);
-    // yield takeLatest(GET_SAVE, getSaveSaga);
     yield takeLatest(DELETE_SAVE, deleteSaveSaga);
     yield takeLatest(STATUS_SAVE, statusSaveSaga);
 }
@@ -59,7 +48,6 @@ const initialState = {
 
 const categorize = handleActions({
     [POST_SAVE_SUCCESS]: (state, { payload: res }) => {
-        console.log('module: ' + res.data.status);
         return {
         ...state,
         error: null,
@@ -78,15 +66,6 @@ const categorize = handleActions({
         ...state,
         error: error.status
     }),
-    // [GET_SAVE_SUCCESS]: (state, { payload: res }) => ({
-    //     ...state,
-    //     savePosts: res.data,
-    // }),
-    // [GET_SAVE_FAILURE]: (state, { payload: error }) => ({
-    //     ...state,
-    //     savePosts: null,
-    //     error: error.status
-    // }),
     [STATUS_SAVE_SUCCESS]: (state, { payload: res}) => ({
         ...state,
         status: res.data.status,

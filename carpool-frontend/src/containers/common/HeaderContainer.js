@@ -5,7 +5,6 @@ import { logout } from '../../modules/user';
 import {menuToggle} from "../../modules/menu";
 import NotificationBlock from "../../components/common/NotificationBlock";
 
-
 const HeaderContainer = () => {
     const {user, isMenuClosed, notifications } = useSelector(({ user, menu, socketReducer }) => ({
         user: user.user,
