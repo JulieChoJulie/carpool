@@ -19,7 +19,7 @@ const Manage = ({
         return (
             <>
                 <div>Please post first! </div>
-                <Button fullWidth color="burgundy" to="/post">Post</Button>
+                <Button medium color="burgundy" to="/post">Post</Button>
             </>
         )
     }

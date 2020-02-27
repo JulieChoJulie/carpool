@@ -41,7 +41,7 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                         </li>
                         <li>
                             <NavLink activeStyle={activeStyle} to="/find-rides">
-                                Find Rides
+                                Filter Posts
                             </NavLink>
                         </li>
                         <li>
@@ -61,12 +61,12 @@ const SideMenu = ({ user, onClick, isMenuClosed, onLogout }) => {
                         </li>
                         <li>
                             <NavLink activeStyle={activeStyle} to="/manage">
-                                My Trips
+                                My Posts
                             </NavLink>
                         </li>
                         <li>
                             <NavLink activeStyle={activeStyle} to="/1">
-                                My Rides
+                                My Reservations
                             </NavLink>
                         </li>
                         <li>
