@@ -52,7 +52,7 @@ const Post = ({
                     <MdPerson /> @{user.username} <span className="date">{dateFormat(updatedAt)}</span>
                 </span>
                 <span className="button">
-                    { loggedInUser && !isOwn
+                    { loggedInUser
                     && (<span className="saveIcon" onClick={() => toggleSave(id)}>
                             {saveStatus ? <TiStarFullOutline/> : <TiStarOutline/>}
                         </span>)

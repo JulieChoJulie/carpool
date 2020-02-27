@@ -24,6 +24,11 @@ exports.postFormat = (field, value) => {
             {
                 model: User,
                 attributes: ['id', 'username']
+            },
+            {
+                model: User,
+                as: 'SaveUsers',
+                attributes: ['id'],
             }
         ],
         order: [['updatedAt', 'DESC']]

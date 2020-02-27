@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { readPosts, initialize, getSave, addUnsave, removeUnsave } from '../../modules/posts';
+import { readPosts, initialize, getSave, getPost } from '../../modules/posts';
 import { postSave, deleteSave } from "../../modules/categorize";
 import Post from "../../components/postList/Post";
 import PostListTemplate from "../../components/postList/PostListTemplate";
@@ -29,10 +29,10 @@ const PostListContainer = ({ match }) => {
 
     useEffect(() => {
         dispatch(initialize());
-        if (isSavePage) {
-            dispatch(getSave());
-        } else {
+        if (!isSavePage) {
             dispatch(readPosts());
+        } else {
+            dispatch(getSave());
         }
     }, [dispatch, isSavePage]);
 
@@ -40,14 +40,14 @@ const PostListContainer = ({ match }) => {
         <ErrorContainer error={postsError}/>
     );
 
-    const onToggleSave = useCallback((id) => {
-        const isUnsaved = unsavedPostId.includes(id);
-        if(isUnsaved) {
+    const onToggleSave = useCallback((id, isSaved) => {
+        console.log(isSaved)
+        if(!isSaved) {
             dispatch(postSave(id));
-            dispatch(removeUnsave(id));
+            setTimeout(() => dispatch(getPost(id)), 100);
         } else {
             dispatch(deleteSave(id));
-            dispatch(addUnsave(id));
+            setTimeout(() => dispatch(getPost(id)), 100);
         }
     });
 
@@ -73,12 +73,11 @@ const PostListContainer = ({ match }) => {
             >
             {posts.map(post =>
                 <Post
+                    user={user}
                     key={post.id}
                     post={post}
                     status={status}
                     onToggleSave={onToggleSave}
-                    unsavedPostId={unsavedPostId}
-                    isSavePage={isSavePage}
                 />)
             }
             </PostListTemplate>

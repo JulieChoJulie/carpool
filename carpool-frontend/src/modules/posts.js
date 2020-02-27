@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import * as postsAPI from '../lib/api/posts';
+import * as postAPI from '../lib/api/posts';
 import createRequestSaga, {
     createRequestActionTypes
 } from '../lib/createRequestSaga';
@@ -24,6 +25,12 @@ const [
 ]= createRequestActionTypes('posts/READ_POSTS');
 
 const [
+    GET_POST,
+    GET_POST_SUCCESS,
+    GET_POST_FAILURE
+] = createRequestActionTypes('posts/GET_POST');
+
+const [
     FILTER_RIDES,
     FILTER_RIDES_SUCCESS,
     FILTER_RIDES_FAILURE
@@ -36,6 +43,7 @@ export const getSave = createAction(GET_SAVE);
 export const addUnsave = createAction(ADD_UNSAVE);
 export const removeUnsave = createAction(REMOVE_UNSAVE);
 export const readPosts = createAction(READ_POSTS);
+export const getPost = createAction(GET_POST, id => id);
 export const filterRides = createAction(FILTER_RIDES,
     ({ when, to, from, seats, price, offering }) =>
         ({ when, to, from, seats, price, offering })
@@ -45,12 +53,14 @@ export const initialize = createAction(INITIALIZE);
 
 
 const readPostsSaga = createRequestSaga(READ_POSTS, postsAPI.readFeed);
+const getPostSaga = createRequestSaga(GET_POST, postAPI.readPost);
 const filterRidesSaga = createRequestSaga(FILTER_RIDES, postsAPI.filterRides);
 const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
 
 
 export function* postsSaga() {
     yield takeLatest(READ_POSTS, readPostsSaga);
+    yield takeLatest(GET_POST, getPostSaga);
     yield takeLatest(FILTER_RIDES, filterRidesSaga);
     yield takeLatest(GET_SAVE, getSaveSaga);
 }
@@ -128,7 +138,18 @@ const posts = handleActions({
             const index = draft.unsavedPostId.findIndex(p => p === id);
             draft.unsavedPostId.splice(index, 1);
         })
-    )
+    ),
+    [GET_POST_SUCCESS]: (state, { payload: res }) => (
+        produce(state, draft => {
+            const post = res.data;
+            const index = draft.posts.findIndex(p => p.id === post.id);
+            draft.posts[index] = post;
+        })
+    ),
+    [GET_POST_FAILURE]: (state, { payload : error }) => ({
+        ...state,
+        postsError: error
+    })
 }, initialState);
 
 export default posts;

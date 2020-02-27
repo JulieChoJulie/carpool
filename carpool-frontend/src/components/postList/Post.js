@@ -6,17 +6,19 @@ import Button from "../common/Button";
 import { IoIosCar, IoIosBody } from 'react-icons/io';
 import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
 
-const Post = ({ post, status, onToggleSave, unsavedPostId, isSavePage }) => {
+const Post = ({ post, status, onToggleSave, user }) => {
     const to = '/posts/' + post.id;
-    const isUnsaved = unsavedPostId.includes(post.id);
+    const isSaved = user
+        && post.SaveUsers
+        && post.SaveUsers.filter(u => u.id === parseInt(user.id)).length > 0;
     return (
         <div className="postBlock">
             <div className="firstRow">
                 <span className="username">@{post.user.username}</span>
                 <span className="postWhen">{dateFormat(post.updatedAt)}</span>
-                {isSavePage
-                    && <span className="save" onClick={() => onToggleSave(post.id)}>
-                        {!!isUnsaved ? <TiStarOutline/> : <TiStarFullOutline/>}
+                {user &&
+                    <span className="save" onClick={() => onToggleSave(post.id, isSaved)}>
+                        {isSaved ? <TiStarFullOutline/> : <TiStarOutline/>}
                     </span>
                 }
             </div>
