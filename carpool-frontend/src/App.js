@@ -25,8 +25,8 @@ const App = () => {
           <Route component={WritePage} path="/post" exact />
           <Route component={ManagePage} path="/manage" exact/>
           <Route component={DetailsPage} path="/posts/:id" exact />
-          <Route component={TripPage} path="/users/@:username/trip" />
-          <Route component={SavePage} path="/users/@:username/save" />
+          <Route component={TripPage} path="/@:username/trip" />
+          <Route component={SavePage} path="/@:username/save" />
           <Route component={ErrorPage} path="/error/:status" />
           <Route component={EditPage} path="/posts/:id/edit" exact/>
           <Route component={FindRides} path="/find-rides" />

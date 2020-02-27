@@ -1,23 +1,31 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { readPosts } from '../../modules/posts';
+import { readPosts, initialize, getSave } from '../../modules/posts';
 import Post from "../../components/postList/Post";
 import PostListTemplate from "../../components/postList/PostListTemplate";
 import ErrorContainer from "../common/ErrorContainer";
+import { withRouter } from 'react-router-dom';
 
-const PostListContainer = () => {
+const PostListContainer = ({ match }) => {
+    const isSavePage = match.params.username;
+    const loadingKey = isSavePage ? 'posts/GET_SAVE' : 'posts/READ_POSTS'
     const dispatch = useDispatch();
     const { posts, status, loading, user, postsError } = useSelector(({ posts, loading, user }) => ({
         posts: posts.posts,
         status: posts.status,
-        loading: loading['posts/READ_POSTS'],
+        loading: loading[loadingKey],
         postsError: posts.postsError,
         user: user.user,
-    }))
+    }));
 
     useEffect(() => {
-        dispatch(readPosts());
-    }, [dispatch]);
+        dispatch(initialize());
+        if (isSavePage) {
+            dispatch(getSave());
+        } else {
+            dispatch(readPosts());
+        }
+    }, [dispatch, isSavePage]);
 
     const noPost = (
         <ErrorContainer error={postsError}/>
@@ -31,7 +39,12 @@ const PostListContainer = () => {
             )
     } else {
         return (
-            <PostListTemplate user={user}>
+            <PostListTemplate
+                user={user}
+                isSavePage={isSavePage}
+                postsError={postsError}
+                loading={loading}
+            >
             {posts.map(post =>
                 <Post key={post.id} user={user} post={post} status={status}/>)
             }
@@ -40,4 +53,4 @@ const PostListContainer = () => {
     }
 };
 
-export default PostListContainer;
+export default withRouter(PostListContainer);

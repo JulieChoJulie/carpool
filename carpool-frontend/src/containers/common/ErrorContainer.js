@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 
 const ErrorContainer = ({ error, match }) => {
     const status = error ? error : match.params.status;
-    console.log(status)
     return <Error status={status}/>;
 
 };

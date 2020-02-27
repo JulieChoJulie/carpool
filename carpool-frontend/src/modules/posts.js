@@ -5,6 +5,18 @@ import createRequestSaga, {
     createRequestActionTypes
 } from '../lib/createRequestSaga';
 import produce from 'immer';
+import * as categorizeAPI from "../lib/api/categorize";
+
+const [
+    GET_SAVE,
+    GET_SAVE_SUCCESS,
+    GET_SAVE_FAILURE
+] = createRequestActionTypes('posts/GET_SAVE');
+
+export const getSave = createAction(GET_SAVE);
+
+const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
+
 
 const [
     READ_POSTS,
@@ -19,6 +31,7 @@ const [
 ] = createRequestActionTypes('posts/FILTER_RIDES');
 
 const ON_CHANGE = 'posts/ON_CHANGE';
+const INITIALIZE = 'posts/INITIALIZE';
 
 export const readPosts = createAction(READ_POSTS);
 export const filterRides = createAction(FILTER_RIDES,
@@ -26,13 +39,14 @@ export const filterRides = createAction(FILTER_RIDES,
         ({ when, to, from, seats, price, offering })
 );
 export const onChange = createAction(ON_CHANGE, res => res);
-
+export const initialize = createAction(INITIALIZE);
 const readPostsSaga = createRequestSaga(READ_POSTS, postsAPI.readFeed);
 const filterRidesSaga = createRequestSaga(FILTER_RIDES, postsAPI.filterRides);
 
 export function* postsSaga() {
     yield takeLatest(READ_POSTS, readPostsSaga);
     yield takeLatest(FILTER_RIDES, filterRidesSaga);
+    yield takeLatest(GET_SAVE, getSaveSaga);
 }
 
 const initialState = {
@@ -48,8 +62,9 @@ const initialState = {
         seats: 1,
         price: [15, 30],
         offering: true
-    }
-}
+    },
+    saveError: null
+};
 
 const posts = handleActions({
     [READ_POSTS_SUCCESS]: (state, { payload: res }) => ({
@@ -85,7 +100,17 @@ const posts = handleActions({
                 draft.criteria[res.key] = res.value;
             }
         })
-    }
+    },
+    [GET_SAVE_SUCCESS]: (state, { payload: res }) => ({
+        ...state,
+        posts: res.data,
+    }),
+    [GET_SAVE_FAILURE]: (state, { payload: error }) => ({
+        ...state,
+        error: error.status,
+        saveError: error.status,
+    }),
+    [INITIALIZE]: (state) => initialState,
 }, initialState);
 
 export default posts;

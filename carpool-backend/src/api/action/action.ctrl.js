@@ -430,7 +430,7 @@ exports.getTrip = async (req, res, next) => {
 exports.getSave = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
-        const posts = await user.getSavePosts();
+        const posts = await user.getSavePosts(postFormat());
         res.send(posts);
     } catch (err) {
         next(err);
