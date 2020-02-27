@@ -10,7 +10,7 @@ import menu from './menu';
 import posts, { postsSaga } from './posts';
 import notifications, { notificationsSaga} from "./notifications";
 import socketReducer, { handleNewNotification } from './socket';
-
+import categorize, { categorizeSaga } from "./categorize";
 
 const rootReducer = combineReducers({
     auth,
@@ -22,7 +22,8 @@ const rootReducer = combineReducers({
     menu,
     posts,
     socketReducer,
-    notifications
+    notifications,
+    categorize,
 });
 
 export function* rootSaga() {
@@ -34,7 +35,8 @@ export function* rootSaga() {
         manageSaga(),
         postsSaga(),
         handleNewNotification(),
-        notificationsSaga()
+        notificationsSaga(),
+        categorizeSaga()
     ]);
 
 }

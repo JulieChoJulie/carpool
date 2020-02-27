@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import {
     getPost, unloadPost, addRequest, cancelRequest, cancelRide, getStatus
 } from '../../modules/post';
+import { postSave, deleteSave, statusSave } from '../../modules/categorize';
 import Post from '../../components/post/Post';
 import { deletePost } from "../../lib/api/posts";
 
@@ -16,14 +17,19 @@ const PostContainer = ({ match, history }) => {
         status,
         error,
         user,
-        loading } = useSelector(
-        ({ post, user, loading }) => ({
+        loading,
+        saveStatus,
+        saveError,
+    } = useSelector(
+        ({ post, user, loading, categorize }) => ({
             post: post.post,
             postError: post.postError,
             status: post.status,
             error: [post.statusError, post.toggleError],
             user: user.user,
             loading: loading['post/GET_POST'],
+            saveStatus: categorize.status,
+            saveError: categorize.error,
     }));
 
     const errorMsg = (error, user) => {
@@ -64,6 +70,10 @@ const PostContainer = ({ match, history }) => {
         await dispatch(getStatus());
     };
 
+    const toggleSave = (id) => {
+        saveStatus ? dispatch(deleteSave(id)) : dispatch(postSave(id));
+    }
+
     const isOwn = user && post.user.id === user.id;
 
     const onRemove = async () => {
@@ -80,6 +90,7 @@ const PostContainer = ({ match, history }) => {
         if (user && user.id) {
             // get ride request status
             dispatch(getStatus());
+            dispatch(statusSave(postId));
         }
         return (() => {
             dispatch(unloadPost());
@@ -97,6 +108,9 @@ const PostContainer = ({ match, history }) => {
               isOwn={isOwn}
               loggedInUser={user}
               onRemove={onRemove}
+              saveError={saveError}
+              saveStatus={saveStatus}
+              toggleSave={toggleSave}
         />
     );
 };

@@ -7,7 +7,8 @@ const Error = ({ status }) => {
         '401': 'Unauthorized',
         '403': 'Forbidden',
         '404': 'Not Found',
-        '402': 'No Posts Yet..'
+        '402': 'No Posts Yet..',
+        '500': 'Internal Error'
     }
     return (
         <div className="errorBlock">

@@ -437,13 +437,35 @@ exports.getSave = async (req, res, next) => {
     }
 }
 
+/* GET  /api/action/save/post/:id */
+exports.getSaveStatus = async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        const save = await user.getSavePosts({ where: { id: req.params.id } });
+        if (save.length > 0) {
+            res.status(200).json({ status: true });
+        } else {
+            res.status(200).json({ status: false });
+        }
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+}
+
 /* POST /api/action/save/post/:id */
 exports.postSave = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
         const post = await Post.findOne({ where: { id: req.params.id } });
+        const save = await user.getSavePosts({ where: { id: req.params.id } });
+        if (save.length > 0) {
+            // if the user already saved the post
+            res.status(409).end();
+            return;
+        }
         await user.addSavePosts(post)
-        res.send(200).end();
+        res.status(200).json({ status: true });
     } catch (err) {
         next(err);
     }
@@ -454,8 +476,13 @@ exports.deleteSave = async (req, res, next) => {
     try{
         const post = await Post.findOne({ where: { id: req.params.id } });
         const user = await User.findOne({ where: { id: req.user.id } });
-        await user.removeSavePosts(post);
-        res.status(200).end();
+        const save = await user.removeSavePosts(post);
+        if (save === 1) {
+            res.status(200).json({ status: false });
+            return;
+        } else {
+            res.status(400).end(); // the post was not saved; nothing to be removed
+        }
     } catch (err) {
         next(err);
     }

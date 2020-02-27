@@ -8,7 +8,6 @@ const { getStatus } = require('../action/action.ctrl');
 exports.readFeed = async (req, res, next) => {
     try {
         const count = await Post.count({ where: { status: true }});
-        console.log(count)
         if (count === 0) {
             res.status(402).end();
             return;
@@ -65,14 +64,11 @@ exports.write = async (req, res, next) => {
 /* GET api/posts/:id */
 exports.readPost = async (req, res, next) => {
     try {
-        console.log(req.params.id);
-        console.log('*********')
         const post = await Post.findOne(postFormat('id', parseInt(req.params.id)));
         if (post === null) {
             res.status(404).end(); // Not Found
             return;
         }
-        console.log(JSON.stringify(post))
         res.status(200).send(post);
     } catch (err) {
         console.error(err);
@@ -165,7 +161,6 @@ exports.deleteRide = async (req, res, next) => {
                 transaction: t
             }
         );
-        console.log(JSON.stringify(ride));
         if (ride[0] === 0) {
             res.sendStatus(404); // Not Found
         } else {

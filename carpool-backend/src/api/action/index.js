@@ -22,5 +22,6 @@ action.get('/trip', isLoggedIn, actionCtrl.getTrip);
 action.get('/save', isLoggedIn, actionCtrl.getSave);
 action.post('/save/post/:id', isLoggedIn, actionCtrl.postSave);
 action.delete('/save/post/:id', isLoggedIn, actionCtrl.deleteSave);
+action.get('/save/post/:id', isLoggedIn, actionCtrl.getSaveStatus);
 
 module.exports = action;

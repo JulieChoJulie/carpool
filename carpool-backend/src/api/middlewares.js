@@ -64,15 +64,12 @@ exports.isOwner = async (req, res, next) => {
         userId = parseInt(req.params.userId);
     } else if (!!req.params.commentId) {
         const comment = await Comment.findOne({ where: { id: req.params.commentId }});
-        console.log(JSON.stringify(comment))
         userId = comment.userId;
     } else if (!!req.params.id) {
         const post = await Post.findOne({ where: { id: req.params.id }});
         userId = post.userId;
     }
     if (userId === req.user.id) {
-        console.log(userId);
-        console.log(req.user);
         next();
     } else {
         res.sendStatus(403); // Forbidden

@@ -2,7 +2,7 @@ import React from 'react';
 import RideBlock from './RideBlock';
 import { MdPerson } from 'react-icons/md';
 import { IoIosBody, IoIosCar } from "react-icons/io";
-import { TiStarOutline } from 'react-icons/ti';
+import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
 import './Post.scss';
 import dateFormat from './dateFormat';
 import ManageButtons from "../manage/ManageButtons";
@@ -18,6 +18,9 @@ const Post = ({
                   isOwn,
                   loggedInUser,
                   onRemove,
+                  saveError,
+                  saveStatus,
+                  toggleSave
               }) => {
     if (postError) {
         if (postError.status && postError.status === 404) {
@@ -41,7 +44,7 @@ const Post = ({
         // -1 => request sent
     }
 
-    const { rides, notes, updatedAt, user } = post;
+    const { rides, notes, updatedAt, user, id } = post;
     return (
         <div className="post">
             <div className="first row">
@@ -49,7 +52,11 @@ const Post = ({
                     <MdPerson /> @{user.username} <span className="date">{dateFormat(updatedAt)}</span>
                 </span>
                 <span className="button">
-                    <span className="saveIcon"><TiStarOutline/></span>
+                    { loggedInUser && !isOwn
+                    && (<span className="saveIcon" onClick={() => toggleSave(id)}>
+                            {saveStatus ? <TiStarFullOutline/> : <TiStarOutline/>}
+                        </span>)
+                    }
                     {isOwn &&
                         <ManageButtons
                             onRemove={onRemove}
@@ -57,8 +64,6 @@ const Post = ({
                             isEdit={true}
                             type="post"
                         />
-                    // (<><span className="editIcon" onClick={onEdit}><TiEdit/></span>
-                    // <span className="deleteIcon"><MdDelete/></span></>)
                     }
                 </span>
             </div>
