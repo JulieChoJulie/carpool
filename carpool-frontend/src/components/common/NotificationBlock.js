@@ -12,7 +12,7 @@ const NotificationBlock = ({ notifications, isClosed, onClickOutside, username }
             <div className="notificationBlock">
                 {notifications.length === 0 &&
                     <div className="notification">
-                        There is no notifications..
+                        No new notifications..
                     </div>
                 }
                 {notifications.map((notification, index) =>

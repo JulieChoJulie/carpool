@@ -7,7 +7,8 @@ const { getStatus } = require('../action/action.ctrl');
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
     try {
-        const count = await Post.count();
+        const count = await Post.count({ where: { status: true }});
+        console.log(count)
         if (count === 0) {
             res.status(402).end();
             return;

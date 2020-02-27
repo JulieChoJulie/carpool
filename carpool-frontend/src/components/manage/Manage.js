@@ -1,6 +1,7 @@
 import React from 'react';
 import ManagePost from "./ManagePost";
 import LoginError from "../common/LoginError";
+import Button from '../common/Button';
 
 const Manage = ({
                     loading,
@@ -14,6 +15,16 @@ const Manage = ({
     if (loading || !myPosts) {
         return null;
     }
+    if (Array.isArray(myPosts) && myPosts.length === 0) {
+        return (
+            <>
+                <div>Please post first! </div>
+                <Button fullWidth color="burgundy" to="/post">Post</Button>
+            </>
+        )
+    }
+
+    console.log(!myPosts);
     return (
         <>
             {!user ?

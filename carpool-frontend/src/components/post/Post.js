@@ -32,6 +32,9 @@ const Post = ({
 
     const rideStatus = (rideId) => {
         const rideIdStr = rideId.toString();
+        if (status === null) {
+            return null;
+        }
         return (!status.hasOwnProperty(rideIdStr) ? '0' : status[rideIdStr]);
         // 0 => no request
         // 1 => booked

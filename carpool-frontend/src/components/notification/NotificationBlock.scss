@@ -1,19 +1,5 @@
 .notificationPage {
   flex: 1;
   display: flex;
-  flex-direction: row;
   z-index: 0;
-  &.empty {
-    bottom: 3rem;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    .content {
-      position: relative;
-      bottom: 3rem;
-    }
-  }
-  .notification {
-    flex: 1;
-  }
 }

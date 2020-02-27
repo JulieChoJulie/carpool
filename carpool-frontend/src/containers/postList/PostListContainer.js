@@ -21,7 +21,7 @@ const PostListContainer = () => {
 
     const noPost = (
         <ErrorContainer error={postsError}/>
-    )
+    );
 
     if (!posts || loading) {
         return (

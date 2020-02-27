@@ -1,5 +1,6 @@
 import React from 'react';
 import dateFormat from "../post/dateFormat";
+import { Link } from 'react-router-dom';
 
 const Notification = ({ notification }) => {
     const { title, ride, username, from, date } = notification;
@@ -53,10 +54,10 @@ const Notification = ({ notification }) => {
     }
 
     return (
-        <div className="notification">
+        <Link className="notification" to={`/posts/${ride.postId}`}>
             {message()}
             <div className="date">{dateFormat(date)}</div>
-        </div>
+        </Link>
     );
 };
 

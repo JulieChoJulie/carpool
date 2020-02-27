@@ -126,7 +126,7 @@ exports.cancelRequest = async (req, res, next) => {
                 title: 'request_cancel',
                 from: 'requester',
             });
-            res.status(200).send(request);
+            res.status(200).end();
         } else {
             res.status(400).end() ; // Bad Request ( no request to be removed)
         }

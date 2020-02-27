@@ -14,7 +14,7 @@ exports.readNotifications = async (req, res, next) => {
                 },
                 {
                     model: Ride,
-                    attributes: ['from', 'to', 'offering'],
+                    attributes: ['from', 'to', 'offering', 'postId'],
                     where: { status: true }
                 }
             ],
