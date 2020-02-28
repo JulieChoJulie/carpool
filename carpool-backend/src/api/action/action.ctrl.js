@@ -415,12 +415,28 @@ exports.getMyPost = async (req, res, next) => {
     }
 }
 
-/* GET /api/action/trip */
-exports.getTrip = async (req, res, next) => {
+/* GET /api/action/reservations */
+exports.getReservations = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
-        const trips = await User.getPartnerRides({ include: [{ model: Post }, { attributes: userId }] });
-        res.send(trips);
+        const trips = await user.getPartnerRides({
+            include: [
+                Object.assign({ model: Post }, postFormat()),
+            ],
+        });
+        const requests = await user.getRequestRides({
+            include: [
+                Object.assign({ model: Post }, postFormat()),
+            ],
+
+        });
+
+        const status = await getStatus(req, next);
+
+        res.status(200).send({
+            posts: { confirmed: trips, requests: requests },
+            status: status
+        });
     } catch (err) {
         next(err);
     }
@@ -431,7 +447,8 @@ exports.getSave = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
         const posts = await user.getSavePosts(postFormat());
-        res.send(posts);
+        const status = await getStatus(req, next);
+        res.send({ posts, status });
     } catch (err) {
         next(err);
     }

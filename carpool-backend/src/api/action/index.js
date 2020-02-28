@@ -18,7 +18,7 @@ action.get('/ride/:rideId/passengers', isLoggedIn, actionCtrl.getPassengers);
 action.get('ride/:rideId/requests', isLoggedIn, isOwner, actionCtrl.getRequests);
 action.get('/posts/manage', isLoggedIn, actionCtrl.getMyPost);
 
-action.get('/trip', isLoggedIn, actionCtrl.getTrip);
+action.get('/reservations', isLoggedIn, actionCtrl.getReservations);
 action.get('/save', isLoggedIn, actionCtrl.getSave);
 action.post('/save/post/:id', isLoggedIn, actionCtrl.postSave);
 action.delete('/save/post/:id', isLoggedIn, actionCtrl.deleteSave);

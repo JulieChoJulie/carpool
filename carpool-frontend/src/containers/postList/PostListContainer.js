@@ -1,14 +1,14 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { readPosts, initialize, getSave, getPost } from '../../modules/posts';
+import {readPosts, initialize, getPost, getSave, isReservations} from '../../modules/posts';
 import { postSave, deleteSave } from "../../modules/categorize";
 import Post from "../../components/postList/Post";
 import PostListTemplate from "../../components/postList/PostListTemplate";
 import ErrorContainer from "../common/ErrorContainer";
 import { withRouter } from 'react-router-dom';
 
-const PostListContainer = ({ match }) => {
-    const isSavePage = match.params.username;
+const PostListContainer = ({ location }) => {
+    const isSavePage = location.pathname.includes('save');
     const loadingKey = isSavePage ? 'posts/GET_SAVE' : 'posts/READ_POSTS'
     const dispatch = useDispatch();
     const {
@@ -17,22 +17,21 @@ const PostListContainer = ({ match }) => {
         loading,
         user,
         postsError,
-        unsavedPostId
     } = useSelector(({ posts, loading, user }) => ({
         posts: posts.posts,
         status: posts.status,
         loading: loading[loadingKey],
         postsError: posts.postsError,
-        user: user.user,
-        unsavedPostId: posts.unsavedPostId,
+        user: user.user
     }));
 
     useEffect(() => {
         dispatch(initialize());
-        if (!isSavePage) {
-            dispatch(readPosts());
-        } else {
+        dispatch(isReservations(false));
+        if (isSavePage) {
             dispatch(getSave());
+        } else {
+            dispatch(readPosts());
         }
     }, [dispatch, isSavePage]);
 
@@ -41,7 +40,6 @@ const PostListContainer = ({ match }) => {
     );
 
     const onToggleSave = useCallback((id, isSaved) => {
-        console.log(isSaved)
         if(!isSaved) {
             dispatch(postSave(id));
             setTimeout(() => dispatch(getPost(id)), 100);
@@ -49,11 +47,11 @@ const PostListContainer = ({ match }) => {
             dispatch(deleteSave(id));
             setTimeout(() => dispatch(getPost(id)), 100);
         }
-    });
+    }, [dispatch]);
 
     if (!posts || loading) {
         return (
-            <PostListTemplate user={user}>
+            <PostListTemplate user={user} isSavePage={isSavePage}>
                 {noPost}
             </PostListTemplate>
             )
@@ -63,7 +61,7 @@ const PostListContainer = ({ match }) => {
                 You have not saved any posts.
             </PostListTemplate>
         )
-    } else {
+    }  else {
         return (
             <PostListTemplate
                 user={user}
@@ -71,15 +69,16 @@ const PostListContainer = ({ match }) => {
                 postsError={postsError}
                 loading={loading}
             >
-            {posts.map(post =>
-                <Post
+            {posts.map(post => {
+                if (Array.isArray(post)) return null;
+                return <Post
                     user={user}
                     key={post.id}
                     post={post}
                     status={status}
                     onToggleSave={onToggleSave}
-                />)
-            }
+                />
+            })}
             </PostListTemplate>
         );
     }

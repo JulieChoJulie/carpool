@@ -6,7 +6,7 @@ import PostListPage from './pages/PostListPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
-import TripPage from './pages/TripPage';
+import ReservationsPage from './pages/ReservationsPage';
 import SavePage from './pages/SavePage';
 import ErrorPage from './pages/ErrorPage';
 import ManagePage from './pages/ManagePage';
@@ -18,14 +18,14 @@ import NotificationPage from './pages/NotificationPage';
 const App = () => {
     return (
         <>
-          <Route component={PostListPage} path={['/@:username', '/']} exact />
+          <Route component={PostListPage} path='/' exact />
           <Route component={LoginPage} path="/login" />
           <Route component={RegisterPage} path="/signup" />
           <Route component={ProfilePage} path="/users/@:username/profile" />
           <Route component={WritePage} path="/post" exact />
           <Route component={ManagePage} path="/manage" exact/>
           <Route component={DetailsPage} path="/posts/:id" exact />
-          <Route component={TripPage} path="/@:username/trip" />
+          <Route component={ReservationsPage} path="/@:username/reservations" exact/>
           <Route component={SavePage} path="/@:username/save" />
           <Route component={ErrorPage} path="/error/:status" />
           <Route component={EditPage} path="/posts/:id/edit" exact/>

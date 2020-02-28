@@ -14,9 +14,14 @@ const [
     GET_SAVE_FAILURE
 ] = createRequestActionTypes('posts/GET_SAVE');
 
+const [
+    GET_RESERVATIONS,
+    GET_RESERVATIONS_SUCCESS,
+    GET_RESERVATIONS_FAILURE
+] = createRequestActionTypes('posts/GET_RESERVATIONS');
+
 const ADD_UNSAVE ='posts/ADD_UNSAVE';
 const REMOVE_UNSAVE = 'posts/REMOVE_UNSAVE';
-
 
 const [
     READ_POSTS,
@@ -30,6 +35,8 @@ const [
     GET_POST_FAILURE
 ] = createRequestActionTypes('posts/GET_POST');
 
+const IS_RESERVATIONS = 'posts/IS_RESERVATIONS';
+
 const [
     FILTER_RIDES,
     FILTER_RIDES_SUCCESS,
@@ -40,10 +47,12 @@ const ON_CHANGE = 'posts/ON_CHANGE';
 const INITIALIZE = 'posts/INITIALIZE';
 
 export const getSave = createAction(GET_SAVE);
+export const getReservations = createAction(GET_RESERVATIONS);
 export const addUnsave = createAction(ADD_UNSAVE);
 export const removeUnsave = createAction(REMOVE_UNSAVE);
 export const readPosts = createAction(READ_POSTS);
 export const getPost = createAction(GET_POST, id => id);
+export const isReservations = createAction(IS_RESERVATIONS);
 export const filterRides = createAction(FILTER_RIDES,
     ({ when, to, from, seats, price, offering }) =>
         ({ when, to, from, seats, price, offering })
@@ -53,6 +62,7 @@ export const initialize = createAction(INITIALIZE);
 
 
 const readPostsSaga = createRequestSaga(READ_POSTS, postsAPI.readFeed);
+const getReservationsSaga = createRequestSaga(GET_RESERVATIONS, categorizeAPI.getReservations);
 const getPostSaga = createRequestSaga(GET_POST, postAPI.readPost);
 const filterRidesSaga = createRequestSaga(FILTER_RIDES, postsAPI.filterRides);
 const getSaveSaga = createRequestSaga(GET_SAVE, categorizeAPI.getSave);
@@ -63,6 +73,7 @@ export function* postsSaga() {
     yield takeLatest(GET_POST, getPostSaga);
     yield takeLatest(FILTER_RIDES, filterRidesSaga);
     yield takeLatest(GET_SAVE, getSaveSaga);
+    yield takeLatest(GET_RESERVATIONS, getReservationsSaga);
 }
 
 const initialState = {
@@ -80,7 +91,7 @@ const initialState = {
         offering: true
     },
     saveError: null,
-    unsavedPostId: [],
+    reservations: false,
 };
 
 const posts = handleActions({
@@ -120,14 +131,18 @@ const posts = handleActions({
     },
     [GET_SAVE_SUCCESS]: (state, { payload: res }) => ({
         ...state,
-        posts: res.data,
+        posts: res.data.posts,
+        saveError: null,
+        status: res.data.status,
     }),
     [GET_SAVE_FAILURE]: (state, { payload: error }) => ({
         ...state,
         error: error.status,
         saveError: error.status,
     }),
-    [INITIALIZE]: (state) => initialState,
+    [INITIALIZE]: (state) => ({
+        ...initialState
+    }),
     [ADD_UNSAVE]: (state, { payload: id }) => (
         produce(state, draft => {
             draft.unsavedPostId.push(id);
@@ -142,13 +157,61 @@ const posts = handleActions({
     [GET_POST_SUCCESS]: (state, { payload: res }) => (
         produce(state, draft => {
             const post = res.data;
-            const index = draft.posts.findIndex(p => p.id === post.id);
-            draft.posts[index] = post;
+            if (draft.reservations) {
+                const indexFirst = draft.posts[0].findIndex(p => p.id === res.payload);
+                if(indexFirst !== -1) {
+                    draft.posts[0][indexFirst] = post;
+                } else {
+                    const indexSecond = draft.posts[1].findIndex(p => p.id === res.payload);
+                    if (indexSecond !== -1) {
+                        draft.posts[1][indexSecond] = post;
+                    }
+                }
+               draft.postsError = null;
+            } else {
+                const index = draft.posts.findIndex(p => p.id === res.payload);
+                console.log(index);
+                if (index !== -1) {
+                    draft.posts[index] = post;
+                }
+            }
         })
     ),
     [GET_POST_FAILURE]: (state, { payload : error }) => ({
         ...state,
         postsError: error
+    }),
+    [GET_RESERVATIONS_SUCCESS]: (state, { payload: res }) => (
+        produce(state, draft => {
+            const posts = res.data.posts;
+            const status = res.data.status;
+            draft.posts[0] = posts.confirmed.reduce((acc, ride) => {
+                const index = acc.findIndex(p => p.id === ride.post.id);
+                if (index === -1) {
+                    acc.push(ride.post);
+                }
+                return acc;
+            }, []);
+            draft.posts[1] = posts.requests.reduce((acc, ride) => {
+                const index = acc.findIndex(p => p.id === ride.post.id);
+                if (index === -1) {
+                    acc.push(ride.post);
+                }
+                return acc;
+            }, []);
+            draft.status = status;
+
+        })
+    ),
+    [GET_RESERVATIONS_FAILURE]: (state, { payload : error }) => ({
+        ...state,
+        postsError: error,
+        posts: [],
+        status: null,
+    }),
+    [IS_RESERVATIONS]: (state, { payload: res}) => ({
+        ...state,
+        reservations: res,
     })
 }, initialState);
 

@@ -1,17 +1,20 @@
 import React from 'react';
 import HeaderContainer from "../containers/common/HeaderContainer";
 import SideMenuContainer from '../containers/common/SideMenuContainer';
+import ReservationsContainer from "../containers/categorize/ReservationsContainer";
 
-const TripPage = () => {
+const ReservationsPage = () => {
+    console.log('reservation page')
+
     return (
         <>
             <HeaderContainer />
             <div className="container">
                 <SideMenuContainer/>
-                TripPage
+                <ReservationsContainer/>
             </div>
         </>
     );
 };
 
-export default TripPage;
+export default ReservationsPage;

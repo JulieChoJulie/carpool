@@ -11,3 +11,6 @@ export const deleteSave = (id) =>
 
 export const getSaveStatus = (id) =>
     client.get(`/api/action/save/post/${id}`);
+
+export const getReservations = () =>
+    client.get(`/api/action/reservations`);
