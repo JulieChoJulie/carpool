@@ -3,6 +3,7 @@ import Passenger from "./Passenger";
 import Request from "./Request";
 import Ride from '../post/Ride';
 import ManageButtons from './ManageButtons';
+import { IoIosBody, IoIosCar } from "react-icons/io";
 import './ManageRide.scss';
 
 const ManageRide = ({ ride, onAccept, onCancel, onCancelRequest, onRemoveRide }) => {
@@ -17,8 +18,8 @@ const ManageRide = ({ ride, onAccept, onCancel, onCancelRequest, onRemoveRide })
                     )}
                 </div>
                 <div className="item passengers">
-                    <div className="label">Passengers</div>
-                    {ride.PartnerUsers.length === 0 && 'No passengers.'}
+                    <div className="label">{ride.offering? 'Passengers' : 'Drivers'}</div>
+                    {ride.PartnerUsers.length === 0 && ride.offering? 'No Passengers' : 'No Drivers'}
                     { ride.PartnerUsers.map(partner =>
                         <Passenger key={ partner.id } passenger={ partner } onCancel={onCancel}/>
                     )}

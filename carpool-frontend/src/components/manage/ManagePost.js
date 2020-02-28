@@ -6,9 +6,10 @@ import Button from "../common/Button";
 
 const ManagePost = ({ post, onAccept, onCancel, onCancelRequest, onRemove, onRemoveRide }) => {
     const to = '/posts/' + post.id;
+    console.log(post.rides[0].offering)
     return (
         <div className="ManagePost">
-            <ManageButtons onRemove={onRemove} id={post.id} isEdit={true} type='post'/>
+            <ManageButtons onRemove={onRemove} id={post.id} isEdit={true} offering={post.rides[0].offering} type='post'/>
             { post.rides.map(ride =>
                 <ManageRide
                     key={ride.id}

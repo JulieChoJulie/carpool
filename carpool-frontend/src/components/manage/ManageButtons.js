@@ -3,8 +3,9 @@ import AskRemoveModal from './AskRemoveModal';
 import { Link } from "react-router-dom";
 import { MdDelete } from 'react-icons/md';
 import { TiEdit } from 'react-icons/ti';
+import { IoIosBody, IoIosCar } from "react-icons/io";
 
-const ManageButtons = ({ onRemove, id, isEdit, obj, type }) => {
+const ManageButtons = ({ offering, onRemove, id, isEdit, obj, type }) => {
     const [modal, setModal] = useState(false);
     const onRemoveClick = () => {
         setModal(true);
@@ -25,14 +26,22 @@ const ManageButtons = ({ onRemove, id, isEdit, obj, type }) => {
 
     return (
         <div className="buttons">
-            { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><TiEdit/></Link>}
-            <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>
-            <AskRemoveModal
-                visible={modal}
-                onConfirm={onConfirm}
-                onCancel={onCancel}
-                obj={type}
-            />
+            <div className="offering">
+                {offering ?
+                    (<span><IoIosCar/>Offering</span>)
+                    :(<span><IoIosBody/>Looking For</span>)
+                }
+            </div>
+            <div>
+                { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><TiEdit/></Link>}
+                <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>
+                <AskRemoveModal
+                    visible={modal}
+                    onConfirm={onConfirm}
+                    onCancel={onCancel}
+                    obj={type}
+                />
+            </div>
         </div>
     );
 };

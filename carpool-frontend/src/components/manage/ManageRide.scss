@@ -40,7 +40,12 @@
 .item + item {
   padding-left: 0.3rem;
 }
-
+.ManageRide>.offering {
+  display: block;
+  text-align: center;
+  color: $lightBrown;
+  font-weight: bold;
+}
 .ManageRide>.rideBlock {
   .buttons {
     display: flex;

@@ -12,12 +12,25 @@
   .buttons {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     svg {
       font-size: 1rem;
       cursor: pointer;
       margin-left: 0.5rem;
       color: $lightBrown;
+    }
+    .offering {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      svg {
+        color: $lightBrown;
+        cursor: default;
+        position: relative;
+        top: 0.3rem;
+      }
+      color: $lightBrown;
+      font-weight: bold;
     }
   }
   .right {
