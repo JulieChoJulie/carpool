@@ -22,6 +22,12 @@ const [
 ] = createRequestActionTypes('manage/CANCEL_PASSENGER');
 
 const [
+    CANCEL_PASSENGER_REQUEST,
+    CANCEL_PASSENGER_REQUEST_SUCCESS,
+    CANCEL_PASSENGER_REQUEST_FAILURE
+] = createRequestActionTypes('manage/CANCEL_PASSENGER_REQUEST');
+
+const [
     GET_MYPOSTS,
     GET_MYPOSTS_SUCCESS,
     GET_MYPOSTS_FAILURE,
@@ -32,15 +38,18 @@ export const addPassenger = createAction(ADD_PASSENGER,
     ({ rideId, userId }) => ({ rideId, userId }));
 export const cancelPassenger = createAction(CANCEL_PASSENGER,
     ({ rideId, userId}) => ({ rideId, userId }));
+export const cancelPassengerRequest = createAction(CANCEL_PASSENGER_REQUEST);
 export const getMyPosts = createAction(GET_MYPOSTS);
 
 const addPassengerSaga = createRequestSaga(ADD_PASSENGER, actionAPI.addPassenger);
 const cancelPassengerSaga = createRequestSaga(CANCEL_PASSENGER, actionAPI.cancelPassenger);
+const cancelPassengerRequestSaga = createRequestSaga(CANCEL_PASSENGER_REQUEST, actionAPI.cancelPassengerRequest);
 const getMyPostsSaga = createRequestSaga(GET_MYPOSTS, actionAPI.getMyPosts);
 
 export function* manageSaga() {
     yield takeLatest(ADD_PASSENGER, addPassengerSaga);
     yield takeLatest(CANCEL_PASSENGER, cancelPassengerSaga);
+    yield takeLatest(CANCEL_PASSENGER_REQUEST, cancelPassengerRequestSaga);
     yield takeLatest(GET_MYPOSTS, getMyPostsSaga);
 };
 
@@ -58,7 +67,7 @@ const manage = handleActions(
         }),
         [GET_MYPOSTS_FAILURE]: (state, { payload: error }) => ({
             ...state,
-            myPostsError: error,
+            myPostsError: error.status,
         }),
         [ADD_PASSENGER_SUCCESS]: (state, { payload: res }) => {
             const rideId = res.payload.rideId;
@@ -88,7 +97,7 @@ const manage = handleActions(
         },
         [ADD_PASSENGER_FAILURE]: (state, { payload: error }) => ({
             ...state,
-            myPostsError: error,
+            myPostsError: error.status,
         }),
         [CANCEL_PASSENGER_SUCCESS]: (state, { payload: res }) => {
             return produce(state, draft => {
@@ -105,7 +114,34 @@ const manage = handleActions(
         },
         [CANCEL_PASSENGER_FAILURE]: (state, { payload: error }) => ({
             ...state,
-            myPostsError: error
+            myPostsError: error.status
+        }),
+        [CANCEL_PASSENGER_REQUEST_SUCCESS]: (state, { payload: res }) => {
+            const rideId = res.payload.rideId;
+            const userId = res.payload.userId;
+            return  produce(state, draft => {
+                let postIndex;
+                let rideIndex;
+                draft.myPosts.forEach((p, i) =>
+                    p.rides.forEach( (r, j)=> {
+                        if (r.id === rideId) {
+                            postIndex = i;
+                            rideIndex = j;
+                        }
+                    })
+                );
+                const requestIndex = draft
+                    .myPosts[postIndex]
+                    .rides[rideIndex]
+                    .RequestUsers
+                    .findIndex(request => request.userId === userId);
+                draft.myPosts[postIndex].rides[rideIndex].RequestUsers.splice(
+                    requestIndex, 1);
+            })
+        },
+        [CANCEL_PASSENGER_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            myPostsError: error.status
         })
 
 

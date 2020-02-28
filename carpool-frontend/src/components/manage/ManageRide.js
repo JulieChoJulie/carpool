@@ -5,7 +5,7 @@ import Ride from '../post/Ride';
 import ManageButtons from './ManageButtons';
 import './ManageRide.scss';
 
-const ManageRide = ({ ride, onAccept, onCancel, onRemoveRide }) => {
+const ManageRide = ({ ride, onAccept, onCancel, onCancelRequest, onRemoveRide }) => {
     return (
         <div className="ManageRide">
             <div className="reservation">
@@ -13,7 +13,7 @@ const ManageRide = ({ ride, onAccept, onCancel, onRemoveRide }) => {
                     <div className="label">Requests Waiting</div>
                     {ride.RequestUsers.length === 0 && 'No requests.'}
                     { ride.RequestUsers.map(request =>
-                        <Request key={ request.id } request={ request } onAccept={onAccept}/>
+                        <Request key={ request.id } request={ request } onAccept={onAccept} onCancelRequest={onCancelRequest} />
                     )}
                 </div>
                 <div className="item passengers">

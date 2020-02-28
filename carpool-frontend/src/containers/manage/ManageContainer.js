@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPassenger, getMyPosts, cancelPassenger } from '../../modules/manage';
+import { addPassenger, getMyPosts, cancelPassenger, cancelPassengerRequest } from '../../modules/manage';
 import { deletePost, deleteRide } from '../../lib/api/posts';
 import ManageTemplate from "../../components/manage/ManageTemplate";
 import Manage from "../../components/manage/Manage";
@@ -21,6 +21,10 @@ const ManageContainer = ({ history }) => {
 
     const onCancel = useCallback((rideId, userId) => {
         dispatch(cancelPassenger({ rideId, userId }));
+    }, [dispatch]);
+
+    const onCancelRequest = useCallback((rideId, userId) => {
+        dispatch(cancelPassengerRequest({ rideId, userId }));
     }, [dispatch]);
 
     const onRemove = async (id) => {
@@ -60,6 +64,7 @@ const ManageContainer = ({ history }) => {
                 user={user}
                 onAccept={onAccept}
                 onCancel={onCancel}
+                onCancelRequest={onCancelRequest}
                 onRemove={onRemove}
                 onRemoveRide={onRemoveRide}
             />

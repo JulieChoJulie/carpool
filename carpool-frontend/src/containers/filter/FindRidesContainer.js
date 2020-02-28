@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { filterRides, onChange } from '../../modules/posts';
+import { filterRides, onChange, initialize, readPosts } from '../../modules/posts';
 import SearchBlock from "../../components/filter/SearchBlock";
 import PostList from '../../components/filter/PostList';
 import FindRidesTemplate from "../../components/filter/FindRidesTemplate";
@@ -19,8 +19,6 @@ const FindRidesContainer = () => {
         } else {
             (e.value !== 'undefined' ? value = e.value : value = e.target.value)
         }
-
-        console.log(value)
 
         if (name === 'offering') {
             dispatch(onChange ({
@@ -42,7 +40,8 @@ const FindRidesContainer = () => {
     };
 
     useEffect(() => {
-
+        dispatch(initialize());
+        dispatch(filterRides(criteria));
     }, [dispatch]);
 
     return (

@@ -20,6 +20,9 @@ export const addPassenger = ({ rideId, userId }) =>
 export const cancelPassenger = ({ rideId, userId }) =>
     client.post(`/api/action/ride/${rideId}/user/${userId}/cancel`);
 
+export const cancelPassengerRequest = ({ rideId, userId }) =>
+    client.post(`/api/action/ride/${rideId}/user/${userId}/cancel/request`);
+
 export const getMyPosts = () =>
     client.get('/api/action/posts/manage');
 

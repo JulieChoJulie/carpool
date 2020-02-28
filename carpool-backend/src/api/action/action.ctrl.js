@@ -316,6 +316,70 @@ exports.addPassenger = async (req, res, next) => {
     }
 }
 
+
+/* POST /action/ride/:rideId/users/:userId/cancel/request */
+exports.cancelPassengerRequest = async (req, res, next) => {
+    try {
+        // no user/ride => 404 error
+        req.userId = req.params.userId;
+        const {user, ride} = await isUserRideValid(req, res, next);
+        const post = await Post.findOne({
+            where: { id: ride.postId },
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'username']
+                }
+            ]
+        });
+        const writer = post.user;
+
+        req.condition = {
+            where: { id: user.id },
+            include: [{
+                model: Ride,
+                as: 'RequestRides',
+                through : {
+                    where: {
+                        rideId: ride.id
+                    }
+                },
+            }]
+        };
+
+        // remove the request
+        const removeRequest = await user.removeRequestRide(ride);
+
+        if (removeRequest === 0) {
+            res.status(400).end(); // Bad Request
+            return;
+        }
+
+        // socket
+        const io = req.app.get('io');
+        io.of('/notification').to(user.id).emit('receive', {
+            ride: ride,
+            username: writer.username,
+            title: 'passenger_cancel_request',
+            from: 'writer',
+            type: 'socket/GET_NOTIFICATION',
+            date: new Date(),
+        });
+
+        const notification = await Notification.create({
+            userId: user.id,
+            rideId: ride.id,
+            title: 'passenger_cancel_request',
+            from: 'writer',
+        });
+
+        res.status(200).end();
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}
+
 /* POST /action/ride/:rideId/user/:userId/cancel */
 exports.cancelPassenger = async (req, res, next) => {
     const t = await sequelize.transaction();

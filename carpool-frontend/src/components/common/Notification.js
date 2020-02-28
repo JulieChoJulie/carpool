@@ -21,6 +21,9 @@ const Notification = ({ notification }) => {
                         return `@${username} has canceled the offering:  ${ride.from} -> ${ride.to}.`;
                     }
                     break;
+                case 'passenger_cancel_request':
+                    return `@${username} has canceled your request: ${ride.from} -> ${ride.to}`;
+                    break;
                 default:
                     return ``;
             }

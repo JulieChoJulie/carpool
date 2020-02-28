@@ -9,6 +9,7 @@ const Manage = ({
                     user,
                     onAccept,
                     onCancel,
+                    onCancelRequest,
                     onRemove,
                     onRemoveRide
 }) => {
@@ -37,6 +38,7 @@ const Manage = ({
                         onAccept={onAccept}
                         onCancel={onCancel}
                         onRemove={onRemove}
+                        onCancelRequest={onCancelRequest}
                         onRemoveRide={onRemoveRide}
                     />)
             }

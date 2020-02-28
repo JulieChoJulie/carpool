@@ -13,6 +13,22 @@
         margin-right: 0.3rem;
         color: $oc-gray-7;
       }
+      .cancelBtn {
+        padding: 0.3rem;
+        cursor: pointer;
+        margin-left: 0.3rem;
+        &:hover {
+          svg {
+            color: $lightBlue;
+          }
+        }
+        svg {
+          font-size: 0.7rem;
+          &:hover {
+            color: $lightBlue;
+          }
+        }
+      }
     }
     .label {
       font-size: 0.7rem;

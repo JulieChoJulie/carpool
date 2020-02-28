@@ -4,7 +4,7 @@ import ManageRide from "./ManageRide";
 import ManageButtons from './ManageButtons';
 import Button from "../common/Button";
 
-const ManagePost = ({ post, onAccept, onCancel, onRemove, onRemoveRide }) => {
+const ManagePost = ({ post, onAccept, onCancel, onCancelRequest, onRemove, onRemoveRide }) => {
     const to = '/posts/' + post.id;
     return (
         <div className="ManagePost">
@@ -15,6 +15,7 @@ const ManagePost = ({ post, onAccept, onCancel, onRemove, onRemoveRide }) => {
                     ride={ride}
                     onAccept={onAccept}
                     onCancel={onCancel}
+                    onCancelRequest={onCancelRequest}
                     onRemoveRide={onRemoveRide}
                 />
             )}
