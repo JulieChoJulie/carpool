@@ -26,12 +26,12 @@ const ManageButtons = ({ offering, onRemove, id, isEdit, obj, type }) => {
 
     return (
         <div className="buttons">
-            <div className="offering">
+            { isEdit && <div className="offering">
                 {offering ?
                     (<span><IoIosCar/>Offering</span>)
                     :(<span><IoIosBody/>Looking For</span>)
                 }
-            </div>
+            </div>}
             <div>
                 { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><TiEdit/></Link>}
                 <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>

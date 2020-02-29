@@ -1,20 +1,20 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Header from '../../components/common/Header';
 import { logout } from '../../modules/user';
-import {menuToggle} from "../../modules/menu";
+import { switchAlarm } from '../../modules/socket';
+import { menuToggle } from "../../modules/menu";
 import NotificationBlock from "../../components/common/NotificationBlock";
 
 const HeaderContainer = () => {
-    const {user, isMenuClosed, notifications } = useSelector(({ user, menu, socketReducer }) => ({
+    const {user, isMenuClosed, notifications, alarm } = useSelector(({ user, menu, socketReducer }) => ({
         user: user.user,
         isMenuClosed: menu.isMenuClosed,
         notifications: socketReducer.notifications,
+        alarm: socketReducer.alarm,
     }));
 
-    const [bounce, setBounce] = useState(false);
     const [unread, setUnread] = useState(false);
-    const [notiSave, setNotiSave] = useState([]);
     const [isClosed, setClose] = useState(true);
 
     const dispatch = useDispatch();
@@ -37,15 +37,14 @@ const HeaderContainer = () => {
     }
 
     useEffect(() => {
-        if (notifications.length > notiSave.length) {
-            setBounce(true);
+        if(alarm) {
             setUnread(true);
+            setClose(false);
             setTimeout(() => {
-                setBounce(false);
+                dispatch(switchAlarm(false))
             }, 6500);
-            setNotiSave([...notifications]);
         }
-    }, [notifications, notiSave]);
+    }, [alarm, dispatch]);
 
     return <>
         <Header
@@ -53,7 +52,7 @@ const HeaderContainer = () => {
             onLogout={onLogout}
             onClick={onClick}
             isMenuClosed={isMenuClosed}
-            alarm={{bounce, unread}}
+            alarm={{bounce: alarm, unread}}
             onClickBell={onClickBell}
             isClosed={isClosed}
         />

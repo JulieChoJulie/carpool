@@ -24,8 +24,6 @@ const Manage = ({
             </>
         )
     }
-
-    console.log(!myPosts);
     return (
         <>
             {!user ?
@@ -46,4 +44,4 @@ const Manage = ({
     );
 };
 
-export default Manage;
+export default React.memo(Manage);

@@ -9,7 +9,9 @@ const [
     GET_NOTI_SUCCESS,
     GET_NOTI_FAILURE,
 ]= createRequestActionTypes('notifications/GET_NOTI');
+
 export const getNoti = createAction(GET_NOTI, userId => userId);
+
 const getNotiSaga = createRequestSaga(GET_NOTI, notificationsAPI.readNotifications);
 
 export function* notificationsSaga() {
@@ -38,7 +40,7 @@ const notifications = handleActions({
         ...state,
         notifications: null,
         error: error.status,
-    })
+    }),
 
 }, initialState);
 

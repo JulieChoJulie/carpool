@@ -27,23 +27,23 @@ const ManageContainer = ({ history }) => {
         dispatch(cancelPassengerRequest({ rideId, userId }));
     }, [dispatch]);
 
-    const onRemove = async (id) => {
+    const onRemove = useCallback(async (id) => {
         try {
             await deletePost(id);
             dispatch(getMyPosts());
         } catch (e) {
             console.log(e);
         }
-    };
+    },[dispatch]);
 
-    const onRemoveRide = async (postId, rideId) => {
+    const onRemoveRide = useCallback(async (postId, rideId) => {
         try {
             await deleteRide(postId, rideId);
             dispatch(getMyPosts());
         } catch (e) {
             console.log(e);
         }
-    };
+    }, [dispatch]);
 
 
     useEffect(() => {

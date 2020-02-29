@@ -3,6 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import { socket } from '../index';
 import produce from 'immer';
+import {createRequestActionTypes} from "../lib/createRequestSaga";
 
 /* TO SERVER */
 const SOCKET_LOGIN = 'socket/LOGIN';
@@ -17,6 +18,11 @@ const NOTIFICATION_RECEIVED = 'socket/NOTIFICATION_RECEIVED';
 
 export const addNotification = createAction(ADD_NOTIFICATION);
 export const notificationReceived = createAction(NOTIFICATION_RECEIVED);
+
+/* ALARM */
+const SWITCH_ALARM = 'notifications/SWITCH_ALARM';
+export const switchAlarm = createAction(SWITCH_ALARM, value => value);
+
 
 
 export const setupSocket = (dispatch) => {
@@ -49,18 +55,21 @@ export function* handleNewNotification() {
 
 const initialState = {
     notifications: [],
+    alarm: false,
 };
 
 const socketReducer = handleActions({
-    [NOTIFICATION_RECEIVED]: (state, { payload: data }) => ({
-        ...state,
-        message: 'it worked',
-    }),
     [GET_NOTIFICATION]: (state, { payload: data }) => {
         return produce(state, draft => {
             draft.notifications.unshift(data);
+            draft.alarm = true;
+            draft.isClosed = false;
         })
-    }
+    },
+    [SWITCH_ALARM]: (state, { payload: value }) => ({
+        ...state,
+        alarm: value,
+    })
 }, initialState);
 
 export default socketReducer;
