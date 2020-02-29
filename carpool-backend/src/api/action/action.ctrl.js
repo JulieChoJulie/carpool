@@ -76,14 +76,18 @@ exports.addRequest = async (req, res, next) => {
             }
             // socket
             const io = req.app.get('io');
-            io.of('/notification').to(driverId).emit('receive', {
-                ride: ride,
-                username: user.username,
-                title: 'request_add',
-                from: 'requester',
-                type: 'socket/GET_NOTIFICATION',
-                date: new Date(),
-            });
+            const driver = await User.findOne({ where: { id: driverId }});
+            const isOnline = driver.online > driver.offline;
+            if (isOnline) {
+                io.of('/notification').to(driverId).emit('receive', {
+                    ride: ride,
+                    username: user.username,
+                    title: 'request_add',
+                    from: 'requester',
+                    type: 'socket/GET_NOTIFICATION',
+                    date: new Date(),
+                });
+            }
             const notification = await Notification.create({
                 userId: driverId,
                 rideId: ride.id,
@@ -111,15 +115,20 @@ exports.cancelRequest = async (req, res, next) => {
         const driverId = post.userId;
         const request = await user.removeRequestRide(ride);
         if (request === 1) {
+            console.log('here')
             const io = req.app.get('io');
-            io.of('/notification').to(driverId).emit('receive', {
-                ride: ride,
-                username: user.username,
-                title: 'request_cancel',
-                from: 'requester',
-                type: 'socket/GET_NOTIFICATION',
-                date: new Date(),
-            });
+            const driver = await User.findOne({ where: { id: driverId }});
+            const isOnline = driver.online > driver.offline;
+            if (isOnline) {
+                io.of('/notification').to(driverId).emit('receive', {
+                    ride: ride,
+                    username: user.username,
+                    title: 'request_cancel',
+                    from: 'requester',
+                    type: 'socket/GET_NOTIFICATION',
+                    date: new Date(),
+                });
+            }
             const notification = await Notification.create({
                 userId: driverId,
                 rideId: ride.id,
@@ -204,15 +213,19 @@ exports.cancelRide = async (req, res, next) => {
         const available = ride.available + 1;
         // socket
         const io = req.app.get('io');
-        io.of('/notification').to(driverId).emit('receive', {
-            ride: ride,
-            username: user.username,
-            title: 'passenger_cancel',
-            from: 'requester',
-            type: 'socket/GET_NOTIFICATION',
-            date: new Date(),
-        });
+        const driver = await User.findOne({ where: { id: driverId }});
+        const isOnline = driver.online > driver.offline;
+        if (isOnline) {
+            io.of('/notification').to(driverId).emit('receive', {
+                ride: ride,
+                username: user.username,
+                title: 'passenger_cancel',
+                from: 'requester',
+                type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
+            });
 
+        }
         const notification = await Notification.create({
             userId: driverId,
             rideId: ride.id,
@@ -287,14 +300,17 @@ exports.addPassenger = async (req, res, next) => {
 
         // socket
         const io = req.app.get('io');
-        io.of('/notification').to(user.id).emit('receive', {
-            ride: ride,
-            username: writer.username,
-            title: 'passenger_add',
-            from: 'writer',
-            type: 'socket/GET_NOTIFICATION',
-            date: new Date(),
-        });
+        const isOnline = user.online > user.offline;
+        if (isOnline) {
+            io.of('/notification').to(user.id).emit('receive', {
+                ride: ride,
+                username: writer.username,
+                title: 'passenger_add',
+                from: 'writer',
+                type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
+            });
+        }
 
         const notification = await Notification.create({
             userId: user.id,
@@ -357,14 +373,17 @@ exports.cancelPassengerRequest = async (req, res, next) => {
 
         // socket
         const io = req.app.get('io');
-        io.of('/notification').to(user.id).emit('receive', {
-            ride: ride,
-            username: writer.username,
-            title: 'passenger_cancel_request',
-            from: 'writer',
-            type: 'socket/GET_NOTIFICATION',
-            date: new Date(),
-        });
+        const isOnline = user.online > user.offline;
+        if (isOnline) {
+            io.of('/notification').to(user.id).emit('receive', {
+                ride: ride,
+                username: writer.username,
+                title: 'passenger_cancel_request',
+                from: 'writer',
+                type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
+            });
+        }
 
         const notification = await Notification.create({
             userId: user.id,
@@ -414,14 +433,17 @@ exports.cancelPassenger = async (req, res, next) => {
 
         // socket
         const io = req.app.get('io');
-        io.of('/notification').to(user.id).emit('receive', {
-            ride: ride,
-            username: writer.username,
-            title: 'passenger_cancel',
-            from: 'writer',
-            type: 'socket/GET_NOTIFICATION',
-            date: new Date(),
-        });
+        const isOnline = user.online > user.offline;
+        if (isOnline) {
+            io.of('/notification').to(user.id).emit('receive', {
+                ride: ride,
+                username: writer.username,
+                title: 'passenger_cancel',
+                from: 'writer',
+                type: 'socket/GET_NOTIFICATION',
+                date: new Date(),
+            });
+        }
 
         const notification = await Notification.create({
             userId: user.id,

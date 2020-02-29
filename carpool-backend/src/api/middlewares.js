@@ -21,14 +21,16 @@ exports.isNotLoggedIn = (req, res, next) => {
 // excluding password
 exports.serialize = (req, res) => {
     if (req.user) {
-        const { email, username, cell, provider, snsId, id } = req.user;
+        const { email, username, cell, provider, snsId, id, offline, online } = req.user;
         res.json({
             email,
             username,
             cell,
             provider,
             snsId,
-            id
+            id,
+            offline,
+            online,
         });
     } else {
         res.sendStatus(404);

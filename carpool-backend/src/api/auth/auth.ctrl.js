@@ -79,7 +79,8 @@ const loginFunction = (req, res, next) => {
 exports.login = loginFunction;
 
 /* POST api/auth/logout */
-exports.logout = (req, res, next) => {
+exports.logout = async (req, res, next) => {
+    await User.update({ offline: new Date() }, { where: { id: req.user.id }});
     req.logout();
     req.session.destroy();
     res.sendStatus(200);
