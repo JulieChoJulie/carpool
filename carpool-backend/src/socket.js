@@ -19,9 +19,6 @@ module.exports = (server, app) => {
                     socket.join(id);
                     const user = await User.findOne({ where: { id } });
                     await user.update({ online: new Date() });
-                    console.log('now Date:' + new Date());
-                    console.log('online: ' + user.online);
-                    console.log('offline: ' + user.offline);
                     const notifications = await user.getReceiveNotifications({
                         where: {
                             createdAt: { [Op.gte]: user.offline }
@@ -53,6 +50,7 @@ module.exports = (server, app) => {
             console.log('notification socket disconnected ************');
             if(id) {
                 await User.update({ offline: new Date() }, { where: { id } });
+                socket.leave(id);
             }
 
         })

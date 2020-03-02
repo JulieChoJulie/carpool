@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Header from '../../components/common/Header';
 import { logout } from '../../modules/user';
+import { socketLogout } from '../../modules/socket';
 import { switchAlarm } from '../../modules/socket';
 import { menuToggle } from "../../modules/menu";
 import NotificationBlock from "../../components/common/NotificationBlock";
@@ -20,6 +21,7 @@ const HeaderContainer = () => {
     const dispatch = useDispatch();
     const onLogout = () => {
         dispatch(logout());
+        dispatch(socketLogout());
     };
 
     const onClick = () => {

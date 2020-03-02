@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { menuToggle } from '../../modules/menu';
 import { logout } from '../../modules/user';
 import SideMenu from '../../components/common/SideMenu';
+import { socketLogout } from "../../modules/socket";
 
 const SideMenuContainer = () => {
     const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const SideMenuContainer = () => {
     const onLogout = () => {
         dispatch(logout());
         dispatch(menuToggle());
+        dispatch(socketLogout());
     };
 
     return <SideMenu

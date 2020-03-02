@@ -7,6 +7,8 @@ import produce from 'immer';
 /* TO SOCKET SERVER */
 const SOCKET_LOGIN = 'socket/LOGIN';
 export const socketLogin = createAction(SOCKET_LOGIN, userId => userId);
+const SOCKET_LOGOUT = 'socket/LOGOUT';
+export const socketLogout = createAction(SOCKET_LOGOUT);
 
 /* FROM SOCKET */
 const GET_NOTIFICATION = 'socket/GET_NOTIFICATION';
@@ -42,6 +44,9 @@ export function* handleNewNotification() {
     yield takeEvery(SOCKET_LOGIN,  (action) => {
         socket.emit('message', JSON.stringify(action));
     });
+    yield takeEvery(SOCKET_LOGOUT, () => {
+        socket.disconnect();
+    })
 }
 
 const initialState = {

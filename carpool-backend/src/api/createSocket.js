@@ -37,8 +37,13 @@ exports.socket = async (req) => {
 
     // socket
     const io = req.app.get('io');
-    io.of('/notification').to(receive.id).emit('receive', {
-        type: 'socket/GET_NOTIFICATION',
-        data: notificationData
-    });
+    const { rooms } = io.of('/notification').adapter;
+
+    // if the alarm receiver is online, send a socket
+    if (rooms[receive.id]) {
+        io.of('/notification').to(receive.id).emit('receive', {
+            type: 'socket/GET_NOTIFICATION',
+            data: notificationData
+        });
+    }
 }
