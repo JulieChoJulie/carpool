@@ -5,22 +5,25 @@ const { Op, transaction } = require('sequelize');
 /* GET /api/posts */
 exports.readNotifications = async (req, res, next) => {
     try {
-        const notifications = await Notification.findAll({
+        const user = await User.findOne({ where: { id: req.user.id }});
+        const notifications = await user.getReceiveNotifications({
             include: [
                 {
                     model: User,
-                    where: { id: req.user.id },
-                    attributes: ['username']
+                    attributes: ['username', 'id'],
+                    as: 'SendUsers',
+                },
+                {
+                    model: User,
+                    attributes: ['username', 'id'],
+                    as: 'ReceiveUsers',
                 },
                 {
                     model: Ride,
-                    attributes: ['from', 'to', 'offering', 'postId'],
-                    where: { status: true }
                 }
             ],
             order: [['createdAt', 'DESC']]
         });
-
         res.status(200).send(notifications);
     } catch (err) {
         console.error(err);

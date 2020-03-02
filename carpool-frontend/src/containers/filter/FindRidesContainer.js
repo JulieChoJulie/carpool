@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { filterRides, onChange, initialize, readPosts } from '../../modules/posts';
+import { filterRides, onChange, initialize } from '../../modules/posts';
 import SearchBlock from "../../components/filter/SearchBlock";
 import PostList from '../../components/filter/PostList';
 import FindRidesTemplate from "../../components/filter/FindRidesTemplate";
@@ -42,7 +42,7 @@ const FindRidesContainer = () => {
     useEffect(() => {
         dispatch(initialize());
         dispatch(filterRides(criteria));
-    }, [dispatch]);
+    }, [dispatch, criteria]);
 
     return (
         <FindRidesTemplate>

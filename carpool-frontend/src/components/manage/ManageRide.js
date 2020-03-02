@@ -3,7 +3,6 @@ import Passenger from "./Passenger";
 import Request from "./Request";
 import Ride from '../post/Ride';
 import ManageButtons from './ManageButtons';
-import { IoIosBody, IoIosCar } from "react-icons/io";
 import './ManageRide.scss';
 
 const ManageRide = ({ ride, onAccept, onCancel, onCancelRequest, onRemoveRide }) => {

@@ -35,6 +35,16 @@ module.exports = (sequelize, DataTypes) => (
         profile: {
             type: DataTypes.STRING(100),
             allowNull: true,
+        },
+        online: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
+        offline: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
         }
     }, {
         timestamps: true,

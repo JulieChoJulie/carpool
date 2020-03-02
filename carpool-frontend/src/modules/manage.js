@@ -139,7 +139,7 @@ const manage = handleActions(
                     requestIndex, 1);
             })
         },
-        [CANCEL_PASSENGER_FAILURE]: (state, { payload: error }) => ({
+        [CANCEL_PASSENGER_REQUEST_FAILURE]: (state, { payload: error }) => ({
             ...state,
             myPostsError: error.status
         })

@@ -27,7 +27,6 @@ oneToN('User', 'Post');
 oneToN('Post', 'Ride')
 oneToN('Post', 'Comment');
 oneToN('User', 'Comment');
-oneToN('User', 'Notification');
 oneToN('Ride', 'Notification', false);
 
 // N:M relationship
@@ -42,6 +41,8 @@ const NtoM = (N, M, through) => {
 NtoM('User', 'Post', 'Save');
 NtoM('User', 'Ride', 'Partner');
 NtoM('User', 'Ride', 'Request');
+NtoM('User', 'Notification', 'Send');
+NtoM('User', 'Notification', 'Receive');
 
 module.exports = db;
 

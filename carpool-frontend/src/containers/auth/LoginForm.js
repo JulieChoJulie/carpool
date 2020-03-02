@@ -4,7 +4,7 @@ import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 import { withRouter } from 'react-router-dom';
 import { profile } from '../../modules/user';
-import { socketLogin } from "../../modules/socket";
+import { socketLogin} from "../../modules/socket";
 
 const LoginForm = ({ history }) => {
     const [error, setError] = useState(null);

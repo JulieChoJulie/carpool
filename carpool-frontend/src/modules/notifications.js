@@ -26,14 +26,16 @@ const initialState = {
 const notifications = handleActions({
     [GET_NOTI_SUCCESS]: (state, { payload: res }) => (
         produce(state, draft => {
-            const arr = res.data.map(n => ({
-                username: n.user.username,
+            const data = res.data;
+            const arr = data.map(n => ({
+                username: n.SendUsers[0].username,
                 ride: n.ride,
                 title: n.title,
                 from: n.from,
                 date: n.createdAt,
             }));
             draft.notifications = arr;
+            draft.error = null;
         })
     ),
     [GET_NOTI_FAILURE]: (state, { payload: error }) => ({
@@ -41,7 +43,6 @@ const notifications = handleActions({
         notifications: null,
         error: error.status,
     }),
-
 }, initialState);
 
 export default notifications;
