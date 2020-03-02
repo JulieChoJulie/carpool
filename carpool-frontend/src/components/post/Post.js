@@ -62,6 +62,7 @@ const Post = ({
                             onRemove={onRemove}
                             id={post.id}
                             isEdit={true}
+                            isDetailedPage={true}
                             type="post"
                         />
                     }

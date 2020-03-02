@@ -97,8 +97,9 @@ exports.addRequest = async (req, res, next) => {
 
             await t.commit();
 
+            const status = await getStatus(req, next);
 
-            res.status(200).send(request);
+            res.status(200).send(status);
         } else {
             await t.rollback();
             res.status(400).end(); // Bad request: request by the driver
@@ -143,7 +144,9 @@ exports.cancelRequest = async (req, res, next) => {
 
             await t.commit();
 
-            res.status(200).end();
+            const status = await getStatus(req, next);
+
+            res.status(200).send(status);
         } else {
             await t.rollback();
             res.status(400).end() ; // Bad Request ( no request to be removed)
@@ -236,8 +239,10 @@ exports.cancelRide = async (req, res, next) => {
         }
         await socket(req, res, next);
 
+        const status = await getStatus(req, next);
+
         await t.commit();
-        res.status(200).send(ride);
+        res.status(200).send(status);
     } catch (err) {
         await t.rollback();
         console.log(err);

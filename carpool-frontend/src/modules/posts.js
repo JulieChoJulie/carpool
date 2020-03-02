@@ -170,7 +170,6 @@ const posts = handleActions({
                draft.postsError = null;
             } else {
                 const index = draft.posts.findIndex(p => p.id === res.payload);
-                console.log(index);
                 if (index !== -1) {
                     draft.posts[index] = post;
                 }

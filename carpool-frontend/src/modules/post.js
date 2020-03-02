@@ -93,6 +93,7 @@ const post = handleActions(
         [UNLOAD_POST]: () => initialState,
         [ADD_REQUEST_SUCCESS]: (state, { payload: res }) => ({
            ...state,
+            status: res.data,
            toggleError: null,
         }),
         [ADD_REQUEST_FAILURE]: (state, { payload: error }) => ({
@@ -101,6 +102,7 @@ const post = handleActions(
         }),
         [CANCEL_REQUEST_SUCCESS]: (state, { payload: res }) => ({
             ...state,
+            status: res.data,
             toggleError: null,
         }),
         [CANCEL_REQUEST_FAILURE]: (state, { payload: error }) => ({
@@ -119,6 +121,7 @@ const post = handleActions(
         }),
         [CANCEL_RIDE_SUCCESS]: (state, { payload: res }) => ({
             ...state,
+            status: res.data,
             toggleError: null,
         }),
         [CANCEL_RIDE_FAILURE]: (state, { payload: error }) => ({
@@ -131,7 +134,6 @@ const post = handleActions(
         }),
         [ON_INSERT_SUCCESS]: (state, { payload: res }) => {
             const comment = res.data;
-            console.log('here')
             return produce(state, draft => {
                 draft.post.comments.push(comment);
                 draft.commentError = null;

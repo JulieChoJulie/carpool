@@ -8,7 +8,14 @@ const ManagePost = ({ post, onAccept, onCancel, onCancelRequest, onRemove, onRem
     const to = '/posts/' + post.id;
     return (
         <div className="ManagePost">
-            <ManageButtons onRemove={onRemove} id={post.id} isEdit={true} offering={post.rides[0].offering} type='post'/>
+            <ManageButtons
+                onRemove={onRemove}
+                id={post.id}
+                isEdit={true}
+                offering={post.rides[0].offering}
+                type='post'
+                isDetailedPage={false}
+            />
             { post.rides.map(ride =>
                 <ManageRide
                     key={ride.id}

@@ -20,8 +20,9 @@ const PostContainer = ({ match, history }) => {
         loading,
         saveStatus,
         saveError,
+        alarm,
     } = useSelector(
-        ({ post, user, loading, categorize }) => ({
+        ({ post, user, loading, categorize, socketReducer }) => ({
             post: post.post,
             postError: post.postError,
             status: post.status,
@@ -30,6 +31,7 @@ const PostContainer = ({ match, history }) => {
             loading: loading['post/GET_POST'],
             saveStatus: categorize.status,
             saveError: categorize.error,
+            alarm: socketReducer.alarm,
     }));
 
     const errorMsg = (error, user) => {
@@ -96,6 +98,13 @@ const PostContainer = ({ match, history }) => {
             dispatch(unloadPost());
         })
     }, [dispatch, postId, user]);
+
+    // when alarm has received, update status
+    useEffect(() => {
+        if(alarm) {
+            dispatch(getStatus());
+        }
+    }, [alarm, dispatch])
 
     return (
         <Post post={post}

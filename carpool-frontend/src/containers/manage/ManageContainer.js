@@ -8,23 +8,33 @@ import { withRouter } from 'react-router-dom';
 
 const ManageContainer = ({ history }) => {
     const dispatch = useDispatch();
-    const { myPosts, myPostsError, user, loading } = useSelector(({ manage, user, loading }) => ({
+    const { myPosts, myPostsError, user, loading, alarm } = useSelector(({ manage, user, loading, socketReducer }) => ({
         myPosts: manage.myPosts,
         myPostsError: manage.myPostsError,
         user: user,
-        loading: loading['manage/GET_MYPOSTS']
+        loading: loading['manage/GET_MYPOSTS'],
+        alarm: socketReducer.alarm,
     }));
 
-    const onAccept = useCallback((rideId, userId) => {
-        dispatch(addPassenger({ rideId, userId }));
+    const onAccept = useCallback(async (rideId, userId) => {
+        await dispatch(addPassenger({ rideId, userId }));
+        setTimeout(() => {
+            dispatch(getMyPosts());
+        }, 500);
     }, [dispatch]);
 
-    const onCancel = useCallback((rideId, userId) => {
-        dispatch(cancelPassenger({ rideId, userId }));
+    const onCancel = useCallback(async (rideId, userId) => {
+        await dispatch(cancelPassenger({ rideId, userId }));
+        setTimeout(() => {
+            dispatch(getMyPosts());
+        }, 500);
     }, [dispatch]);
 
-    const onCancelRequest = useCallback((rideId, userId) => {
-        dispatch(cancelPassengerRequest({ rideId, userId }));
+    const onCancelRequest = useCallback(async (rideId, userId) => {
+        await dispatch(cancelPassengerRequest({ rideId, userId }));
+        setTimeout(() => {
+            dispatch(getMyPosts());
+        }, 500);
     }, [dispatch]);
 
     const onRemove = useCallback(async (id) => {
@@ -45,10 +55,17 @@ const ManageContainer = ({ history }) => {
         }
     }, [dispatch]);
 
-
+    // when it's first mounted.
     useEffect(() => {
         dispatch(getMyPosts());
     }, [dispatch]);
+
+    // when the user receives the alarm
+    useEffect(() => {
+        if (alarm) {
+            dispatch(getMyPosts());
+        }
+    }, [dispatch, alarm])
 
     useEffect(() => {
         if (myPostsError !== null && !!user) {

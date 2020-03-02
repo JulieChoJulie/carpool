@@ -42,12 +42,11 @@ const SearchBlock = ({ criteria, onChange, onSubmit }) => {
                 <div className="when fullWidth">
                     <label>Date: </label>
                     <input
-                        type="radio"
                         id="isAnytime"
                         name="when"
-                        value={isAnytime}
-                        checked={isAnytime}
-                        onClick={onClickRadio}/>
+                        type="checkbox"
+                        checked={ isAnytime }
+                        onChange={onClickRadio}/>
                     <label htmlFor="one-way">Any Date</label>
                 </div>
                 <div className="when dateInput">

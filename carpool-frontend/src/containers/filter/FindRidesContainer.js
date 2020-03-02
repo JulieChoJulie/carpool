@@ -41,8 +41,7 @@ const FindRidesContainer = () => {
 
     useEffect(() => {
         dispatch(initialize());
-        dispatch(filterRides(criteria));
-    }, [dispatch, criteria]);
+    }, [dispatch]);
 
     return (
         <FindRidesTemplate>

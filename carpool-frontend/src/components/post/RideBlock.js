@@ -40,7 +40,9 @@ const RideBlock = ({ isOwn, ride, status, toggleRide, user }) => {
         } else if (ride.available > 0) {
             // the user can sends a booking request or have a ride booking requested
             // only when the ride has availablitiy.
-            return obj[status][1]
+            if (obj.hasOwnProperty(status)) {
+                return obj[status][1]
+            }
         } else {
             // when the ride is full (sold out)
             return false;

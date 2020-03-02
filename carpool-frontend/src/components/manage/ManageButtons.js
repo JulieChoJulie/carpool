@@ -5,7 +5,7 @@ import { MdDelete } from 'react-icons/md';
 import { TiEdit } from 'react-icons/ti';
 import { IoIosBody, IoIosCar } from "react-icons/io";
 
-const ManageButtons = ({ offering, onRemove, id, isEdit, obj, type }) => {
+const ManageButtons = ({ offering, onRemove, id, isEdit, obj, type, isDetailedPage }) => {
     const [modal, setModal] = useState(false);
     const onRemoveClick = () => {
         setModal(true);
@@ -26,12 +26,14 @@ const ManageButtons = ({ offering, onRemove, id, isEdit, obj, type }) => {
 
     return (
         <div className="buttons">
-            { isEdit && <div className="offering">
-                {offering ?
-                    (<span><IoIosCar/>Offering</span>)
-                    :(<span><IoIosBody/>Looking For</span>)
-                }
-            </div>}
+            { isEdit && !isDetailedPage
+                && <div className="offering">
+                    {offering ?
+                        (<span><IoIosCar/>Offering</span>)
+                        :(<span><IoIosBody/>Looking For</span>)
+                    }
+                </div>
+            }
             <div>
                 { isEdit && <Link className="editIcon" to={`/posts/${id}/edit`}><TiEdit/></Link>}
                 <span className="deleteIcon" onClick={onRemoveClick}><MdDelete/></span>
