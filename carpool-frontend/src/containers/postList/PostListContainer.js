@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import {readPosts, initialize, getPost, getSave, isReservations} from '../../modules/posts';
+import {readPosts, initialize, getPost, getSave } from '../../modules/posts';
 import { postSave, deleteSave } from "../../modules/categorize";
 import Post from "../../components/postList/Post";
 import PostListTemplate from "../../components/postList/PostListTemplate";
@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 
 const PostListContainer = ({ location }) => {
     const isSavePage = location.pathname.includes('save');
-    const loadingKey = isSavePage ? 'posts/GET_SAVE' : 'posts/READ_POSTS'
+    const loadingKey = isSavePage ? 'posts/GET_SAVE' : 'posts/READ_POSTS';
     const dispatch = useDispatch();
     const {
         posts,
@@ -17,17 +17,16 @@ const PostListContainer = ({ location }) => {
         loading,
         user,
         postsError,
-    } = useSelector(({ posts, loading, user }) => ({
+    } = useSelector(({ posts, loading, user, categorize }) => ({
         posts: posts.posts,
         status: posts.status,
         loading: loading[loadingKey],
         postsError: posts.postsError,
-        user: user.user
+        user: user.user,
     }));
 
     useEffect(() => {
         dispatch(initialize());
-        dispatch(isReservations(false));
         if (isSavePage) {
             dispatch(getSave());
         } else {
@@ -48,6 +47,15 @@ const PostListContainer = ({ location }) => {
             setTimeout(() => dispatch(getPost(id)), 100);
         }
     }, [dispatch]);
+
+
+    const filterActive = useCallback((ride) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return new Date(ride.when) > today;
+
+    });
+
 
     if (!posts || loading) {
         return (
@@ -77,6 +85,7 @@ const PostListContainer = ({ location }) => {
                     post={post}
                     status={status}
                     onToggleSave={onToggleSave}
+                    filterActive={filterActive}
                 />
             })}
             </PostListTemplate>

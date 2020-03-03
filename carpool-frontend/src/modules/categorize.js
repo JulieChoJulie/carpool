@@ -33,6 +33,9 @@ export const statusSave = createAction(STATUS_SAVE, id => id);
 
 const statusSaveSaga = createRequestSaga(STATUS_SAVE, categorizeAPI.getSaveStatus);
 
+const TOGGLE_ACTIVE = 'categorize/TOGGLE_ACTIVE';
+export const toggleActive = createAction(TOGGLE_ACTIVE);
+
 
 export function* categorizeSaga() {
     yield takeLatest(POST_SAVE, postSaveSaga);
@@ -43,6 +46,7 @@ export function* categorizeSaga() {
 const initialState = {
     error: null,
     status: false,
+    isActive: true,
 };
 
 const categorize = handleActions({
@@ -72,6 +76,10 @@ const categorize = handleActions({
     [STATUS_SAVE_FAILURE]: (state, { payload: error }) => ({
         ...state,
         status: error.status,
+    }),
+    [TOGGLE_ACTIVE]: (state, { payload: res }) => ({
+        ...state,
+        isActive: res,
     })
 }, initialState);
 

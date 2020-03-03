@@ -87,11 +87,12 @@ const initialState = {
         from: '',
         to: '',
         seats: 1,
-        price: [15, 30],
+        price: [10, 30],
         offering: true
     },
     saveError: null,
     reservations: false,
+    today: new Date(),
 };
 
 const posts = handleActions({
@@ -140,9 +141,12 @@ const posts = handleActions({
         error: error.status,
         saveError: error.status,
     }),
-    [INITIALIZE]: (state) => ({
-        ...initialState
-    }),
+    [INITIALIZE]: (state) => {
+        const date = new Date().toLocaleDateString();
+        return {
+        ...initialState,
+        today: date
+    }},
     [ADD_UNSAVE]: (state, { payload: id }) => (
         produce(state, draft => {
             draft.unsavedPostId.push(id);

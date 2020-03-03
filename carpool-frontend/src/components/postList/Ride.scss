@@ -6,6 +6,14 @@
   &.reservation {
     background: $lightBeige;
   }
+  &.isPast {
+    .where {
+      text-decoration: line-through;
+      color: $oc-gray-6;
+    }
+    color: $oc-gray-6;
+    text-decoration: line-through;
+  }
   margin: 0.3rem;
   display: flex;
   flex-direction: column;

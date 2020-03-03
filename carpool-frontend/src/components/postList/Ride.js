@@ -5,7 +5,7 @@ import { IoMdCheckboxOutline } from 'react-icons/io';
 import dateFormat from "../post/dateFormat";
 import classNames from 'classnames';
 
-const Ride = ({ ride, status }) => {
+const Ride = ({ ride, status, filterActive }) => {
 
     const keyArr = Object.keys(status);
     const isRideSelected = keyArr.includes(ride.id.toString());
@@ -15,8 +15,10 @@ const Ride = ({ ride, status }) => {
         '1': ['Booked', <IoMdCheckboxOutline/>]
     };
 
+    const isPast = !filterActive(ride);
+
     return (
-        <div className={classNames("rideBlock", {reservation})}>
+        <div className={classNames("rideBlock", {reservation}, { isPast })}>
             <div className="firstRow">
             <span className="status">{isRideSelected && obj[status[ride.id]][1]}</span>
             <span className="where">{ride.from} >> {ride.to}</span>

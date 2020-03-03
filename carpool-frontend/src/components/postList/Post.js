@@ -6,11 +6,12 @@ import Button from "../common/Button";
 import { IoIosCar, IoIosBody } from 'react-icons/io';
 import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
 
-const Post = ({ post, status, onToggleSave, user }) => {
+const Post = ({ post, status, onToggleSave, user, filterActive }) => {
     const to = '/posts/' + post.id;
     const isSaved = user
         && post.SaveUsers
         && post.SaveUsers.filter(u => u.id === parseInt(user.id)).length > 0;
+
     return (
         <div className="postBlock">
             <div className="firstRow">
@@ -30,7 +31,7 @@ const Post = ({ post, status, onToggleSave, user }) => {
                 }
             </div>
             { post.rides.map(ride =>
-                <Ride key={ride.id} status={status} ride={ride}/>)
+                <Ride key={ride.id} status={status} ride={ride} filterActive={filterActive}/>)
             }
             <div className="right"><Button color="white" to={to}>Details &#8594;</Button></div>
         </div>
