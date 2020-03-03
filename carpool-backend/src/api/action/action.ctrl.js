@@ -483,13 +483,33 @@ exports.getMyPost = async (req, res, next) => {
 /* GET /api/action/reservations */
 exports.getReservations = async (req, res, next) => {
     try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0,);
         const user = await User.findOne({ where: { id: req.user.id } });
         const trips = await user.getPartnerRides({
+            where: { when: { [Op.gte]: today }},
             include: [
                 Object.assign({ model: Post }, postFormat()),
             ],
         });
+
+        const inactiveTrips = await user.getPartnerRides({
+            where: { when: { [Op.lt]: today }},
+            include: [
+                Object.assign({ model: Post }, postFormat()),
+            ],
+        });
+
         const requests = await user.getRequestRides({
+            where: { when: { [Op.gte]: today }},
+            include: [
+                Object.assign({ model: Post }, postFormat()),
+            ],
+
+        });
+
+        const inactiveRequests = await user.getRequestRides({
+            where: { when: { [Op.lt]: today }},
             include: [
                 Object.assign({ model: Post }, postFormat()),
             ],
@@ -500,6 +520,7 @@ exports.getReservations = async (req, res, next) => {
 
         res.status(200).send({
             posts: { confirmed: trips, requests: requests },
+            history: { confirmed: inactiveTrips, requests: inactiveRequests },
             status: status
         });
     } catch (err) {

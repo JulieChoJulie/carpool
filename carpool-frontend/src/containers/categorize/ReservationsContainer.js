@@ -1,30 +1,32 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { initialize, getPost, getReservations, isReservations } from '../../modules/posts';
-import { postSave, deleteSave } from "../../modules/categorize";
-import Post from "../../components/postList/Post";
-import ReservationsTemplate from "../../components/categorize/ReservationsTemplate";
-import ErrorContainer from "../common/ErrorContainer";
+import { postSave, deleteSave, toggleActive } from "../../modules/categorize";
 import { withRouter } from 'react-router-dom';
+import Reservations from "../../components/categorize/Reservations";
 
 const ReservationsContainer = () => {
     const dispatch = useDispatch();
     const {
         posts,
+        history,
         status,
         loading,
         user,
         postsError,
-    } = useSelector(({posts, loading, user}) => ({
+        isActive,
+    } = useSelector(({posts, loading, user, categorize }) => ({
         posts: posts.posts,
+        history: posts.history,
         status: posts.status,
         loading: loading['posts/GET_RESERVATIONS'],
         postsError: posts.postsError,
         user: user.user,
+        isActive: categorize.isActive
     }));
 
     useEffect(() => {
-        dispatch(initialize())
+        dispatch(initialize());
         dispatch(getReservations());
         dispatch(isReservations(true));
     }, [dispatch]);
@@ -39,50 +41,32 @@ const ReservationsContainer = () => {
         }
     }, [dispatch]);
 
-    if (postsError) {
-        return (
-            <ReservationsTemplate user={user}>
-                <ErrorContainer error={postsError}/>
-            </ReservationsTemplate>
-        )
-    } else if (!posts || loading) {
-        return null;
-    } else {
-        const requests = Array.isArray(posts[1]) && posts[1].length > 0 && posts[1];
-        const confirmed = Array.isArray(posts[0]) && posts[0].length > 0 && posts[0];
-        return (
-            <>
-                <ReservationsTemplate
-                    user={user}
-                >
-                    <h2>My Confirmed Reservations</h2>
-                    {confirmed ? confirmed.map((post, index) =>
-                        <Post
-                            user={user}
-                            key={'confirmed' + index}
-                            post={post}
-                            status={status}
-                            onToggleSave={onToggleSave}
-                        />)
-                        :
-                        <div>No Reservations</div>
-                    }
-                    <h2>Reqeusts</h2>
-                    {requests ? requests.map((post, index) =>
-                        <Post
-                            user={user}
-                            key={'requests' + index}
-                            post={post}
-                            status={status}
-                            onToggleSave={onToggleSave}
-                        />)
-                        :
-                        <div>No Requests</div>
-                    }
-                </ReservationsTemplate>
-            </>
-        )
-    }
+    const onToggleActive = useCallback((res) => {
+        dispatch(toggleActive(res));
+    }, [dispatch]);
+
+    const filterActive = (ride) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        console.log(new Date(ride.when) >= today)
+        return new Date(ride.when) >= today;
+    };
+
+    return (
+        <Reservations
+            onToggleSave={onToggleSave}
+            filterActive={filterActive}
+            postsError={postsError}
+            user={user}
+            posts={posts}
+            loading={loading}
+            onToggleActive={onToggleActive}
+            isActive={isActive}
+            posts={posts}
+            history={history}
+            status={status}
+        />
+    )
 }
 
 export default withRouter(ReservationsContainer);

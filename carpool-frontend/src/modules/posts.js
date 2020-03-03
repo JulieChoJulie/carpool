@@ -93,6 +93,7 @@ const initialState = {
     saveError: null,
     reservations: false,
     today: new Date(),
+    history: [],
 };
 
 const posts = handleActions({
@@ -187,6 +188,7 @@ const posts = handleActions({
     [GET_RESERVATIONS_SUCCESS]: (state, { payload: res }) => (
         produce(state, draft => {
             const posts = res.data.posts;
+            const history = res.data.history;
             const status = res.data.status;
             draft.posts[0] = posts.confirmed.reduce((acc, ride) => {
                 const index = acc.findIndex(p => p.id === ride.post.id);
@@ -202,8 +204,21 @@ const posts = handleActions({
                 }
                 return acc;
             }, []);
+            draft.history[0] = history.confirmed.reduce((acc, ride) => {
+                const index = acc.findIndex(p => p.id === ride.post.id);
+                if (index === -1) {
+                    acc.push(ride.post);
+                }
+                return acc;
+            }, []);
+            draft.history[1] = history.requests.reduce((acc, ride) => {
+                const index = acc.findIndex(p => p.id === ride.post.id);
+                if (index === -1) {
+                    acc.push(ride.post);
+                }
+                return acc;
+            }, []);
             draft.status = status;
-
         })
     ),
     [GET_RESERVATIONS_FAILURE]: (state, { payload : error }) => ({

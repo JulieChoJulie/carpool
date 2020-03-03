@@ -34,7 +34,7 @@ export const statusSave = createAction(STATUS_SAVE, id => id);
 const statusSaveSaga = createRequestSaga(STATUS_SAVE, categorizeAPI.getSaveStatus);
 
 const TOGGLE_ACTIVE = 'categorize/TOGGLE_ACTIVE';
-export const toggleActive = createAction(TOGGLE_ACTIVE);
+export const toggleActive = createAction(TOGGLE_ACTIVE, res => res);
 
 
 export function* categorizeSaga() {

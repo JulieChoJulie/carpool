@@ -1,0 +1,18 @@
+@import '../../styles/utils';
+
+.activeMenu {
+  width: 100%;
+  height: 1.3rem;
+  display: flex;
+  flex-direction: row;
+  .menu {
+    flex: 0 1 50%;
+    border-bottom: 4px solid $lightBlue;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .isActive {
+    border-bottom: 4px solid $burgundy;
+  }
+}

@@ -49,12 +49,11 @@ const PostListContainer = ({ location }) => {
     }, [dispatch]);
 
 
-    const filterActive = useCallback((ride) => {
+    const filterActive = (ride) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         return new Date(ride.when) > today;
-
-    });
+    };
 
 
     if (!posts || loading) {

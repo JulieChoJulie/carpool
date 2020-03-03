@@ -4,8 +4,6 @@ import SideMenuContainer from '../containers/common/SideMenuContainer';
 import ReservationsContainer from "../containers/categorize/ReservationsContainer";
 
 const ReservationsPage = () => {
-    console.log('reservation page')
-
     return (
         <>
             <HeaderContainer />
