@@ -4,24 +4,36 @@ import styles from './SelectStyle';
 
 const optionsOffering = [
     {value: true, 'label': 'Offering'},
-    {value: false, 'label': 'Looking for'}
+    {value: false, 'label': 'Looking for'},
 ];
 
+const filterOptions = [
+    ...optionsOffering,
+    {value:'', 'label': 'Any'},
+]
+
 const offeringValue = (value) => {
-    const label = value ? 'Offering' : 'Looking for';
+    let label;
+    if (value === '') {
+        label = 'Any';
+    } else if (value === true) {
+        label = 'Offering';
+    } else {
+        label = 'Looking for';
+    }
     return {
         value: value,
         label: label
     }
 };
 
-const Offering = ({ onChange, offering }) => {
+const Offering = ({ onChange, offering, isFilter }) => {
     return (
         <Select
             classNamePrefix="select"
             id="offering"
             styles={styles('8')}
-            options={optionsOffering}
+            options={isFilter ? filterOptions : optionsOffering}
             value={offeringValue(offering)}
             onChange={(e) => onChange(e, 'offering')}
             autoFocus

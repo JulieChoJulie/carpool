@@ -28,7 +28,7 @@ const SearchBlock = ({ criteria, onChange, onSubmit }) => {
         <form className="searchBlock" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
                 <label htmlFor="offering">Offering:</label>
-                <Offering offering={criteria.offering} onChange={onChange}/>
+                <Offering offering={criteria.offering} isFilter={true} onChange={onChange}/>
             </div>
             <div className="form-group where">
                 <label htmlFor="offering">Where:</label>

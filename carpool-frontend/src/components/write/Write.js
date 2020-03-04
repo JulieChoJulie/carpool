@@ -13,7 +13,7 @@ const Write = ({ rides, onChange, isRoundTrip, onChangeRoundtrip, onSubmit, erro
                 <form onSubmit={onSubmit}>
                     <div className="form-group">
                         <label htmlFor="offering">Offering:</label>
-                        <Offering offering={rides[0].offering} onChange={onChange}/>
+                        <Offering isFilter={false} offering={rides[0].offering} onChange={onChange}/>
                     </div>
                     <div className="form-group trip">
                         <input
