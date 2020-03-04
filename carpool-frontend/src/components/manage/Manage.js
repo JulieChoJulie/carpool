@@ -2,16 +2,20 @@ import React from 'react';
 import ManagePost from "./ManagePost";
 import LoginError from "../common/LoginError";
 import Button from '../common/Button';
+import ActiveMenu from "../../components/common/ActiveMenu";
+import ReservationsTemplate from "../categorize/Reservations";
 
 const Manage = ({
-                    loading,
-                    myPosts,
-                    user,
-                    onAccept,
-                    onCancel,
-                    onCancelRequest,
-                    onRemove,
-                    onRemoveRide
+    loading,
+    myPosts,
+    user,
+    onAccept,
+    onCancel,
+    onCancelRequest,
+    onRemove,
+    onRemoveRide,
+    isActive,
+    onToggleActive
 }) => {
     if (loading || !myPosts) {
         return null;
@@ -26,6 +30,7 @@ const Manage = ({
     }
     return (
         <>
+            <ActiveMenu onToggle={onToggleActive} isActive={isActive}/>
             {!user ?
                 <LoginError message="to manage your rides."/>
                 :

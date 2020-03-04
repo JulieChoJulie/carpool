@@ -1,19 +1,34 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPassenger, getMyPosts, cancelPassenger, cancelPassengerRequest } from '../../modules/manage';
+import {
+    addPassenger,
+    getMyPosts,
+    cancelPassenger,
+    cancelPassengerRequest,
+    toggleActive
+} from '../../modules/manage';
 import { deletePost, deleteRide } from '../../lib/api/posts';
 import ManageTemplate from "../../components/manage/ManageTemplate";
 import Manage from "../../components/manage/Manage";
 import { withRouter } from 'react-router-dom';
+import ActiveMenu from "../../components/categorize/Reservations";
 
 const ManageContainer = ({ history }) => {
     const dispatch = useDispatch();
-    const { myPosts, myPostsError, user, loading, alarm } = useSelector(({ manage, user, loading, socketReducer }) => ({
+    const {
+        myPosts,
+        myPostsError,
+        user,
+        loading,
+        alarm,
+        isActive
+    } = useSelector(({ manage, user, loading, socketReducer, categorize }) => ({
         myPosts: manage.myPosts,
         myPostsError: manage.myPostsError,
         user: user,
         loading: loading['manage/GET_MYPOSTS'],
         alarm: socketReducer.alarm,
+        isActive: manage.isActive,
     }));
 
     const onAccept = useCallback(async (rideId, userId) => {
@@ -55,8 +70,13 @@ const ManageContainer = ({ history }) => {
         }
     }, [dispatch]);
 
+    const onToggleActive = useCallback((res) => {
+        dispatch(toggleActive(res));
+    }, [dispatch]);
+
     // when it's first mounted.
     useEffect(() => {
+        dispatch(toggleActive(true));
         dispatch(getMyPosts());
     }, [dispatch]);
 
@@ -84,6 +104,8 @@ const ManageContainer = ({ history }) => {
                 onCancelRequest={onCancelRequest}
                 onRemove={onRemove}
                 onRemoveRide={onRemoveRide}
+                isActive={isActive}
+                onToggleActive={onToggleActive}
             />
         </ManageTemplate>
     );

@@ -31,11 +31,13 @@ const HeaderContainer = () => {
     const onClickBell = () => {
         setClose(!isClosed);
         setUnread(!unread);
+        dispatch(switchAlarm(false))
     }
 
     const onClickOutside = () => {
         setClose(true);
         setUnread(false);
+        dispatch(switchAlarm(false))
     }
 
     useEffect(() => {

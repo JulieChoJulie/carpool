@@ -42,7 +42,7 @@ exports.postFormat = (field, value) => {
 };
 
 
-exports.myPostFormat = (userId) => {
+exports.myPostFormat = (userId, field, value) => {
     const format = {
         where: { status: true, userId },
         include: [
@@ -63,6 +63,11 @@ exports.myPostFormat = (userId) => {
                 ]
             }
         ]
+    }
+    const obj = {};
+    obj[field] = value;
+    if(!!field && !!value) {
+        format.include[0].where = {[Op.and]: [obj, { status: true }] }
     }
     return format;
 }

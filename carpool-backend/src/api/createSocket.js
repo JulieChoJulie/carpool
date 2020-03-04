@@ -1,9 +1,6 @@
 const { Notification, User, Ride } = require('../../models');
 const { sequelize } = require('../../models');
 
-const { transaction } = require('sequelize');
-
-
 exports.socket = async (req) => {
     const { ride, send, receive, from, title } = req.variables;
     //notification

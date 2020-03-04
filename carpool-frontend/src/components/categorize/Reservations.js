@@ -56,15 +56,15 @@ const Reservations = ({
                     user={user}
                 >
                     <ActiveMenu onToggle={onToggleActive} isActive={isActive}/>
-                    <h2>Reservations</h2>
+                    <h4>Confirmed Reservations</h4>
                     {confirmed ? postFilter(confirmed)
                         :
-                        <div>No Reservations</div>
+                        <div className="empty">No Reservations</div>
                     }
-                    <h2>Reqeusts</h2>
+                    <h4>Reqeusts</h4>
                     {requests ? postFilter(requests)
                         :
-                        <div>No Requests</div>
+                        <div className="empty">No Requests</div>
                     }
                 </ReservationsTemplate>
             </>

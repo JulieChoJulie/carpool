@@ -7,6 +7,15 @@ import { GoTag } from 'react-icons/go';
 import Button from "../common/Button";
 
 const RideBlock = ({ isOwn, ride, status, toggleRide, user }) => {
+    const isNotActive = () => {
+        const now = new Date();
+        if (new Date(ride.when) < now) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     const obj = {
         '0': [
             'Reserve',
@@ -30,7 +39,7 @@ const RideBlock = ({ isOwn, ride, status, toggleRide, user }) => {
     const isSoldout = status === 0 && ride.available === 0;
 
     const statusResult = () => {
-        if (isOwn || !user) {
+        if (isOwn || !user || isNotActive()) {
             // when the post belongs to the user or
             // the user is not logged in
             return null;
@@ -51,7 +60,7 @@ const RideBlock = ({ isOwn, ride, status, toggleRide, user }) => {
 
     return (
         <div className="rideBlock">
-            <Ride ride={ ride } isSoldout={isSoldout} />
+            <Ride ride={ ride } isSoldout={isSoldout} isPast={isNotActive()}/>
             { statusResult()}
             {!statusResult() && statusResult() !== null &&
                 <div className="reserve soldout">

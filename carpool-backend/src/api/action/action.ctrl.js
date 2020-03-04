@@ -86,6 +86,8 @@ exports.addRequest = async (req, res, next) => {
                 next();
             }
 
+            await t.commit();
+
             req.variables = {
                 send: user,
                 receive: writer,
@@ -94,8 +96,6 @@ exports.addRequest = async (req, res, next) => {
                 ride,
             }
             await socket(req, res, next);
-
-            await t.commit();
 
             const status = await getStatus(req, next);
 
@@ -131,6 +131,9 @@ exports.cancelRequest = async (req, res, next) => {
         const writer = post.user;
 
         const request = await user.removeRequestRide(ride, { transaction: t });
+
+        await t.commit();
+
         if (request === 1) {
             //notification
             req.variables = {
@@ -142,7 +145,6 @@ exports.cancelRequest = async (req, res, next) => {
             }
             await socket(req, res, next);
 
-            await t.commit();
 
             const status = await getStatus(req, next);
 
@@ -230,6 +232,8 @@ exports.cancelRide = async (req, res, next) => {
 
         await ride.update({ available: available }, { transaction: t } );
 
+        await t.commit();
+
         req.variables = {
             send: user,
             receive: writer,
@@ -241,7 +245,6 @@ exports.cancelRide = async (req, res, next) => {
 
         const status = await getStatus(req, next);
 
-        await t.commit();
         res.status(200).send(status);
     } catch (err) {
         await t.rollback();
@@ -303,6 +306,8 @@ exports.addPassenger = async (req, res, next) => {
         const available = ride.seats - 1;
         await ride.update({ available: available }, { transaction: t });
 
+        await t.commit();
+
         //notification
         req.variables = {
             send: writer,
@@ -313,10 +318,10 @@ exports.addPassenger = async (req, res, next) => {
         };
         await socket(req, res, next);
 
-        const userPartner = await ride.getPartnerUsers({ where: { id: user.id }}, { transaction: t });
+        const userPartner = await ride.getPartnerUsers(
+            { where: { id: user.id }},
+        );
         const serializedPartner = serializeUser(userPartner[0], 'Partner');
-
-        await t.commit();
 
         // array of obj { ...user, Parter: {userId, rideId}}
         res.status(200).send(serializedPartner);
@@ -368,6 +373,8 @@ exports.cancelPassengerRequest = async (req, res, next) => {
             return;
         }
 
+        await t.commit();
+
         //notification
         req.variables = {
             send: writer,
@@ -377,8 +384,6 @@ exports.cancelPassengerRequest = async (req, res, next) => {
             ride,
         };
         await socket(req, res, next);
-
-        await t.commit();
 
         res.status(200).end();
     } catch (err) {
@@ -419,6 +424,8 @@ exports.cancelPassenger = async (req, res, next) => {
         const available = ride.available + 1;
         await ride.update({ available: available }, { transaction: t });
 
+        await t.commit();
+
         // notification
         req.variables = {
             send: writer,
@@ -428,8 +435,6 @@ exports.cancelPassenger = async (req, res, next) => {
             ride,
         };
         await socket(req, res, next);
-
-        await t.commit();
 
         res.status(200).send(ride);
 
@@ -472,9 +477,15 @@ exports.getRequests = async (req, res, next) => {
 /* GET /api/action/posts/manage */
 exports.getMyPost = async (req, res, next) => {
     try {
-        const posts = await Post.findAll(myPostFormat(req.user.id));
-        res.send(posts);
-
+        const today = new Date();
+        today.setHours(0, 0, 0, 0,);
+        const inactivePosts = await Post.findAll(
+            myPostFormat(req.user.id, 'when', { [Op.lt]: today }
+        ));
+        const activePosts = await Post.findAll(
+            myPostFormat(req.user.id, 'when', { [Op.gte]: today }
+            ));
+        res.status(200).send({ posts: activePosts, history: inactivePosts });
     } catch (err) {
         console.log(err);
     }

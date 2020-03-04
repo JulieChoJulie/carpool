@@ -1,0 +1,9 @@
+@import '../../styles/utils';
+
+.reservationsTemplate>.empty {
+  margin-left: 1rem;
+}
+
+.reservationsTemplate>h4 {
+  color: $lightBrown;
+}

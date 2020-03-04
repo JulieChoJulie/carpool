@@ -3,9 +3,9 @@ import dateFormat from './dateFormat';
 import classNames from 'classnames';
 import './Ride.scss';
 
-const Ride = ({ ride, isSoldout, status }) => {
+const Ride = ({ ride, isSoldout, status, isPast }) => {
     return (
-        <div className={classNames('ride', { isSoldout })}>
+        <div className={classNames('ride', { isSoldout }, { isPast })}>
             <div className="cities item">
                 <span className="label">Where: </span>
                 {ride.from} <span className="label"> >> </span> {ride.to}

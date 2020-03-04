@@ -18,7 +18,8 @@ const ManageRide = ({ ride, onAccept, onCancel, onCancelRequest, onRemoveRide })
                 </div>
                 <div className="item passengers">
                     <div className="label">{ride.offering? 'Passengers' : 'Drivers'}</div>
-                    {ride.PartnerUsers.length === 0 && ride.offering? 'No Passengers' : 'No Drivers'}
+                    {ride.PartnerUsers.length === 0
+                    && (ride.offering? 'No Passengers' : 'No Drivers')}
                     { ride.PartnerUsers.map(partner =>
                         <Passenger key={ partner.id } passenger={ partner } onCancel={onCancel}/>
                     )}

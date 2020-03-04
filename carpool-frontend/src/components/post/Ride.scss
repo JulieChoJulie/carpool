@@ -23,6 +23,14 @@
       color:$lightBlue;
     }
   }
+  &.isPast {
+    .where {
+      text-decoration: line-through;
+      color: $oc-gray-6;
+    }
+    color: $oc-gray-6;
+    text-decoration: line-through;
+  }
 }
 
 .ride>.item {

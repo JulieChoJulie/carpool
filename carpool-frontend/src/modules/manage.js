@@ -33,6 +33,8 @@ const [
     GET_MYPOSTS_FAILURE,
 ] = createRequestActionTypes('manage/GET_MYPOSTS');
 
+const TOGGLE_ACTIVE = 'manage/TOGGLE_ACTIVE';
+
 // export const editPost = createAction(EDIT_POST);
 export const addPassenger = createAction(ADD_PASSENGER,
     ({ rideId, userId }) => ({ rideId, userId }));
@@ -40,6 +42,7 @@ export const cancelPassenger = createAction(CANCEL_PASSENGER,
     ({ rideId, userId}) => ({ rideId, userId }));
 export const cancelPassengerRequest = createAction(CANCEL_PASSENGER_REQUEST);
 export const getMyPosts = createAction(GET_MYPOSTS);
+export const toggleActive = createAction(TOGGLE_ACTIVE, res => res);
 
 const addPassengerSaga = createRequestSaga(ADD_PASSENGER, actionAPI.addPassenger);
 const cancelPassengerSaga = createRequestSaga(CANCEL_PASSENGER, actionAPI.cancelPassenger);
@@ -56,18 +59,26 @@ export function* manageSaga() {
 const initialState = {
     myPosts: [],
     myPostsError: null,
+    myHistory: [],
+    myActivePosts: [],
+    isActive: true,
 };
 
 const manage = handleActions(
     {
         [GET_MYPOSTS_SUCCESS]: (state, { payload: res }) => ({
             ...state,
-            myPosts: res.data,
+            myActivePosts: res.data.posts,
+            myPosts: res.data.posts,
+            myHistory: res.data.history,
             myPostsError: null,
         }),
         [GET_MYPOSTS_FAILURE]: (state, { payload: error }) => ({
             ...state,
             myPostsError: error.status,
+            myActivePosts: null,
+            myPosts: null,
+            myHistory: null,
         }),
         [ADD_PASSENGER_SUCCESS]: (state, { payload: res }) => {
             const rideId = res.payload.rideId;
@@ -142,7 +153,17 @@ const manage = handleActions(
         [CANCEL_PASSENGER_REQUEST_FAILURE]: (state, { payload: error }) => ({
             ...state,
             myPostsError: error.status
-        })
+        }),
+        [TOGGLE_ACTIVE]: (state, { payload: res }) => (
+            produce(state, draft => {
+                if(res) {
+                  draft.myPosts = draft.myActivePosts;
+                } else {
+                    draft.myPosts = draft.myHistory;
+                }
+                draft.isActive = res;
+            })
+        )
 
 
     },

@@ -27,6 +27,7 @@ const ReservationsContainer = () => {
 
     useEffect(() => {
         dispatch(initialize());
+        dispatch(toggleActive(true));
         dispatch(getReservations());
         dispatch(isReservations(true));
     }, [dispatch]);
@@ -48,7 +49,6 @@ const ReservationsContainer = () => {
     const filterActive = (ride) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        console.log(new Date(ride.when) >= today)
         return new Date(ride.when) >= today;
     };
 
@@ -62,7 +62,6 @@ const ReservationsContainer = () => {
             loading={loading}
             onToggleActive={onToggleActive}
             isActive={isActive}
-            posts={posts}
             history={history}
             status={status}
         />
