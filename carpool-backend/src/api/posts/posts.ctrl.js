@@ -3,6 +3,8 @@ const { sequelize } = require('../../../models');
 const { Op, transaction } = require('sequelize');
 const { postFormat } = require('./helper');
 const { getStatus } = require('../action/action.ctrl');
+const schedule = require('node-schedule');
+const { socket } = require('../createSocket');
 
 /* GET /api/posts */
 exports.readFeed = async (req, res, next) => {
@@ -30,6 +32,7 @@ exports.write = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
         const { rides, notes } = req.body;
+        const writer = await User.findOne({ where: { id: req.user.id }});
         if (!rides) {
             res.redirect('/');
         }
@@ -39,9 +42,9 @@ exports.write = async (req, res, next) => {
             },
             { transaction: t });
         const postId = post.id;
-        const result = await Promise.all(rides.map(ride => {
-            const { from, to, seats, when, price, offering } = ride;
-            return Ride.create({
+        const rideArr = await Promise.all(rides.map(r => {
+            const { from, to, seats, when, price, offering } = r;
+            return  Ride.create({
                 when,
                 from,
                 to,
@@ -53,7 +56,30 @@ exports.write = async (req, res, next) => {
             }, { transaction: t });
         }));
         await t.commit();
+
+        // cancel all requests on the time of ride departure
+        rideArr.forEach(ride => {
+            const end = new Date(ride.when);
+            schedule.scheduleJob(end, async() => {
+                const requestedUsers = await ride.getRequestUsers();
+                await Promise.all(requestedUsers.forEach(async u => {
+                    const user = await User.findOne({where: { id: u.id }});
+                    await ride.removeRequestUser(user);
+                    //notification
+                    req.variables = {
+                        send: writer,
+                        receive: user,
+                        title: 'passenger_cancel_request',
+                        from: 'writer',
+                        ride,
+                    };
+                    await socket(req, res, next);
+                }));
+            });
+        })
+
         res.json({ id: postId });
+
     } catch (error) {
         await t.rollback();
         console.error(error);
