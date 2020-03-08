@@ -2,6 +2,7 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { User } = require('../../../models');
 const { serialize } = require('../middlewares');
+const { sendEmail } = require('../../lib/email');
 
 /* GET api/auth/profile */
 exports.profile = (req, res) => {
@@ -35,12 +36,13 @@ exports.join = (req, res) => {
 /* POST api/auth/join */
 exports.joinPost = async (req, res, next) => {
     try {
-        const { email, username, password, cell } = req.body;
+        const { email, username, password, cell, isStudentEmail } = req.body;
         const hash = await bcrypt.hash(password, 12);
         const user = await User.create({
             email,
             username,
             cell,
+            isStudentEmail,
             password: hash,
             provider: 'local'});
         loginFunction(req, res, next);
@@ -51,6 +53,7 @@ exports.joinPost = async (req, res, next) => {
         next(err);
     }
 };
+
 
 /* POST api/auth/login */
 const loginFunction = (req, res, next) => {
@@ -84,3 +87,78 @@ exports.logout = (req, res, next) => {
     req.session.destroy();
     res.sendStatus(200);
 };
+
+/* POST api/auth/verifyStudentEmail */
+exports.verifyStudentEmail = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const studentEmails = [
+            '@edu.uwaterloo.ca',
+            '@mail.utoronto.ca',
+            '@yorku.ca',
+            '@mcmaster.ca',
+            '@mylaurier.ca',
+            '@uwo.ca',
+            '@ryerson.ca',
+        ];
+        const isStudentEmail = studentEmails.filter(i => email.includes(i));
+        if (isStudentEmail === -1) {
+            // the entered email is not student email address;
+            res.sendStatus(400); // bad request
+            return;
+        } else {
+            const exUser = await User.findOne({ where: { email } });
+            if (exUser) {
+                res.sendStatus(409); // Conflict
+                return;
+            } else {
+                res.sendStatus(200);
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
+
+/* GET api/auth/sendVerificationCodes */
+exports.sendVerificationCodes = async (req, res, next) => {
+    try {
+        let verificationCodes = 0;
+        for (let i = 0; i < 6; i++) {
+            verificationCodes += Math.floor(Math.random() * 10) * (10 ** i);
+        }
+        const user = await User({ where: { id: req.user.id }});
+        const res = await sendEmail({ verificationCodes, email: user.email });
+        if (res.includes('Email sent')) {
+            res.status(200).end();
+            await user.update({ verificationCodes });
+        } else {
+            res.status(500).end();
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
+
+/* POST /api/auth/compareVerificationCodes */
+exports.compareVerificationCodes = async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        const codes = user.verificationCodes;
+        const { verificationCodes } = req.body;
+        if (verificationCodes === '' ) {
+            res.sendStatus(400); // BadRequest
+        } else if (codes === verificationCodes) {
+            res.sendStatus(200);
+            await user.update({ isStudent: true });
+            return;
+        } else {
+            res.sendStatus(404); // Not Found
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}

@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, call } from 'redux-saga/effects';
 import createRequestSaga, {
     createRequestActionTypes
 } from '../lib/createRequestSaga';
@@ -12,8 +12,11 @@ const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] = createRequestActionTypes('auth/SIGNUP');
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
 const [UNIQUE, UNIQUE_SUCCESS, UNIQUE_FAILURE] = createRequestActionTypes('auth/UNIQUE');
+const [VERIFY_STUDENT_EMAIL, VERIFY_STUDENT_EMAIL_SUCCESS, VERIFY_STUDENT_EMAIL_FAILURE ] = createRequestActionTypes('auth/STUDENT_EMAIL');
+
 const PASSWORD_CHECK = 'auth/PASSWORD_CHECK';
 const EMAIL_CHECK = 'auth/EMAIL_CHECK';
+const FACEBOOK_LOGIN = 'auth/FACEBOOK_LOGIN';
 
 export const changeField = createAction(
     CHANGE_FIELD,
@@ -27,11 +30,12 @@ export const changeField = createAction(
 
 export const signup = createAction(
     SIGNUP,
-    ({ username, email, cell, password }) => ({
+    ({ username, email, cell, password, isStudentEmail }) => ({
         username,
         email,
         cell,
-        password
+        password,
+        isStudentEmail
     })
 );
 
@@ -41,7 +45,7 @@ export const unique = createAction(
         type,
         value
     })
-)
+);
 
 
 export const login = createAction(
@@ -53,15 +57,29 @@ export const login = createAction(
 
 export const passwordCheck = createAction(PASSWORD_CHECK, boolean => boolean);
 export const emailCheck = createAction(EMAIL_CHECK, boolean => boolean);
+export const facebookLogin = createAction(FACEBOOK_LOGIN);
+export const verifyStudentEmail = createAction(VERIFY_STUDENT_EMAIL, email => email);
+
 // create Saga
 const signupSaga = createRequestSaga(SIGNUP, authAPI.signup);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 const uniqueSaga = createRequestSaga(UNIQUE, authAPI.uniqueCheck);
+const studentEmailSaga = createRequestSaga(VERIFY_STUDENT_EMAIL, authAPI.verifyStudentEmail);
+
+function* facebookLoginSaga() {
+    try {
+        yield call(authAPI.facebookLogin);
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 export function* authSaga() {
     yield takeLatest(SIGNUP, signupSaga);
     yield takeLatest(LOGIN, loginSaga);
     yield takeLatest(UNIQUE, uniqueSaga);
+    yield takeLatest(FACEBOOK_LOGIN, facebookLoginSaga);
+    yield takeLatest(VERIFY_STUDENT_EMAIL, studentEmailSaga);
 }
 
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
@@ -73,6 +91,9 @@ const initialState = {
         passwordConfirm: '',
         email: '',
         cell: '',
+        isStudentEmail: null,
+        studentEmail: '',
+        studentEmailAddress: '@edu.uwaterloo.ca',
     },
     login: {
         username: '',
@@ -89,7 +110,8 @@ const initialState = {
         email: null,
         passwordConfirm: null,
         emailValidation: null,
-    }
+    },
+    isStudentEmailError: null,
 };
 
 const auth = handleActions(
@@ -144,6 +166,19 @@ const auth = handleActions(
         [EMAIL_CHECK]: (state, action) => {
             return produce(state, draft => {
                 draft.error.emailValidation = action.payload;
+            })
+        },
+        [VERIFY_STUDENT_EMAIL_SUCCESS]: (state, { payload: res }) => {
+            return produce(state, draft => {
+                draft.isStudentEmailError = null;
+                draft.signup.email = draft.signup.studentEmail;
+            })
+        },
+        [VERIFY_STUDENT_EMAIL_FAILURE]: (state, { payload: error }) => {
+            return produce(state, draft => {
+                draft.signup.isStudentEmail = false;
+                draft.isStudentEmailError = error.status;
+                draft.signup.email = null;
             })
         }
     },

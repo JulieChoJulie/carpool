@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm, login } from "../../modules/auth";
+import { changeField, initializeForm, login, facebookLogin } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 import { withRouter } from 'react-router-dom';
 import { profile } from '../../modules/user';
@@ -36,6 +36,10 @@ const LoginForm = ({ history }) => {
             dispatch(login({ username, password }));
         }
     };
+
+    const onFacebookLogin = () => {
+        dispatch(facebookLogin());
+    }
 
     // initialize the form when the comp is first rendered;
     useEffect(() => {
@@ -82,6 +86,7 @@ const LoginForm = ({ history }) => {
             onChange={onChange}
             onSubmit={onSubmit}
             error={error}
+            onFacebookLogin={onFacebookLogin}
         />
     );
 };

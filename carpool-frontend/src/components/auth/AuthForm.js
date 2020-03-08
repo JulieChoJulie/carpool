@@ -3,14 +3,14 @@ import './AuthFormBlock.scss';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 import Input from './Input';
-
+import { IoLogoFacebook } from 'react-icons/io';
 
 const text = {
     login: 'LOG IN',
     signup: 'SIGN UP'
 };
 
-const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur }) => {
+const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur, onFacebookLogin }) => {
     return (
         <div className="AuthFormBlock">
             <h3>{text[type]}</h3>
@@ -64,11 +64,14 @@ const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur }) => {
             </form>
             <div className="footer">
                 {type === 'login' ? (
-                    <Link to="/signup">{text.signup}</Link>
+                    <Link to="/signup/isStudentEmail">{text.signup}</Link>
                 ) : (
                     <Link to="/login">{text.login}</Link>
                 )}
-
+                <div className="facebookLogin" onClick={onFacebookLogin}>
+                    <IoLogoFacebook/>
+                    Sign in with Facebook
+                </div>
             </div>
         </div>
     );

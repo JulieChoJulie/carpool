@@ -3,7 +3,6 @@ import ManagePost from "./ManagePost";
 import LoginError from "../common/LoginError";
 import Button from '../common/Button';
 import ActiveMenu from "../../components/common/ActiveMenu";
-import ReservationsTemplate from "../categorize/Reservations";
 
 const Manage = ({
     loading,

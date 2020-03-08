@@ -21,14 +21,15 @@ exports.isNotLoggedIn = (req, res, next) => {
 // excluding password
 exports.serialize = (req, res) => {
     if (req.user) {
-        const { email, username, cell, provider, snsId, id } = req.user;
+        const { email, username, cell, provider, snsId, id, isStudent } = req.user;
         res.json({
             email,
             username,
             cell,
             provider,
             snsId,
-            id
+            id,
+            isStudent,
         });
     } else {
         res.sendStatus(404);
@@ -36,13 +37,14 @@ exports.serialize = (req, res) => {
 };
 
 exports.serializeUser = (user, type) => {
-    const { username, id } = user;
+    const { username, id, isStudent } = user;
     return {
         username,
         id,
+        isStudent,
         [type]: user[type]
     }
-}
+};
 
 exports.isOwner = async (req, res, next) => {
     let userId = -1;

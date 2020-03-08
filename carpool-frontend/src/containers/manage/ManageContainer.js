@@ -11,7 +11,6 @@ import { deletePost, deleteRide } from '../../lib/api/posts';
 import ManageTemplate from "../../components/manage/ManageTemplate";
 import Manage from "../../components/manage/Manage";
 import { withRouter } from 'react-router-dom';
-import ActiveMenu from "../../components/categorize/Reservations";
 
 const ManageContainer = ({ history }) => {
     const dispatch = useDispatch();

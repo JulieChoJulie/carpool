@@ -11,4 +11,8 @@ api.use('/auth', auth);
 api.use('/action', action);
 api.use('/notifications', notifications);
 
+
+const router = express.Router()
+
+
 module.exports = api;

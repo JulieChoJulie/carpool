@@ -45,6 +45,20 @@ module.exports = (sequelize, DataTypes) => (
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+        },
+        verificationCodes: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true,
+        },
+        isStudent : {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
+        isStudentEmail: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         }
     }, {
         timestamps: true,

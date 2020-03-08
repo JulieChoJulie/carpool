@@ -13,6 +13,7 @@ import ManagePage from './pages/ManagePage';
 import EditPage from './pages/EditPage';
 import FindRides from "./pages/FindRides";
 import NotificationPage from './pages/NotificationPage';
+import EmailVerificationPage from './pages/EmailVerificationPage';
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route component={PostListPage} path='/' exact />
           <Route component={LoginPage} path="/login" />
           <Route component={RegisterPage} path="/signup" />
+          <Route component={EmailVerificationPage} path="/verification" />
           <Route component={ProfilePage} path="/users/@:username/profile" />
           <Route component={WritePage} path="/post" exact />
           <Route component={ManagePage} path="/manage" exact/>

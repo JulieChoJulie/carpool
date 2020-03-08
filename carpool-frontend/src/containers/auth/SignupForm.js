@@ -9,12 +9,20 @@ import { withRouter } from 'react-router-dom';
 const SignupForm = ({ history }) => {
     const [typingTimeout, setTypingTimeout] = useState(0);
     const dispatch = useDispatch();
-    const { form, auth, authError, error, user } = useSelector(({ auth, user }) => ({
+    const {
+        form,
+        auth,
+        authError,
+        error,
+        user,
+        isStudentEmail,
+    } = useSelector(({ auth, user }) => ({
         form: auth.signup,
         auth: auth.auth,
         authError: auth.authError,
         error: auth.error,
         user: user.user,
+        isStudentEmail: auth.signup.isStudentEmail,
     }));
 
     const uniqueDispatch = (name, value, form, password) => {
@@ -92,11 +100,6 @@ const SignupForm = ({ history }) => {
         }
     };
 
-    // initialize the form when the comp is first rendered;
-    useEffect(() => {
-        dispatch(initializeForm('signup'));
-    }, [dispatch]);
-
     useEffect(() => {
         if (auth) {
             console.log(auth);
@@ -106,6 +109,14 @@ const SignupForm = ({ history }) => {
             console.log(authError)
         }
     }, [auth, authError, dispatch]);
+
+    // if the user was not in /signup/isStudentEmail page before,
+    // push to that page
+    useEffect(() => {
+        if (isStudentEmail === null) {
+            history.push('/signup/isStudentEmail');
+        }
+    })
 
     useEffect(() => {
         if (user) {

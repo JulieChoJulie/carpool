@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
+const { User } = require('../models');
 require('dotenv').config();
 
 const webSocket = require('./socket');
@@ -30,8 +31,9 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.set('port', process.env.PORT || 8001);
 
+
+app.set('port', process.env.PORT || 8001);
 
 const api = require('./api');
 
@@ -59,3 +61,4 @@ const server = app.listen(app.get('port'), () => {
 webSocket(server, app);
 
 module.exports = app;
+
