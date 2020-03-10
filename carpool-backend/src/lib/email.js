@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-exports.sendEmail = ({ verificationCodes, email }) => {
+exports.sendEmail = ({verificationCodes, email}) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -15,7 +15,7 @@ exports.sendEmail = ({ verificationCodes, email }) => {
         to: email,
         subject: 'Welcome to Carpool. Please confirm email',
         html: '<h1><img src="cid:carpool@logo.img" alt="logo" width="300"/></h1>' +
-            '<p>Your verification code is <strong>'+ verificationCodes +'</strong></p>',
+            '<p>Your verification code is <strong>' + verificationCodes + '</strong></p>',
         attachments: [{
             filename: 'logo.png',
             path: __dirname + '/img/logo.png',
@@ -23,13 +23,11 @@ exports.sendEmail = ({ verificationCodes, email }) => {
         }]
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions,  (error, info) => {
         if (error) {
             console.log(error);
-            return error;
         } else {
             console.log('Email sent: ' + info.response);
-            return 'Email sent: ' + info.response;
         }
     });
 };

@@ -27,7 +27,6 @@ export const changeField = createAction(
     })
 );
 
-
 export const signup = createAction(
     SIGNUP,
     ({ username, email, cell, password, isStudentEmail }) => ({
@@ -58,7 +57,11 @@ export const login = createAction(
 export const passwordCheck = createAction(PASSWORD_CHECK, boolean => boolean);
 export const emailCheck = createAction(EMAIL_CHECK, boolean => boolean);
 export const facebookLogin = createAction(FACEBOOK_LOGIN);
-export const verifyStudentEmail = createAction(VERIFY_STUDENT_EMAIL, email => email);
+export const verifyStudentEmail = createAction(
+    VERIFY_STUDENT_EMAIL,
+        email => email
+);
+
 
 // create Saga
 const signupSaga = createRequestSaga(SIGNUP, authAPI.signup);
@@ -94,6 +97,7 @@ const initialState = {
         isStudentEmail: null,
         studentEmail: '',
         studentEmailAddress: '@edu.uwaterloo.ca',
+        time: null,
     },
     login: {
         username: '',
@@ -119,7 +123,7 @@ const auth = handleActions(
         [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
             produce(state, draft => {
                 draft[form][key] = value;
-            }),
+        }),
         [INITIALIZE_FORM]: (state, { payload: form }) => ({
             ...state,
             [form]: initialState[form],
@@ -171,16 +175,17 @@ const auth = handleActions(
         [VERIFY_STUDENT_EMAIL_SUCCESS]: (state, { payload: res }) => {
             return produce(state, draft => {
                 draft.isStudentEmailError = null;
-                draft.signup.email = draft.signup.studentEmail;
+                draft.signup.isStudentEmail = true;
+                draft.signup.email = draft.signup.studentEmail + draft.signup.studentEmailAddress;
             })
         },
         [VERIFY_STUDENT_EMAIL_FAILURE]: (state, { payload: error }) => {
             return produce(state, draft => {
-                draft.signup.isStudentEmail = false;
+                draft.signup.isStudentEmail = null;
                 draft.isStudentEmailError = error.status;
                 draft.signup.email = null;
             })
-        }
+        },
     },
     initialState
 );

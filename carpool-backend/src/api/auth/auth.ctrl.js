@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const { User } = require('../../../models');
 const { serialize } = require('../middlewares');
 const { sendEmail } = require('../../lib/email');
+const schedule = require('node-schedule');
 
 /* GET api/auth/profile */
 exports.profile = (req, res) => {
@@ -38,6 +39,8 @@ exports.joinPost = async (req, res, next) => {
     try {
         const { email, username, password, cell, isStudentEmail } = req.body;
         const hash = await bcrypt.hash(password, 12);
+        console.log('isStudentEmjail: ' + isStudentEmail);
+        console.log('*****************************************')
         const user = await User.create({
             email,
             username,
@@ -128,14 +131,15 @@ exports.sendVerificationCodes = async (req, res, next) => {
         for (let i = 0; i < 6; i++) {
             verificationCodes += Math.floor(Math.random() * 10) * (10 ** i);
         }
-        const user = await User({ where: { id: req.user.id }});
-        const res = await sendEmail({ verificationCodes, email: user.email });
-        if (res.includes('Email sent')) {
-            res.status(200).end();
-            await user.update({ verificationCodes });
-        } else {
-            res.status(500).end();
-        }
+        const user = await User.findOne({ where: { id: req.user.id }});
+        sendEmail({ verificationCodes, email: user.email });
+        await user.update({ verificationCodes });
+        const end = new Date();
+        end.setMinutes(end.getMinutes() + 5);
+        schedule.scheduleJob(end, async() => {
+            await user.update({ verificationCodes: null });
+        });
+        res.status(200).send(end);
     } catch (err) {
         console.error(err);
         next(err);

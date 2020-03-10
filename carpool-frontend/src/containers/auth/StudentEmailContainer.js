@@ -2,12 +2,10 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyStudentEmail, changeField, initializeForm } from '../../modules/auth';
 import StudentEmail from '../../components/auth/StudentEmail';
-import VerificationCode from '../../components/auth/VerificationCode';
 import { withRouter } from 'react-router-dom';
 import {profile} from "../../modules/user";
 
-const StudentEmailContainer = ({ history, location }) => {
-    const verificationCodePage = location.pathname.includes('/getVerificationCode');
+const StudentEmailContainer = ({ history }) => {
     const dispatch = useDispatch();
     const {
         isStudentEmail,
@@ -57,8 +55,6 @@ const StudentEmailContainer = ({ history, location }) => {
         if (!ownEmail) {
             dispatch(changeField({ form:'signup', key:'isStudentEmail', value: false }));
             history.push('/signup');
-        } else if (isStudentEmail) {
-            history.push('/signup');
         } else if (ownEmail) {
             if (studentEmail.length <= 2 ) {
                 setError('The email should be longer than 3 characters.');
@@ -69,17 +65,11 @@ const StudentEmailContainer = ({ history, location }) => {
                     setError('Internal Server Error. Please try later..');
                 }
             } else {
-                history.push('/signup/isStudentEmail/getVerificationCode');
+                history.push('/signup');
             }
         }
-    }, [ownEmail, dispatch, studentEmail, history, isStudentEmail]);
+    }, [ownEmail, dispatch, studentEmail, history, isStudentEmail, isStudentEmailError]);
 
-    const onClickPrev = () => {
-    }
-
-    const onVerification = useCallback((email) => {
-        dispatch(verifyStudentEmail(email));
-    }, [dispatch]);
 
     // initialize the form when the comp is first rendered;
     useEffect(() => {
@@ -96,33 +86,21 @@ const StudentEmailContainer = ({ history, location }) => {
         }
     }, [auth, authError, dispatch]);
 
-    if(verificationCodePage) {
-        return (
-            <VerificationCode
-                ownEmail={ownEmail}
-                studentEmail={studentEmail}
-                emailAddress={emailAddress}
-                onVerification={onVerification}
-                error={isStudentEmailError}
-            />
-        )
-    } else {
-        return (
-            <StudentEmail
-                isStudentEmail={isStudentEmail}
-                onClick={onClick}
-                studentEmail={studentEmail}
-                isStudentEmailError={isStudentEmailError}
-                onChange={onChange}
-                onClickRadio={onClickRadio}
-                onSwitchAddress={onSwitchAddress}
-                ownEmail={ownEmail}
-                emailAddress={emailAddress}
-                onClickNext={onClickNext}
-                error={error}
-            />
-        );
-    }
+    return (
+        <StudentEmail
+            isStudentEmail={isStudentEmail}
+            onClick={onClick}
+            studentEmail={studentEmail}
+            isStudentEmailError={isStudentEmailError}
+            onChange={onChange}
+            onClickRadio={onClickRadio}
+            onSwitchAddress={onSwitchAddress}
+            ownEmail={ownEmail}
+            emailAddress={emailAddress}
+            onClickNext={onClickNext}
+            error={error}
+        />
+    );
 };
 
 export default withRouter(StudentEmailContainer);

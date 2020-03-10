@@ -16,6 +16,8 @@ const Input = ({ onChange, onBlur, error, type, form, name }) => {
     let nameUpperCase = name.toUpperCase();
     if (nameUpperCase === 'PASSWORDCONFIRM') {
         nameUpperCase = 'PASSWORD CONFIRM' // add space
+    } else if (nameUpperCase === 'CELL') {
+        nameUpperCase = 'CELL (OPTIONAL)'
     }
 
     let inputType = name;

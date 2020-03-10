@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeField, initializeForm, signup, unique, passwordCheck, emailCheck } from "../../modules/auth";
+import { changeField, signup, unique, passwordCheck, emailCheck } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
 import * as EmailValidator from 'email-validator';
 import { profile } from '../../modules/user'
@@ -66,10 +66,16 @@ const SignupForm = ({ history }) => {
         );
         if (name === 'password' && form.passwordConfirm !== '') {
             setTypingTimeout(setTimeout(function () {
-                uniqueDispatch('passwordConfirm', form.passwordConfirm, form, value);
+                uniqueDispatch(
+                    'passwordConfirm',
+                    form.passwordConfirm,
+                    form,
+                    value
+                );
             }, 600));
         }
-        if ((name === 'email' && EmailValidator.validate(value))|| name === 'passwordConfirm' || name === 'username') {
+        if ((name === 'email' && EmailValidator.validate(value))
+            || name === 'passwordConfirm' || name === 'username') {
             setTypingTimeout(setTimeout(function () {
                 uniqueDispatch(name, value, form);
             }, 600));
@@ -96,7 +102,7 @@ const SignupForm = ({ history }) => {
             && username.length > 4
             && !error.emailVerification
         ) {
-            dispatch(signup({username, cell, email, password}));
+            dispatch(signup({username, cell, email, password, isStudentEmail }));
         }
     };
 
@@ -116,15 +122,19 @@ const SignupForm = ({ history }) => {
         if (isStudentEmail === null) {
             history.push('/signup/isStudentEmail');
         }
-    })
+    }, [isStudentEmail])
 
     useEffect(() => {
         if (user) {
-            history.push('/');
-            try {
-                localStorage.setItem('user', JSON.stringify(user));
-            } catch (e) {
-                console.log('localStorage is not working.');
+            if(!user.isStudent && user.isStudentEmail) {
+                history.push('/verification');
+            } else {
+                history.push('/');
+                try {
+                    localStorage.setItem('user', JSON.stringify(user));
+                } catch (e) {
+                    console.log('localStorage is not working.');
+                }
             }
         }
     }, [history, user])
