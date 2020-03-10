@@ -248,6 +248,23 @@ exports.writeComment = async (req, res, next) => {
             postId: req.params.id,
             content: req.body.content
         });
+
+        const user = await User.findOne({ where: { id: req.user.id } });
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        const rides = await Ride.findAll({ where: { postId: post.id } });
+        const writer = await User.findOne({ where: { id: post.userId } });
+
+        // notification
+        req.variables = {
+            send: user,
+            receive: writer,
+            title: 'comment',
+            from: 'commenter',
+            ride: post,
+        };
+
+        await socket(req, res, next);
+
         res.status(200).send(comment);
     } catch (err) {
         console.error(err);
@@ -269,7 +286,7 @@ exports.editComment = async (req, res, next) => {
                     attributes: ['content', 'updatedAt', 'userId', 'id'],
                     include: {
                         model: User,
-                        attributes: ['id', 'username']
+                        attributes: ['id', 'username', 'isStudent']
                     },
                 }
             );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import dateFormat from './dateFormat';
 import { MdSend } from 'react-icons/md';
 import './Comment.scss';
+import { MdCheckCircle } from 'react-icons/md';
 
 const Comment = ({ comment, user, onEdit, onRemove, commentEdit, onChange }) => {
     const [isEditing, setEditing] = useState(false);
@@ -13,13 +14,17 @@ const Comment = ({ comment, user, onEdit, onRemove, commentEdit, onChange }) => 
         onChange({ target: { name: 'commentEdit', value: comment.content }})
     };
 
+    const isVerified = comment.user.isStudent
+        && <span className="verified"><MdCheckCircle/></span>;
+
+
     return (
         <div className="comment">
             <div className="info">
-            <span className="username">@{comment.user.username} :</span>
+            <span className="username">@{comment.user.username}{isVerified} :</span>
             {!isEditing &&
                 <><span className="content">{comment.content}</span>
-                <span className="date">{dateFormat(comment.updatedAt)}</span></>
+                <span className="date">{dateFormat(comment.createdAt)}</span></>
             }
             {isEditing &&
                 <form

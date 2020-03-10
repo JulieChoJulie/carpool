@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import Button from "../common/Button";
 import AskRemoveModal from './AskRemoveModal';
 import { MdClose } from 'react-icons/md';
+import { MdCheckCircle } from 'react-icons/md';
 
 const Request = ({ request, onAccept, onCancelRequest }) => {
     const [visible, setVisible] = useState(false);
     const rideId = parseInt(request.Request.rideId);
     const userId = parseInt(request.Request.userId);
+    const isVerified = request.isStudent
+        && <span className="verified"><MdCheckCircle/></span>;
+
     return (
         <div className="user">
-            <span className="username">@{request.username}</span>
+            <span className="username">@{request.username}{isVerified}</span>
             <Button
                 color="white"
                 small

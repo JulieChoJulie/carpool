@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 
 const Notification = ({ notification }) => {
     const { title, ride, username, from, date } = notification;
+    let postId;
     const message = () => {
         if (from === 'writer') {
+            postId = ride.postId;
             switch (title) {
                 case 'passenger_add':
                     if (ride.offering) {
@@ -27,7 +29,7 @@ const Notification = ({ notification }) => {
                 default:
                     return ``;
             }
-        } else {
+        } else if (from === 'requester') {
             switch (title) {
                 case 'request_add':
                     if (ride.offering) {
@@ -53,11 +55,16 @@ const Notification = ({ notification }) => {
                 default:
                     return ``;
             }
+        } else if (from === 'commenter') {
+            postId = ride.id;
+            if (title === 'comment') {
+                return `@${username} commented on your post.`
+            }
         }
     }
 
     return (
-        <Link className="notification" to={`/posts/${ride.postId}`}>
+        <Link className="notification" to={`/posts/${postId}`}>
             {message()}
             <div className="date">{dateFormat(date)}</div>
         </Link>

@@ -56,14 +56,14 @@ exports.addRequest = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
         // no user/ride => 404 error
-        req.userId = req.user.id;
+        req.userId = req.user.id;;
         const {user, ride} = await isUserRideValid(req, res, next);
         const post = await Post.findOne({
             where: { id: ride.postId },
             include: [
                 {
                     model: User,
-                    attribute: ['username', 'id']
+                    attribute: ['username', 'id', 'isStudent']
                 }
             ]
         });
@@ -124,7 +124,7 @@ exports.cancelRequest = async (req, res, next) => {
             include: [
                 {
                     model: User,
-                    attributes: ['username', 'id']
+                    attributes: ['username', 'id', 'isStudent']
                 }
             ]
         });
@@ -265,7 +265,7 @@ exports.addPassenger = async (req, res, next) => {
             include: [
                 {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['id', 'username', 'isStudent']
                 }
             ]
         });
@@ -346,7 +346,7 @@ exports.cancelPassengerRequest = async (req, res, next) => {
             include: [
                 {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['id', 'username', 'isStudent']
                 }
             ]
         });
@@ -406,7 +406,7 @@ exports.cancelPassenger = async (req, res, next) => {
             include: [
                 {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['id', 'username', 'isStudent']
                 }
             ]
         });

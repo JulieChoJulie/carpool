@@ -9,12 +9,12 @@ exports.postFormat = (field, value) => {
             {
                 model: Comment,
                 where: { status: true },
-                attributes: ['content', 'updatedAt', 'userId', 'id'],
+                attributes: ['content', 'createdAt', 'userId', 'id'],
                 include: {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['id', 'username', 'isStudent']
                 },
-                order: [['updatedAt', 'DESC']],
+                order: [['createdAt', 'ASC']],
                 limit: 500,
             },
             {
@@ -23,7 +23,7 @@ exports.postFormat = (field, value) => {
             },
             {
                 model: User,
-                attributes: ['id', 'username']
+                attributes: ['id', 'username', 'isStudent']
             },
             {
                 model: User,
@@ -53,12 +53,12 @@ exports.myPostFormat = (userId, field, value) => {
                     {
                         model: User,
                         as: 'RequestUsers',
-                        attributes: ['id', 'username'],
+                        attributes: ['id', 'username', 'isStudent'],
                     },
                     {
                         model: User,
                         as: 'PartnerUsers',
-                        attributes: ['id', 'username'],
+                        attributes: ['id', 'username', 'isStudent'],
                     }
                 ]
             }

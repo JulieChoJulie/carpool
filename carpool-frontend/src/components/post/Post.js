@@ -3,6 +3,7 @@ import RideBlock from './RideBlock';
 import { MdPerson } from 'react-icons/md';
 import { IoIosBody, IoIosCar } from "react-icons/io";
 import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
+import { MdCheckCircle } from 'react-icons/md';
 import './Post.scss';
 import dateFormat from './dateFormat';
 import ManageButtons from "../manage/ManageButtons";
@@ -45,11 +46,14 @@ const Post = ({
     }
 
     const { rides, notes, updatedAt, user, id } = post;
+    const isVerified = user.isStudent
+        && <span className="verified"><MdCheckCircle/></span>;
+
     return (
         <div className="post">
             <div className="first row">
                 <span className="username">
-                    <MdPerson /> @{user.username} <span className="date">{dateFormat(updatedAt)}</span>
+                    <span className="photo"><MdPerson /></span> @{user.username}{isVerified} <span className="date">{dateFormat(updatedAt)}</span>
                 </span>
                 <span className="button">
                     { loggedInUser

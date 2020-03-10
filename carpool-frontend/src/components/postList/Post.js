@@ -5,17 +5,20 @@ import dateFormat from "../post/dateFormat";
 import Button from "../common/Button";
 import { IoIosCar, IoIosBody } from 'react-icons/io';
 import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
+import { MdCheckCircle } from 'react-icons/md';
 
 const Post = ({ post, status, onToggleSave, user, filterActive }) => {
     const to = '/posts/' + post.id;
     const isSaved = user
         && post.SaveUsers
         && post.SaveUsers.filter(u => u.id === parseInt(user.id)).length > 0;
+    const isVerified = post.user.isStudent
+        && <span className="verified"><MdCheckCircle/></span>;
 
     return (
         <div className="postBlock">
             <div className="firstRow">
-                <span className="username">@{post.user.username}</span>
+                <span className="username">@{post.user.username}{isVerified}</span>
                 <span className="postWhen">{dateFormat(post.updatedAt)}</span>
                 {user &&
                     <span className="save" onClick={() => onToggleSave(post.id, isSaved)}>
