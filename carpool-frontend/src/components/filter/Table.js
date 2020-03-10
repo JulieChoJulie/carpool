@@ -18,7 +18,7 @@ export default function Table({ columns, data, history }) {
 
     const rowInfo = (rowobject) => {
         history.push(`posts/${rowobject.id}`);
-    }
+    };
 
     return (
         <>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from "../common/Button";
 import { MdCheckCircle } from 'react-icons/md';
+import {Link} from "react-router-dom";
 
 const Passenger = ({ passenger, onCancel }) => {
     const rideId = passenger.Partner !== undefined && parseInt(passenger.Partner.rideId);
@@ -10,7 +11,9 @@ const Passenger = ({ passenger, onCancel }) => {
 
     return (
         <div className="user">
-            <span className="username">@{passenger.username}{isVerified}</span>
+            <Link to={`/users/@${passenger.username}/profile`}>
+                <span className="username">@{passenger.username}{isVerified}</span>
+            </Link>
             <Button
                 color="white"
                 small

@@ -1,0 +1,27 @@
+@import '../../styles/utils';
+
+.userProfileTemplate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .content {
+    border: 1px solid $burgundy;
+    padding: 1rem;
+    min-height: 80%;
+    .label {
+      margin-right: 0.3rem;
+    }
+    .username {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      .name {
+        display: flex;
+        flex-direction: row;
+      }
+      .message-icon {
+        margin-left: 1rem;
+      }
+    }
+  }
+}

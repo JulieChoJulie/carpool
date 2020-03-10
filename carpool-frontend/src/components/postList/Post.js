@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import { IoIosCar, IoIosBody } from 'react-icons/io';
 import { TiStarOutline, TiStarFullOutline } from 'react-icons/ti';
 import { MdCheckCircle } from 'react-icons/md';
+import { Link } from "react-router-dom";
 
 const Post = ({ post, status, onToggleSave, user, filterActive }) => {
     const to = '/posts/' + post.id;
@@ -18,7 +19,9 @@ const Post = ({ post, status, onToggleSave, user, filterActive }) => {
     return (
         <div className="postBlock">
             <div className="firstRow">
-                <span className="username">@{post.user.username}{isVerified}</span>
+                <Link to={`/users/@${post.user.username}/profile`}>
+                    <span className="username">@{post.user.username}{isVerified}</span>
+                </Link>
                 <span className="postWhen">{dateFormat(post.updatedAt)}</span>
                 {user &&
                     <span className="save" onClick={() => onToggleSave(post.id, isSaved)}>

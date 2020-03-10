@@ -3,6 +3,7 @@ import Button from "../common/Button";
 import AskRemoveModal from './AskRemoveModal';
 import { MdClose } from 'react-icons/md';
 import { MdCheckCircle } from 'react-icons/md';
+import {Link} from "react-router-dom";
 
 const Request = ({ request, onAccept, onCancelRequest }) => {
     const [visible, setVisible] = useState(false);
@@ -13,7 +14,9 @@ const Request = ({ request, onAccept, onCancelRequest }) => {
 
     return (
         <div className="user">
-            <span className="username">@{request.username}{isVerified}</span>
+            <Link to={`/users/@${request.username}/profile`}>
+                <span className="username">@{request.username}{isVerified}</span>
+            </Link>
             <Button
                 color="white"
                 small

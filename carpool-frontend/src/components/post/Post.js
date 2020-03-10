@@ -7,22 +7,23 @@ import { MdCheckCircle } from 'react-icons/md';
 import './Post.scss';
 import dateFormat from './dateFormat';
 import ManageButtons from "../manage/ManageButtons";
+import { Link } from 'react-router-dom';
 
 const Post = ({
-                  post,
-                  status,
-                  postError,
-                  loading,
-                  toggleRide,
-                  error,
-                  errorMsg,
-                  isOwn,
-                  loggedInUser,
-                  onRemove,
-                  saveError,
-                  saveStatus,
-                  toggleSave
-              }) => {
+    post,
+    status,
+    postError,
+    loading,
+    toggleRide,
+    error,
+    errorMsg,
+    isOwn,
+    loggedInUser,
+    onRemove,
+    saveError,
+    saveStatus,
+    toggleSave
+}) => {
     if (postError) {
         if (postError.status && postError.status === 404) {
             return <div className="post">The requested post does not exist.</div>
@@ -53,7 +54,15 @@ const Post = ({
         <div className="post">
             <div className="first row">
                 <span className="username">
-                    <span className="photo"><MdPerson /></span> @{user.username}{isVerified} <span className="date">{dateFormat(updatedAt)}</span>
+                    <span className="photo">
+                        <MdPerson />
+                    </span>
+                    <Link to={`/users/@${user.username}/profile`}>
+                        @{user.username}{isVerified}
+                    </Link>
+                    <span className="date">
+                        {dateFormat(updatedAt)}
+                    </span>
                 </span>
                 <span className="button">
                     { loggedInUser

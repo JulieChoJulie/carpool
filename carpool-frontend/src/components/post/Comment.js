@@ -3,6 +3,7 @@ import dateFormat from './dateFormat';
 import { MdSend } from 'react-icons/md';
 import './Comment.scss';
 import { MdCheckCircle } from 'react-icons/md';
+import {Link} from "react-router-dom";
 
 const Comment = ({ comment, user, onEdit, onRemove, commentEdit, onChange }) => {
     const [isEditing, setEditing] = useState(false);
@@ -21,7 +22,9 @@ const Comment = ({ comment, user, onEdit, onRemove, commentEdit, onChange }) => 
     return (
         <div className="comment">
             <div className="info">
-            <span className="username">@{comment.user.username}{isVerified} :</span>
+            <Link to={`/users/@${comment.user.username}/profile`}>
+                <span className="username">@{comment.user.username}{isVerified} :</span>
+            </Link>
             {!isEditing &&
                 <><span className="content">{comment.content}</span>
                 <span className="date">{dateFormat(comment.createdAt)}</span></>
