@@ -11,8 +11,17 @@ const [
     GET_PROFILE_SUCCESS,
     GET_PROFILE_FAILURE
 ] = createRequestActionTypes('profile/GET_PROFILE');
+const CHANGE_FIELD = 'profile/CHANGE_FILED';
 
 export const getProfile = createAction(GET_PROFILE, username => username);
+export const changeField = createAction(
+    CHANGE_FIELD,
+    ({ form, key, value}) => ({
+        form, // login, signup
+        key, // username, password, passwordConfirm
+        value
+    })
+);
 
 const getProfileSaga = createRequestSaga(GET_PROFILE, profileAPI.getProfile);
 
@@ -27,6 +36,8 @@ const initialState = {
         user: {},
     },
     profileError: null,
+    myProfile: null,
+    myProfileError: null,
 };
 
 const profile = handleActions({
@@ -59,7 +70,11 @@ const profile = handleActions({
         ...state,
         profile: initialState.profile,
         profileError: err.status,
-    })
+    }),
+    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
+        produce(state, draft => {
+            draft[form][key] = value;
+    }),
 }, initialState);
 
 

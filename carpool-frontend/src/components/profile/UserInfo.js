@@ -3,9 +3,21 @@ import Button from "../common/Button";
 import { MdCheckCircle } from 'react-icons/md';
 import dateFormat from "../post/dateFormat";
 
-const UserInfo = ({ user }) => {
+const UserInfo = ({ user, isMyProfile }) => {
     const isVerified = user.isStudent
         && <span className="verified"><MdCheckCircle/></span>;
+
+    const myProfile = (
+        <span className="message-icon">
+            <span><Button small color="white" to="/my-profile/edit">Edit My Profile</Button></span>
+        </span>
+    );
+
+    const notMyProfile =  (
+        <span className="message-icon">
+                    <span><Button small color="white">Message</Button></span>
+        </span>
+    );
 
     return (
         <div className="userInfo">
@@ -15,9 +27,7 @@ const UserInfo = ({ user }) => {
                         <span className="username">@{user.username}</span>
                 </span>
                 {isVerified}
-                <span className="message-icon">
-                    <span><Button small color="white">Message</Button></span>
-                </span>
+                { isMyProfile ? myProfile : notMyProfile }
             </div>
             <div className="email">
                 <span className="label">Email: </span>
