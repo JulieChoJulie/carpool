@@ -14,7 +14,8 @@ db.Post = require('./post')(sequelize, Sequelize);
 db.Comment = require('./comment')(sequelize, Sequelize);
 db.Ride = require('./ride')(sequelize, Sequelize);
 db.Notification = require('./notification')(sequelize, Sequelize);
-
+db.Room = require('./room')(sequelize, Sequelize);
+db.Chat = require('./chat')(sequelize, Sequelize);
 
 // 1:N relationship
 const oneToN = (one, N, isOption) => {
@@ -28,6 +29,8 @@ oneToN('Post', 'Ride')
 oneToN('Post', 'Comment');
 oneToN('User', 'Comment');
 oneToN('Ride', 'Notification', false);
+oneToN('Room', 'Chat');
+oneToN('User', 'Chat');
 
 // N:M relationship
 const NtoM = (N, M, through) => {
@@ -43,6 +46,7 @@ NtoM('User', 'Ride', 'Partner');
 NtoM('User', 'Ride', 'Request');
 NtoM('User', 'Notification', 'Send');
 NtoM('User', 'Notification', 'Receive');
+NtoM('User', 'Room', 'Message');
 
 module.exports = db;
 

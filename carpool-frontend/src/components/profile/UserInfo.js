@@ -7,11 +7,12 @@ const UserInfo = ({ user, isMyProfile }) => {
     const isVerified = user.isStudent
         && <span className="verified"><MdCheckCircle/></span>;
 
-    const myProfile = (
-        <span className="message-icon">
-            <span><Button small color="white" to="/my-profile/edit">Edit My Profile</Button></span>
-        </span>
-    );
+    // const myProfile = (
+    //     <span className="message-icon">
+    //         <span><Button small color="white" to="/my-profile/edit">Edit My Profile</Button></span>
+    //     </span>
+    // );
+    const myProfile = null;
 
     const notMyProfile =  (
         <span className="message-icon">

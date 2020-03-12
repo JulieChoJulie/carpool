@@ -4,6 +4,16 @@ import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 
 const PostListTemplate = ({ user, isSavePage, error, loading, children }) => {
+    console.log(user);
+    const verification = (
+        <>
+            <p>Please verify your student email and get a verified badge.</p>
+            <Link to='verification' className='signup'>
+                Verify my email now!
+            </Link>
+        </>
+
+    );
     const isHomepage = (
         <>
         {user !== null ?
@@ -11,6 +21,11 @@ const PostListTemplate = ({ user, isSavePage, error, loading, children }) => {
                 <h1>Welcome! {user.username}</h1>
                 <p> Do you need to find a ride or carpool partners? Post Now! </p>
                 <Link to='/post'><Button fullWidth color="burgundy">Post</Button></Link>
+                {
+                    !user.isStudent
+                    && user.isStudentEmail
+                    && verification
+                }
             </> :
             <>
                 <h1>Welcome to Carpool!</h1>

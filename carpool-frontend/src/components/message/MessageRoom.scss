@@ -1,0 +1,46 @@
+@import '../../styles/utils';
+
+.messageTemplate>.room {
+  border: 1px solid $lightBlue;
+  border-radius: 10px;
+  padding: 1rem;
+  .chats {
+    margin-bottom: 1rem;
+  }
+  .chat {
+    display: flex;
+    flex-direction: row;
+    .username {
+      margin-right: 0.8rem;
+      &:hover {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+    }
+    &.isMine {
+      display: flex;
+      flex-direction: row-reverse;
+      .username {
+        margin-left: 0.8rem;
+        margin-right: 0;
+      }
+    }
+    .messageContent {
+      background: $lightBeige;
+      padding: 0.3rem;
+      box-sizing: border-box;
+      border-radius: 10px;
+      .updatedAt {
+        color: $oc-gray-5;
+        font-size: 0.5rem;
+        text-align: end;
+      }
+    }
+  }
+}
+
+.chat {
+  & + & {
+    margin-top: 0.8rem;
+  }
+}

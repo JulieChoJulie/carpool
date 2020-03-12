@@ -2,14 +2,15 @@ import React from 'react';
 import { MdSend } from 'react-icons/md';
 import './CommentInsert.scss';
 
-const CommentInsert = ({ onInsert, onChange, comment, user }) => {
+const CommentInsert = ({ onInsert, onChange, comment, user, isChat }) => {
+    const placeholder = isChat ? 'Message here..' : "Comment here.."
     if (!user) {
         return (
           <form className="commentInsert">
               <input
                   className="readOnly"
                   readOnly
-                  value="Please log in to leave a comment."
+                  value="Please log in to write a comment."
               />
           </form>
         );
@@ -18,7 +19,7 @@ const CommentInsert = ({ onInsert, onChange, comment, user }) => {
             <form onSubmit={onInsert} className="commentInsert">
                 <span className="username">@{user.username}:</span>
                 <input
-                    placeholder="Comment here.."
+                    placeholder={placeholder}
                     name="comment"
                     value={comment}
                     onChange={onChange}

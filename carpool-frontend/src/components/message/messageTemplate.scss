@@ -1,0 +1,47 @@
+@import '../../styles/utils';
+
+.roomList {
+  border: 1px solid $burgundy;
+  padding: 1rem;
+  margin: 1rem;
+  flex: 1;
+  .messageRoomThumbnail {
+    border: 1px solid $lightBlue;
+    border-radius: 10px;
+    &:hover {
+      font-weight: bold;
+      border: 2px solid $lightBlue;
+    }
+    .userList {
+      padding: 0.5rem;
+      border-bottom: 1px solid $lightBlue;
+    }
+    .message {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0.3rem;
+      color: $oc-gray-7;
+      cursor: pointer;
+      background: $lightBeige;
+      .user {
+        font-style: italic;
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+      }
+      .createdAt {
+        text-align: end;
+        flex: 1 0 150px;
+      }
+      .message-content {
+        display: flex;
+        flex-wrap: nowrap;
+      }
+    }
+  }
+}
+
+.messageRoomThumbnail {
+  & + & {
+    margin-top: 1rem;
+  }
+}

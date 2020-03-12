@@ -14,7 +14,7 @@ import FindRides from "./pages/FindRides";
 import NotificationPage from './pages/NotificationPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import UserPage from './pages/UserPage';
-import ProfileEditPage from './pages/ProfileEditPage';
+import MessagePage from './pages/MessagePage';
 
 const App = () => {
     return (
@@ -33,7 +33,7 @@ const App = () => {
           <Route component={FindRides} path="/find-rides" />
           <Route component={NotificationPage} path="/@:username/notifications" exact/>
           <Route component={UserPage} path={["/users/@:username/profile", "/my-profile"]} exact/>
-          <Route component={ProfileEditPage} path="/my-profile/edit" exact/>
+          <Route component={MessagePage} path="/message" />
       </>
     );
 };

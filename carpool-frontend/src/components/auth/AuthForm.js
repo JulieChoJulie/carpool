@@ -3,7 +3,7 @@ import './AuthFormBlock.scss';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 import Input from './Input';
-import { IoLogoFacebook } from 'react-icons/io';
+// import { IoLogoFacebook } from 'react-icons/io';
 
 const text = {
     login: 'LOG IN',
@@ -68,10 +68,10 @@ const AuthForm = ({ type, onChange, onSubmit, form, error, onBlur, onFacebookLog
                 ) : (
                     <Link to="/login">{text.login}</Link>
                 )}
-                <div className="facebookLogin" onClick={onFacebookLogin}>
-                    <IoLogoFacebook/>
-                    Sign in with Facebook
-                </div>
+                {/*<div className="facebookLogin" onClick={onFacebookLogin}>*/}
+                    {/*<IoLogoFacebook/>*/}
+                    {/*Sign in with Facebook*/}
+                {/*</div>*/}
             </div>
         </div>
     );
