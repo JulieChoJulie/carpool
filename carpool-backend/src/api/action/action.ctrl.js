@@ -114,7 +114,7 @@ exports.addRequest = async (req, res, next) => {
 
 /* POST /action/ride/:rideId/request/cancel */
 exports.cancelRequest = async (req, res, next) => {
-    const t = await sequelize.transaction();
+    const t = await ction();
     try {
         // no user/ride => 404 error
         req.userId = req.user.id;

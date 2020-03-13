@@ -1,5 +1,5 @@
 import client from './client';
 
-export const createRoom = () =>
-    client.post('/api/message/room');
+export const createRoom = ({ userId, rideId }) =>
+    client.post('/api/message/room', ({ userId, rideId }));
 

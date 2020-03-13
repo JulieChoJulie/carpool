@@ -10,7 +10,7 @@ export const socketLogin = createAction(SOCKET_LOGIN, userId => userId);
 const SOCKET_LOGOUT = 'socket/LOGOUT';
 export const socketLogout = createAction(SOCKET_LOGOUT);
 
-/* FROM SOCKET */
+/* FROM SOCKET SERVER */
 const GET_NOTIFICATION = 'socket/GET_NOTIFICATION';
 export const getNotification = createAction(GET_NOTIFICATION);
 const OFFLINE_NOTI = 'socket/OFFLINE_NOTI';

@@ -45,7 +45,6 @@ const profile = handleActions({
         produce(state, draft => {
             const data = res.data;
             const { username, email, isStudent, cell, createdAt, id } = data;
-            console.log(JSON.stringify(data))
             draft.profile.posts.lookingFor = data.lookingForRides.reduce((acc, r) => {
                 if (r.PartnerUsers.length > 0) {
                     acc += 1;

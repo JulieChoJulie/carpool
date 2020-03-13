@@ -12,6 +12,8 @@ import notifications, { notificationsSaga} from "./notifications";
 import socketReducer, { handleNewNotification } from './socket';
 import categorize, { categorizeSaga } from "./categorize";
 import profile, { profileSaga } from './profile';
+import message, { messageSaga } from './message';
+
 const rootReducer = combineReducers({
     auth,
     loading,
@@ -25,6 +27,7 @@ const rootReducer = combineReducers({
     notifications,
     categorize,
     profile,
+    message,
 });
 
 export function* rootSaga() {
@@ -39,6 +42,7 @@ export function* rootSaga() {
         notificationsSaga(),
         categorizeSaga(),
         profileSaga(),
+        messageSaga(),
     ]);
 
 }

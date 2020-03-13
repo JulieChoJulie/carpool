@@ -5,12 +5,13 @@ import TableFormat from './TableFormat';
 import ErrorContainer from "../../containers/common/ErrorContainer";
 
 const UserProfile = ({
-     profile,
-     profileError,
-     loading,
-     username,
-     error,
-    isMyProfile
+    profile,
+    profileError,
+    loading,
+    username,
+    error,
+    isMyProfile,
+    onClickMessage,
 }) => {
     if (loading || !profile) {
         return null;
@@ -31,7 +32,7 @@ const UserProfile = ({
     return (
         <>
             <div className="content">
-                <UserInfo user={profile.user} isMyProfile={isMyProfile} />
+                <UserInfo user={profile.user} isMyProfile={isMyProfile} onClickMessage={onClickMessage}/>
                 <TableFormat data={[profile]}/>
             </div>
         </>

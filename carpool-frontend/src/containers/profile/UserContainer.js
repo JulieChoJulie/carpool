@@ -1,30 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProfile } from '../../modules/profile';
+import { createRoom, initializeField } from "../../modules/message";
 import UserProfile from "../../components/profile/UserProfile";
 import UserProfileTemplate from "../../components/profile/UserProfileTemplate";
 import { withRouter } from 'react-router-dom';
 
-const UserContainer = ({ location }) => {
+const UserContainer = ({ location, history }) => {
     const dispatch = useDispatch();
     const {
         profile,
         profileError,
         loading,
-        user
-    } = useSelector(({ profile, loading, user }) => ({
+        user,
+        roomId
+    } = useSelector(({ profile, loading, user, message }) => ({
         profile: profile.profile,
         profileError: profile.profileError,
         loading: loading['profile/GET_PROFILE'],
         user: user.user,
+        roomId: message.roomId,
     }));
     const [error, setError] = useState(false);
+
+    const onClickMessage = useCallback(({ userId, rideId })=> {
+        dispatch(createRoom({ userId, rideId }));
+    }, [dispatch]);
 
     const isMyProfile = location.pathname.includes('my-profile');
     let username = null;
 
     useEffect(() => {
         setError(false);
+        dispatch(initializeField('roomId'));
         if (!isMyProfile) {
             username = location.pathname
                 .split('/')
@@ -40,6 +48,11 @@ const UserContainer = ({ location }) => {
         dispatch(getProfile(username));
     }, [dispatch, user]);
 
+    useEffect(() => {
+        if (roomId) {
+            history.push(`/message/room/${roomId}`);
+        }
+    }, [roomId]);
 
     return (
         <UserProfileTemplate isMyProfile={isMyProfile}>
@@ -50,6 +63,7 @@ const UserContainer = ({ location }) => {
                 username={username}
                 loading={loading}
                 error={error}
+                onClickMessage={onClickMessage}
             />
         </UserProfileTemplate>
     );

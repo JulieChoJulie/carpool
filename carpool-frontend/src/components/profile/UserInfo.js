@@ -3,7 +3,7 @@ import Button from "../common/Button";
 import { MdCheckCircle } from 'react-icons/md';
 import dateFormat from "../post/dateFormat";
 
-const UserInfo = ({ user, isMyProfile }) => {
+const UserInfo = ({ user, isMyProfile, onClickMessage }) => {
     const isVerified = user.isStudent
         && <span className="verified"><MdCheckCircle/></span>;
 
@@ -16,7 +16,18 @@ const UserInfo = ({ user, isMyProfile }) => {
 
     const notMyProfile =  (
         <span className="message-icon">
-                    <span><Button small color="white">Message</Button></span>
+                    <span>
+                        <Button
+                            small
+                            color="white"
+                            onClick={() => onClickMessage({
+                                userId: user.id.toString(),
+                                rideId: false
+                            })}
+                        >
+                            Message
+                        </Button>
+                    </span>
         </span>
     );
 

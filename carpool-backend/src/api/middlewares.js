@@ -17,6 +17,39 @@ exports.isNotLoggedIn = (req, res, next) => {
     }
 };
 
+exports.isRoom = async (res, req, next) => {
+    try {
+        const room = await Room.findOne({ where: { id: req.params.roomId } });
+        if (!room) {
+            res.status(400).end(); // Bad Request
+            return;
+        } else {
+            next();
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}
+
+exports.isParticipatedInRoom = async (req, res, next) => {
+    try {
+        const room = await Room.findOne({ where: { id: req.params.roomId } });
+        const users = await room.getMessageUsers({
+            where: { id: req.user.id }
+        });
+        if (users.length === 0) {
+            res.status(403).end(); // forbidden
+            return;
+        } else {
+            next();
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}
+
 
 // excluding password
 exports.serialize = (req, res) => {
