@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 
 const PostListTemplate = ({ user, isSavePage, error, loading, children }) => {
-    console.log(user);
     const verification = (
         <>
             <p>Please verify your student email and get a verified badge.</p>

@@ -29,30 +29,34 @@ const UserContainer = ({ location, history }) => {
 
     const isMyProfile = location.pathname.includes('my-profile');
     let username = null;
+    if (!isMyProfile) {
+        username = location.pathname
+            .split('/')
+            .filter(a => a.includes('@'))[0]
+            .slice(1);
+    } else {
+        if (user) {
+            username = user.username;
+        }
+    }
 
     useEffect(() => {
         setError(false);
         dispatch(initializeField('roomId'));
-        if (!isMyProfile) {
-            username = location.pathname
-                .split('/')
-                .filter(a => a.includes('@'))[0]
-                .slice(1);
-        } else {
-            if (user) {
-                username = user.username;
-            } else {
-                setError(true);
-            }
-        }
         dispatch(getProfile(username));
-    }, [dispatch, user]);
+    }, [dispatch, username]);
 
     useEffect(() => {
         if (roomId) {
             history.push(`/message/room/${roomId}`);
         }
-    }, [roomId]);
+    }, [roomId, history]);
+
+    useEffect(() => {
+        if (!user) {
+            history.push('/');
+        }
+    }, [user]);
 
     return (
         <UserProfileTemplate isMyProfile={isMyProfile}>

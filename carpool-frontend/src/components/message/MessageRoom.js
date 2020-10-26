@@ -5,14 +5,21 @@ import './MessageRoom.scss';
 import ErrorContainer from "../../containers/common/ErrorContainer";
 
 const MessageRoom = ({ room, user }) => {
-    if (user) {
+    if (!user) {
         return <ErrorContainer status="401"/>
     }
 
+    const userList = room.users.map(u => {
+        return '@' + u.username
+    }).join(', ');
+
     return (
         <div className="room">
+            <div className="userList">
+                <label>Users:</label> {userList}
+            </div>
             <div className="chats">
-            { room.chat.map((chat, index) =>
+            { room.chats.map((chat, index) =>
                 <MessageChat
                     key={index}
                     chat={chat}

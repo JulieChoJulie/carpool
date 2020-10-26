@@ -4,9 +4,9 @@ import { changeField, signup, unique, passwordCheck, emailCheck } from "../../mo
 import AuthForm from '../../components/auth/AuthForm';
 import * as EmailValidator from 'email-validator';
 import { profile } from '../../modules/user'
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 
-const SignupForm = ({ history }) => {
+const SignupForm = () => {
     const [typingTimeout, setTypingTimeout] = useState(0);
     const dispatch = useDispatch();
     const {
@@ -24,6 +24,8 @@ const SignupForm = ({ history }) => {
         user: user.user,
         isStudentEmail: auth.signup.isStudentEmail,
     }));
+
+    let history = useHistory();
 
     const uniqueDispatch = (name, value, form, password) => {
         const usernameLength = name === 'username' && value.length > 4;
@@ -122,7 +124,7 @@ const SignupForm = ({ history }) => {
         if (isStudentEmail === null) {
             history.push('/signup/isStudentEmail');
         }
-    }, [isStudentEmail])
+    }, [isStudentEmail, history]);
 
     useEffect(() => {
         if (user) {
@@ -137,7 +139,7 @@ const SignupForm = ({ history }) => {
                 }
             }
         }
-    }, [history, user])
+    }, [history, user]);
 
     return (
         <AuthForm

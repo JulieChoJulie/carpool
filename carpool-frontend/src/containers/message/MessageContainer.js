@@ -1,14 +1,18 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getRoom } from '../../modules/message';
 import MessageRoom from "../../components/message/MessageRoom";
 import MessageTemplate from "../../components/message/MessageTemplate";
-import { withRouter } from 'react-router-dom';
 import MessageRoomList from "../../components/message/MessageRoomList";
 import CreateMessageRoom from "../../components/message/CreateMessageRoom";
+import { withRouter } from 'react-router-dom';
+
 
 const MessageContainer = ({ location }) => {
-    const { user } = useSelector(({ user }) => ({
+    const dispatch = useDispatch();
+    const { user, messages } = useSelector(({ user, message }) => ({
         user: user.user,
+        messages: message.messages,
     }));
     const fakeData = [
         {
@@ -45,7 +49,7 @@ const MessageContainer = ({ location }) => {
     ]
 
     const roomData = {
-        chat: [
+        chats: [
             {
                 user: {
                     username: 'Simon',
@@ -70,10 +74,25 @@ const MessageContainer = ({ location }) => {
             }
         ]
     };
+
+    useEffect(() => {
+        roomData.users = messages.users;
+    }, [messages, roomData]);
+
     const roomList = location.pathname === '/message';
     const room = location.pathname.includes('/room/');
     const createRoom = location.pathname.includes('create');
-    let comp;
+
+    useEffect(() => {
+        if (room) {
+            const arr = location.pathname.split('/room/');
+            const roomId = arr[arr.length -1];
+            dispatch(getRoom(roomId));
+        }
+    }, [location, dispatch, room])
+
+    let comp = null;
+
     if (createRoom) {
         comp = <CreateMessageRoom/>
     } else if (room) {

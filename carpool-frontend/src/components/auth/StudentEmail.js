@@ -15,7 +15,7 @@ const StudentEmail = ({
     error
 }) => {
     const emailList = [
-        '@edu.uwaterloo.ca',
+        '@uwaterloo.ca',
         '@mail.utoronto.ca',
         '@yorku.ca',
         '@mcmaster.ca',

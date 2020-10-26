@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { sendCode, changeField, compareCodes } from "../../modules/user";
 import VerificationCode from "../../components/auth/VerificationCode";
 import { withRouter } from 'react-router-dom';
-import {interfaceDeclaration} from "@babel/types";
 
 const VerificationCodeContainer = ({ history }) => {
     const dispatch = useDispatch();
@@ -28,7 +27,7 @@ const VerificationCodeContainer = ({ history }) => {
             key: 'code',
             value: e.target.value,
         }))
-    });
+    }, [dispatch]);
 
     const onClickCompare = useCallback((e) => {
         e.preventDefault();

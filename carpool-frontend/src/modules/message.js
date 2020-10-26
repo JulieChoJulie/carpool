@@ -25,6 +25,14 @@ export const createRoom = createAction(CREATE_ROOM,
 );
 const createRoomSaga = createRequestSaga(CREATE_ROOM, messageAPI.createRoom);
 
+const [
+    GET_ROOM,
+    GET_ROOM_SUCCESS,
+    GET_ROOM_FAILURE,
+] = createRequestActionTypes('message/GET_ROOM');
+export const getRoom = createAction(GET_ROOM, roomId => roomId);
+const getRoomSaga = createRequestSaga(GET_ROOM, messageAPI.getRoom);
+
 
 // const SEND_CHAT = 'message/SEND_CHAT';
 // export const sendCaht = createAction(SEND_CAHT, userId => userId);
@@ -74,12 +82,17 @@ export function* messageSaga() {
     //     socket.disconnect();
     // })
     yield takeLatest(CREATE_ROOM, createRoomSaga);
+    yield takeLatest(GET_ROOM, getRoomSaga);
 }
 
 const initialState = {
-    messages: [],
+    messages: {
+        chats: [],
+        users: [],
+    },
     roomId: null,
     createRoomError: null,
+    getRoomError: null,
 };
 
 const message = handleActions({
@@ -102,6 +115,18 @@ const message = handleActions({
     [INITIALIZE_FIELD]: (state, { payload: field }) => ({
         ...state,
         [field]: initialState[field]
+    }),
+    [GET_ROOM_SUCCESS]: (state, { payload: res }) => (
+        produce(state, draft => {
+            draft.getRoomError = null;
+            draft.messages.chats = res.data.chats;
+            draft.messages.users = res.data.users;
+        })
+    ),
+    [GET_ROOM_FAILURE]: (state, { payload: error }) => ({
+        ...state,
+        getRoomError: error.status,
+        messages: initialState.messages,
     })
 }, initialState);
 
