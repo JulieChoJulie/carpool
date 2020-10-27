@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { verifyStudentEmail, changeField, initializeForm } from '../../modules/auth';
+import { verifyStudentEmail, changeField, initializeForm, combineStudentEmail } from '../../modules/auth';
 import StudentEmail from '../../components/auth/StudentEmail';
 import { withRouter } from 'react-router-dom';
 import {profile} from "../../modules/user";
@@ -39,6 +39,7 @@ const StudentEmailContainer = ({ history }) => {
             key: 'studentEmailAddress',
             value: e.target.value
         }));
+        dispatch(combineStudentEmail());
     }, [dispatch]);
 
     const onChange = useCallback((e) => {
@@ -46,6 +47,7 @@ const StudentEmailContainer = ({ history }) => {
         dispatch(changeField({ form:'signup', key:'studentEmail', value: email }));
         if (email.length > 2) {
             setError(null);
+            dispatch(combineStudentEmail());
             dispatch(verifyStudentEmail(email));
         }
     }, [dispatch]);
@@ -65,6 +67,7 @@ const StudentEmailContainer = ({ history }) => {
                     setError('Internal Server Error. Please try later..');
                 }
             } else {
+                dispatch(combineStudentEmail());
                 history.push('/signup');
             }
         }

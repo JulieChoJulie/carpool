@@ -3,7 +3,7 @@ import client from './client';
 export const login = ({ username, password }) =>
     client.post('/api/auth/login', { username, password });
 
-export const signup = ({ username, password, email, cell, isStudentEmail }) =>
+export const signup = ({ username, password, email, cell, isStudentEmail }) => 
     client.post('/api/auth/join', { username, email, password, cell, isStudentEmail });
 
 export const uniqueCheck = ({ type, value }) =>

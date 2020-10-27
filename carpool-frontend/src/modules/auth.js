@@ -54,6 +54,10 @@ export const login = createAction(
     })
 );
 
+export const combineStudentEmail = createAction(
+    VERIFY_STUDENT_EMAIL_SUCCESS
+);
+
 export const passwordCheck = createAction(PASSWORD_CHECK, boolean => boolean);
 export const emailCheck = createAction(EMAIL_CHECK, boolean => boolean);
 export const facebookLogin = createAction(FACEBOOK_LOGIN);
@@ -96,7 +100,7 @@ const initialState = {
         cell: '',
         isStudentEmail: null,
         studentEmail: '',
-        studentEmailAddress: '@edu.uwaterloo.ca',
+        studentEmailAddress: '@uwaterloo.ca',
         time: null,
     },
     login: {
