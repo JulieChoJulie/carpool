@@ -31,7 +31,7 @@ const getUserRequestsFunc = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 const isUserRideValid = async (req, res, next) => {
     try {
@@ -49,7 +49,7 @@ const isUserRideValid = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* POST /action/ride/:rideId/request/add */
 exports.addRequest = async (req, res, next) => {
@@ -94,7 +94,7 @@ exports.addRequest = async (req, res, next) => {
                 title: 'request_add',
                 from: 'requester',
                 ride,
-            }
+            };
             await socket(req, res, next);
 
             const status = await getStatus(req, next);
@@ -110,11 +110,11 @@ exports.addRequest = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* POST /action/ride/:rideId/request/cancel */
 exports.cancelRequest = async (req, res, next) => {
-    const t = await ction();
+    const t = await sequelize.transaction();
     try {
         // no user/ride => 404 error
         req.userId = req.user.id;
@@ -142,7 +142,7 @@ exports.cancelRequest = async (req, res, next) => {
                 title: 'request_cancel',
                 from: 'requester',
                 ride,
-            }
+            };
             await socket(req, res, next);
 
 
@@ -183,7 +183,7 @@ const getStatus = async (req, next) => {
         console.log(e);
         next(e);
     }
-}
+};
 
 exports.getStatus = getStatus;
 /* GET /action/rides/status */
@@ -196,7 +196,7 @@ exports.getRideStatus = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 
 /*
@@ -210,7 +210,7 @@ exports.cancelRide = async (req, res, next) => {
         req.userId = req.user.id;
         const {user, ride} = await isUserRideValid(req, res, next);
         const post = await Post.findOne({ where: { id: ride.postId }});
-        const writer = await User.find({ where: { id: post.userId }});
+        const writer = await User.findOne({ where: { id: post.userId }});
         /* remove partner
         / partner = 0 (nothing is removed)
         / partner = 1 (one partner is removed
@@ -240,7 +240,7 @@ exports.cancelRide = async (req, res, next) => {
             title: 'passenger_cancel',
             from: 'requester',
             ride,
-        }
+        };
         await socket(req, res, next);
 
         const status = await getStatus(req, next);
@@ -251,11 +251,12 @@ exports.cancelRide = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* POST /action/ride/:rideId/users/:userId/add */
 exports.addPassenger = async (req, res, next) => {
     const t = await sequelize.transaction();
+
     try {
         // no user/ride => 404 error
         req.userId = req.params.userId;
@@ -305,7 +306,6 @@ exports.addPassenger = async (req, res, next) => {
         // update available seats in the ride
         const available = ride.seats - 1;
         await ride.update({ available: available }, { transaction: t });
-
         await t.commit();
 
         //notification
@@ -330,7 +330,7 @@ exports.addPassenger = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 
 /* POST /action/ride/:rideId/users/:userId/cancel/request */
@@ -391,7 +391,7 @@ exports.cancelPassengerRequest = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* POST /action/ride/:rideId/user/:userId/cancel */
 exports.cancelPassenger = async (req, res, next) => {
@@ -443,7 +443,7 @@ exports.cancelPassenger = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* GET /api/action/ride/:rideId/passengers */
 exports.getPassengers = async (req, res, next) => {
@@ -460,7 +460,7 @@ exports.getPassengers = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* GET /api/action/ride/:rideId/requests */
 exports.getRequests = async (req, res, next) => {
@@ -472,7 +472,7 @@ exports.getRequests = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* GET /api/action/posts/manage */
 exports.getMyPost = async (req, res, next) => {
@@ -489,7 +489,7 @@ exports.getMyPost = async (req, res, next) => {
     } catch (err) {
         console.log(err);
     }
-}
+};
 
 /* GET /api/action/reservations */
 exports.getReservations = async (req, res, next) => {
@@ -537,7 +537,7 @@ exports.getReservations = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};
 
 /* GET /api/action/save */
 exports.getSave = async (req, res, next) => {
@@ -565,7 +565,7 @@ exports.getSaveStatus = async (req, res, next) => {
         console.log(err);
         next(err);
     }
-}
+};
 
 /* POST /api/action/save/post/:id */
 exports.postSave = async (req, res, next) => {
@@ -578,12 +578,12 @@ exports.postSave = async (req, res, next) => {
             res.status(409).end();
             return;
         }
-        await user.addSavePosts(post)
+        await user.addSavePosts(post);
         res.status(200).json({ status: true });
     } catch (err) {
         next(err);
     }
-}
+};
 
 /* DELETE /api/action/save/post/:id */
 exports.deleteSave = async (req, res, next) => {
@@ -600,4 +600,4 @@ exports.deleteSave = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};

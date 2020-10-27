@@ -1,4 +1,4 @@
-const { Post, Comment, User, Ride } = require('../../models');
+const { Post, Comment, User, Ride, Room } = require('../../models');
 
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {

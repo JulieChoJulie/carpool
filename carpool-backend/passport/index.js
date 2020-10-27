@@ -1,5 +1,4 @@
 const local = require('./localStrategy');
-const facebook = require('./facebookStrategy');
 const { User } = require('../models');
 
 module.exports = (passport) => {
@@ -14,5 +13,4 @@ module.exports = (passport) => {
     });
 
     local(passport);
-    facebook(passport);
 };

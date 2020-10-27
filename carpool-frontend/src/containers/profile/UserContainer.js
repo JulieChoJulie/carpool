@@ -56,7 +56,7 @@ const UserContainer = ({ location, history }) => {
         if (!user) {
             history.push('/');
         }
-    }, [user]);
+    }, [user, history]);
 
     return (
         <UserProfileTemplate isMyProfile={isMyProfile}>

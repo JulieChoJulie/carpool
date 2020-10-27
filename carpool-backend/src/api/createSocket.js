@@ -43,4 +43,4 @@ exports.socket = async (req) => {
             data: notificationData
         });
     }
-}
+};

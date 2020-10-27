@@ -66,7 +66,7 @@ exports.createRoom = async (req, res, next) => {
             }
         }
 
-        if (id !== null) {
+        if (exRoomId !== null) {
             await t.rollback();
             res.status(200).send({ roomId: exRoomId });
             return;
@@ -94,6 +94,7 @@ exports.createRoom = async (req, res, next) => {
         }
         await t.commit();
         res.status(200).send({ roomId: room.id });
+
     } catch (err) {
         await t.rollback();
         console.error(err);
@@ -108,22 +109,19 @@ GET api/message/room/:roomId
 exports.getRoom = async (req, res, next) => {
     try {
         const chats = await Chat.findAll({
-            where: { roomId: req.params.roomId },
-            include : [
+            where: { roomId: parseInt(req.params.roomId) },
+            include: [
                 {
-                    model: Chat,
-                    include: [
-                        {
-                            model: User,
-                            attributes: ['id', 'username', 'isStudent']
-                        }
-                    ]
-
+                    model: User,
+                    attributes: ['id', 'username', 'isStudent']
                 }
             ]
-        })
-        res.status(200).send(chats);
-
+        });
+        const room = await Room.findOne({ where: { id: parseInt(req.params.roomId) }});
+        const users = await room.getMessageUsers({
+            attributes: ['id', 'username', 'isStudent']
+        });
+        res.status(200).send({ chats, users });
     } catch (err) {
         console.error(err);
         next(err);

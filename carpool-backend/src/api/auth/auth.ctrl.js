@@ -7,7 +7,7 @@ const schedule = require('node-schedule');
 
 /* GET api/auth/profile */
 exports.profile = (req, res) => {
-    res.status(200).send(serialize(req, res));
+    return serialize(req, res);
 };
 
 /* POST  api/auth/join/uniqueCheck */
@@ -24,7 +24,7 @@ exports.uniqueCheck = async (req, res, next) => {
             res.sendStatus(200);
         }
     } catch (err) {
-        console.log(err)
+        console.log(err);
         next(err)
     }
 }
