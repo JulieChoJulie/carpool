@@ -5,11 +5,12 @@ import MessageRoom from "../../components/message/MessageRoom";
 import MessageTemplate from "../../components/message/MessageTemplate";
 import MessageRoomList from "../../components/message/MessageRoomList";
 import CreateMessageRoom from "../../components/message/CreateMessageRoom";
-import { withRouter } from 'react-router-dom';
-
+import { withRouter, useHistory } from 'react-router-dom';
+import ErrorContainer from "../../containers/common/ErrorContainer";
 
 const MessageContainer = ({ location }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const { user, messages } = useSelector(({ user, message }) => ({
         user: user.user,
         messages: message.messages,
@@ -46,31 +47,48 @@ const MessageContainer = ({ location }) => {
                 }
             ]
         }
-    ]
+    ];
 
     const roomData = {
-        chats: [
+        "chats": [
             {
-                user: {
-                    username: 'Simon',
-                    isStudent: true,
-                },
-                chat: 'Hello',
-                updatedAt: new Date()
+                "id": 1,
+                "chat": "Hello???",
+                "gif": null,
+                "createdAt": "2020-10-27T23:13:52.000Z",
+                "updatedAt": "2020-10-27T23:13:52.000Z",
+                "deletedAt": null,
+                "roomId": 18,
+                "userId": 5,
+                "user": {
+                    "id": 5,
+                    "username": "Julie",
+                    "isStudent": false
+                }
+            }
+        ],
+        "users": [
+            {
+                "id": 5,
+                "username": "Julie",
+                "isStudent": false,
+                "Message": {
+                    "createdAt": "2020-10-27T00:45:05.000Z",
+                    "updatedAt": "2020-10-27T00:45:05.000Z",
+                    "userId": 5,
+                    "roomId": 18
+                }
             },
             {
-                user: {
-                    username: 'Julie2',
-                },
-                chat: 'Hello!!! Nice to meet you',
-                updatedAt: new Date()
-            },
-            {
-                user: {
-                    username: 'Julie',
-                },
-                chat: 'Hey guys! How are you',
-                updatedAt: new Date()
+                "id": 6,
+                "username": "Julie3",
+                "isStudent": false,
+                "Message": {
+                    "createdAt": "2020-10-27T00:45:05.000Z",
+                    "updatedAt": "2020-10-27T00:45:05.000Z",
+                    "userId": 6,
+                    "roomId": 18
+                }
             }
         ]
     };
@@ -89,23 +107,27 @@ const MessageContainer = ({ location }) => {
             const roomId = arr[arr.length -1];
             dispatch(getRoom(roomId));
         }
-    }, [location, dispatch, room])
+    }, [location, dispatch, room]);
 
     let comp = null;
 
     if (createRoom) {
         comp = <CreateMessageRoom/>
     } else if (room) {
-        comp = <MessageRoom user={user} room={roomData}/>;
+        comp = <MessageRoom room={roomData} user={user}/>;
     } else if (roomList) {
         comp = <MessageRoomList rooms={fakeData}/>;
     }
 
-    return (
-        <MessageTemplate>
-            {comp}
-        </MessageTemplate>
-    );
+    if (!user) {
+        return <ErrorContainer error="0"/>
+    } else {
+        return (
+            <MessageTemplate>
+                {comp}
+            </MessageTemplate>
+        );
+    }
 };
 
 export default withRouter(MessageContainer);

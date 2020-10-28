@@ -1,6 +1,6 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const { User, Chat, Room, Ride } = require('../../../models');
+const { User, Chat, Room, Post } = require('../../../models');
 const schedule = require('node-schedule');
 const { Op } = require('sequelize');
 const { sequelize } = require('../../../models');
@@ -18,17 +18,21 @@ exports.getUser = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* POST api/message/room */
 exports.createRoom = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
-        const { userId, rideId } = req.body;
+        const { userId, postId } = req.body;
 
-        const allRooms = await user.getMessageRooms({
-            attributes: ['id', 'rideId'],
+
+        const post = await Post.findOne({ where: { id: parseInt(postId) }});
+
+        const allRooms = await Room.findAll({
+            where: { postId } ,
+            attributes: ['id'],
             include: [
                 {
                     model: User,
@@ -36,62 +40,32 @@ exports.createRoom = async (req, res, next) => {
                     attributes: ['id']
                 }
             ]
-
         });
-        const allRoomsArr = JSON.parse(JSON.stringify(allRooms));
 
-        // find if there is existing room;
-        let exRoomId = null;
-
-        if (userId) {
-            for (let i = 0; i < allRoomsArr.length; i++) {
-                const room = allRoomsArr[i];
-                const users = room.MessageUsers;
-                if (users.length === 2) {
-                    if (users[0].id === user.id || users[0].id === parseInt(userId)) {
-                        if (users[1].id === user.id || users[1].id === parseInt(userId)) {
-                            exRoomId = room.id;
-                            break;
-                        }
-                    }
-                }
-            }
-        } else {
-            for (let i = 0; i < allRoomsArr.length; i++) {
-                const room = allRoomsArr[i];
-                if (room.rideId === rideId) {
-                    exRoomId = rideId;
-                    break;
+        if (allRooms.length > 0) {
+            // find and return the existing roomId
+            for (let i = 0; i < allRooms.length; i++) {
+                const users = allRooms[i].MessageUsers;
+                const isExistingRoom =
+                    (users[0].id === user.id || users[0].id === userId)
+                    && (users[1].id === user.id || users[1].id === userId);
+                if(isExistingRoom) {
+                    return res.send({ roomId: allRooms[i].id })
                 }
             }
         }
 
-        if (exRoomId !== null) {
-            await t.rollback();
-            res.status(200).send({ roomId: exRoomId });
-            return;
-        }
-
-        // if there was no existing room;
-        const room = await Room.create({ transaction: t });
+        // create a new room and return roomId
+        const room = await Room.create({
+            postId: post.id
+        },{ transaction: t });
         await room.addMessageUser(user, { transaction: t });
 
         if (userId) {
             const userInvited = await User.findOne({ where: { id: parseInt(userId) } });
             await room.addMessageUser(userInvited, { transaction: t });
-        } else if (rideId) {
-            const ride = await Ride.findOne({ where: { id: parseInt(rideId) }});
-            const users = await ride.getPartnerUsers();
-            await Promise.all(usersArr.forEach(async (user) => {
-                const member = await User.findOne({ where: { id: user.id }});
-                if (!member) {
-                    res.sendStatus(400); // Bad Request
-                    return;
-                }
-                await Room.addMessageUser(member, { transaction: t });
-                await room.update({ rideId: ride.id }, { transaction: t });
-            }));
         }
+
         await t.commit();
         res.status(200).send({ roomId: room.id });
 
@@ -100,7 +74,7 @@ exports.createRoom = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /*
 isParticipatedInRoom middleware
@@ -118,10 +92,11 @@ exports.getRoom = async (req, res, next) => {
             ]
         });
         const room = await Room.findOne({ where: { id: parseInt(req.params.roomId) }});
+        const post = await Post.findOne({ where: { id: room.postId }});
         const users = await room.getMessageUsers({
             attributes: ['id', 'username', 'isStudent']
         });
-        res.status(200).send({ chats, users });
+        res.status(200).send({ chats, users, post });
     } catch (err) {
         console.error(err);
         next(err);
@@ -177,7 +152,7 @@ exports.postChat = async (req, res, next) => {
 };
 
 /*
-GET api/message/room/:roomId/join
+POST api/message/room/:roomId/join
 */
 exports.joinRoom = async (req, res, next) => {
     try {
@@ -194,7 +169,7 @@ exports.joinRoom = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* DELETE api/message/room/:roomId/exit */
 exports.exitRoom = async (req, res, next) => {
@@ -205,6 +180,7 @@ exports.exitRoom = async (req, res, next) => {
         if (userRemoved === 0) {
             res.sendStatus(400); // nothing has been removed
         } else if (userRemoved === 1) {
+            // if there is no user left, delete the room
             const users = await room.getMessageUsers();
             if (users.length === 0) {
                 await room.destroy();
@@ -215,7 +191,7 @@ exports.exitRoom = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};
 
 /* GET /api/message/offline */
 exports.offlineMessage = async (req, res, next) => {
@@ -248,4 +224,4 @@ exports.offlineMessage = async (req, res, next) => {
         console.error(err);
         next(err);
     }
-}
+};

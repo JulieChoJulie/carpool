@@ -31,13 +31,13 @@ oneToN('User', 'Comment');
 oneToN('Ride', 'Notification', false);
 oneToN('Room', 'Chat');
 oneToN('User', 'Chat');
+oneToN('Post', 'Room');
 
 // N:M relationship
 const NtoM = (N, M, through) => {
     // ex. as: SavePosts
     db[N].belongsToMany(db[M], { through: through, as: through + M + 's' });
     db[M].belongsToMany(db[N], { through: through, as: through + N + 's' });
-
 };
 
 // make tables for trip and save;

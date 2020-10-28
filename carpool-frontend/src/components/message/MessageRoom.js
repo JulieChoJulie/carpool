@@ -5,8 +5,8 @@ import './MessageRoom.scss';
 import ErrorContainer from "../../containers/common/ErrorContainer";
 
 const MessageRoom = ({ room, user }) => {
-    if (!user) {
-        return <ErrorContainer status="401"/>
+    if (!room || room.users.length === 0) {
+        return <ErrorContainer error="404"/>
     }
 
     const userList = room.users.map(u => {

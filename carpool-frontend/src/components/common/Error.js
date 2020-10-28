@@ -8,8 +8,10 @@ const Error = ({ status }) => {
         '403': 'Forbidden',
         '404': 'Not Found',
         '402': 'No Posts Yet..',
-        '500': 'Internal Error'
-    }
+        '500': 'Internal Error',
+        '0': 'Please log in first.'
+    };
+
     return (
         <div className="errorBlock">
             {error[status]}...
