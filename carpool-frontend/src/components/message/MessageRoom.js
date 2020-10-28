@@ -14,9 +14,9 @@ const MessageRoom = ({ room, user, onClickUser, onClickBack, onClickDelete }) =>
         return <ErrorContainer error="404"/>
     }
 
-    const userList = room.users.map(u => {
-        return (<span className="username" onClick={() => onClickUser(u.username)}>@{u.username}</span>)
-    });
+    const userList = room.users.map(u =>
+        (<span key={u.id} className="username" onClick={() => onClickUser(u.username)}>@{u.username}</span>)
+    );
 
     return (
         <div className="room">

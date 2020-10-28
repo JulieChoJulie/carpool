@@ -10,6 +10,7 @@ const MessageRoomThumbnail = ({ room, onClick }) => {
     const message = chat.chat.length > 50
         ? chat.chat.slice(0, 50) + '...'
         : chat.chat;
+
     return (
         <div className="messageRoomThumbnail" onClick={() => onClick(room.id)}>
             <MessagePostHeader rides={room.post.rides} onClickPost/>

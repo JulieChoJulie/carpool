@@ -6,4 +6,5 @@ export const createRoom = ({ userId, rideId }) =>
 export const getRoom = (roomId) =>
     client.get(`/api/message/room/${roomId}`);
 
-
+export const getRooms = () =>
+    client.get('/api/message/rooms');

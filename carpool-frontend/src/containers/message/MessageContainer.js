@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getRoom } from '../../modules/message';
+import { getRoom, getRooms } from '../../modules/message';
 import MessageRoom from "../../components/message/MessageRoom";
 import MessageTemplate from "../../components/message/MessageTemplate";
 import MessageRoomList from "../../components/message/MessageRoomList";

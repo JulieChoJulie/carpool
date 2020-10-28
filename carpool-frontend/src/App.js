@@ -15,6 +15,7 @@ import NotificationPage from './pages/NotificationPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import UserPage from './pages/UserPage';
 import MessagePage from './pages/MessagePage';
+import MessageRoomPage from "./pages/MessageRoomPage";
 
 const App = () => {
     return (
@@ -33,7 +34,8 @@ const App = () => {
           <Route component={FindRides} path="/find-rides" />
           <Route component={NotificationPage} path="/@:username/notifications" exact/>
           <Route component={UserPage} path={["/users/@:username/profile", "/my-profile"]} exact/>
-          <Route component={MessagePage} path="/message" />
+          <Route component={MessagePage} path="/message" exact />
+          <Route component={MessageRoomPage} path="/message/room/:roomId" />
       </>
     );
 };

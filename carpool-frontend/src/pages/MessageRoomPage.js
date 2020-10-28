@@ -1,18 +1,18 @@
 import React from 'react';
 import HeaderContainer from "../containers/common/HeaderContainer";
 import SideMenuContainer from "../containers/common/SideMenuContainer";
-import MessageRoomsContainer from "../containers/message/MessageRoomsContainer";
+import MessageRoomContainer from "../containers/message/MessageRoomContainer";
 
-const MessagePage = () => {
+const MessageRoomPage = () => {
     return (
         <>
             <HeaderContainer/>
             <div className="container">
                 <SideMenuContainer/>
-                <MessageRoomsContainer/>
+                <MessageRoomContainer/>
             </div>
         </>
     );
 };
 
-export default MessagePage;
+export default MessageRoomPage;

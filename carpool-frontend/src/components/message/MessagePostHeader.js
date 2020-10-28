@@ -12,7 +12,7 @@ const MessagePostHeader = ({ rides, onClickPost, messageRoom }) => {
         >
             {
                 rides.map((ride, index) => (
-                    <div className="messageRide">
+                    <div className="messageRide" key={index}>
                         <span className="city">{ride.from}</span>
                         <span className="arrow">>></span>
                         <span className="city">{ride.to}</span>

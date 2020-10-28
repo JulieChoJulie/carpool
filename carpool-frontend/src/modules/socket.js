@@ -15,6 +15,8 @@ const GET_NOTIFICATION = 'socket/GET_NOTIFICATION';
 export const getNotification = createAction(GET_NOTIFICATION);
 const OFFLINE_NOTI = 'socket/OFFLINE_NOTI';
 export const offlineNoti = createAction(OFFLINE_NOTI);
+const GET_MESSAGE = 'socket/GET_MESSAGE';
+export const getMessage = createAction(GET_MESSAGE);
 
 /* ALARM */
 const SWITCH_ALARM = 'notifications/SWITCH_ALARM';
@@ -23,11 +25,13 @@ export const switchAlarm = createAction(SWITCH_ALARM, value => value);
 
 export const setupSocket = (dispatch) => {
     const socket = io('http://localhost:4000/notification');
-
-    socket.on('receive', (data) => {
+    socket.on('/notification/receive', (data) => {
         switch (data.type) {
             case GET_NOTIFICATION:
                 dispatch(getNotification(data.data));
+                break;
+            case GET_MESSAGE:
+                dispatch(getMessage(data.data));
                 break;
             default:
                 break;

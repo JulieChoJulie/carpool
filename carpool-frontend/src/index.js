@@ -11,6 +11,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import { tempSetUser, profile } from "./modules/user";
 import { setupSocket, socketLogin } from './modules/socket';
+import { setupSocketMsg } from './modules/message';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer,
@@ -31,6 +32,7 @@ function loadUser() {
 }
 
 export const socket = setupSocket(store.dispatch);
+export const socketMsg = setupSocketMsg(store.dispatch);
 sagaMiddleware.run(rootSaga);
 
 loadUser();

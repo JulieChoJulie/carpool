@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { createAction, handleActions } from 'redux-actions';
 import { takeEvery, takeLatest } from 'redux-saga/effects';
-import { socket } from '../index';
+import { socketMsg } from '../index';
 import createRequestSaga, { createRequestActionTypes } from "../lib/createRequestSaga";
 import produce from 'immer';
 import * as messageAPI from '../lib/api/message';
@@ -26,12 +26,35 @@ export const createRoom = createAction(CREATE_ROOM,
 const createRoomSaga = createRequestSaga(CREATE_ROOM, messageAPI.createRoom);
 
 const [
+    GET_ROOMS,
+    GET_ROOMS_SUCCESS,
+    GET_ROOMS_FAILURE,
+] = createRequestActionTypes('message/GET_ROOMS');
+export const getRooms = createAction(GET_ROOMS);
+const getRoomsSaga = createRequestSaga(GET_ROOMS, messageAPI.getRooms);
+
+const [
     GET_ROOM,
     GET_ROOM_SUCCESS,
     GET_ROOM_FAILURE,
 ] = createRequestActionTypes('message/GET_ROOM');
 export const getRoom = createAction(GET_ROOM, roomId => roomId);
 const getRoomSaga = createRequestSaga(GET_ROOM, messageAPI.getRoom);
+
+// const [
+//     POST_CHAT,
+//     POST_CHAT_SUCCESS,
+//     POST_CHAT_FAILURE
+// ] = createRequestActionTypes('message/POST_CHAT');
+// export const postChat = createAction(POST_CHAT, chat => chat);
+
+// const [
+//     DELETE_ROOM,
+//     DELETE_ROOM_SUCCESS,
+//     DELETE_ROOM_FAILURE
+// ] = createRequestActionTypes('message/DELETE_ROOM');
+// export const deleteRoom = createAction('message/DELETE_ROOM', roomId => roomId);
+// const deleteRoomSaga = createRequestSaga(DELETE_ROOM, messageAPI.deleteRoom);
 
 
 // const SEND_CHAT = 'message/SEND_CHAT';
@@ -50,23 +73,14 @@ const getRoomSaga = createRequestSaga(GET_ROOM, messageAPI.getRoom);
 // export const switchAlarm = createAction(SWITCH_ALARM, value => value);
 
 
-export const setupSocket = (dispatch) => {
+export const setupSocketMsg = (dispatch) => {
     const socket = io('http://localhost:4000/chat');
 
-    // socket.on('receive', (data) => {
-    //     switch (data.type) {
-    //         case JOIN_CHAT:
-    //             dispatch(joinChat(data.data));
-    //             break;
-    //         case EXIT_CHAT:
-    //             dispatch(exitChat(data.data));
-    //         case ADD_CHAT:
-    //             dispatch(addChat(data.data));
-    //
-    //         default:
-    //             break;
-    //     }
-    // });
+    socket.on('receive', (data) => {
+        switch (data.type) {
+
+        }
+    });
     // socket.on('offline', (data) => {
     //     dispatch(offlineNoti(JSON.parse(data)));
     // });
@@ -75,58 +89,92 @@ export const setupSocket = (dispatch) => {
 };
 
 export function* messageSaga() {
-    // yield takeEvery(SOCKET_LOGIN,  (action) => {
-    //     socket.emit('message', JSON.stringify(action));
+    // yield takeEvery(POST_CHAT,  (action) => {
+    //     socketMsg.emit('post', JSON.stringify(action));
     // });
     // yield takeEvery(SOCKET_LOGOUT, () => {
     //     socket.disconnect();
     // })
-    yield takeLatest(CREATE_ROOM, createRoomSaga);
+    // yield takeLatest(CREATE_ROOM, createRoomSaga);
     yield takeLatest(GET_ROOM, getRoomSaga);
+    yield takeLatest(GET_ROOMS, getRoomsSaga);
 }
 
 const initialState = {
     messages: {
-        chats: [],
-        users: [],
+        chats: [
+
+        ],
+        users: [
+
+        ],
+        rides: []
+
     },
+    rooms: [
+        {
+            id: null,
+            post: {
+                id: null,
+                rides: [],
+            },
+            chats: [{
+                chat: '',
+                user: {
+                    username: null,
+                    isStudent: false,
+                }
+            }]
+        },
+    ],
+    roomsError: false,
     roomId: null,
     createRoomError: null,
     getRoomError: null,
 };
 
 const message = handleActions({
-    [CREATE_ROOM_SUCCESS]: (state, { payload: res }) => ({
-        ...state,
-        roomId: res.data.roomId,
-        createRoomError: null,
-    }),
-    [CREATE_ROOM_FAILURE]: (state, { payload: err }) => ({
-        ...state,
-        roomId: null,
-        createRoomError: err.status,
-    }),
-    [CHANGE_FIELD]: (state, { payload: res }) => {
-        const { form, key, value } = res;
-        return produce(state, draft => {
-            draft[form][key] = value;
-        })
-    },
-    [INITIALIZE_FIELD]: (state, { payload: field }) => ({
-        ...state,
-        [field]: initialState[field]
-    }),
+    // [CREATE_ROOM_SUCCESS]: (state, { payload: res }) => ({
+    //     ...state,
+    //     roomId: res.data.roomId,
+    //     createRoomError: null,
+    // }),
+    // [CREATE_ROOM_FAILURE]: (state, { payload: err }) => ({
+    //     ...state,
+    //     roomId: null,
+    //     createRoomError: err.status,
+    // }),
+    // [CHANGE_FIELD]: (state, { payload: res }) => {
+    //     const { form, key, value } = res;
+    //     return produce(state, draft => {
+    //         draft[form][key] = value;
+    //     })
+    // },
+    // [INITIALIZE_FIELD]: (state, { payload: field }) => ({
+    //     ...state,
+    //     [field]: initialState[field]
+    // }),
     [GET_ROOM_SUCCESS]: (state, { payload: res }) => (
         produce(state, draft => {
-            draft.getRoomError = null;
+            draft.getRoomError = false;
             draft.messages.chats = res.data.chats;
             draft.messages.users = res.data.users;
+            draft.messages.rides = res.data.rides;
         })
     ),
     [GET_ROOM_FAILURE]: (state, { payload: error }) => ({
         ...state,
         getRoomError: error.status,
         messages: initialState.messages,
+    }),
+    [GET_ROOMS_SUCCESS]: (state, { payload: res }) => ({
+        ...state,
+        rooms: res.data,
+        roomsError: false
+    }),
+    [GET_ROOMS_FAILURE]: (state, { payload: error }) => ({
+        ...state,
+        roomsError: true,
     })
 }, initialState);
 
