@@ -1,10 +1,15 @@
 import React from 'react';
 import dateFormat from "../post/dateFormat";
 import "./MessagePostHeader.scss";
+import classNames from "classnames";
 
-const MessagePostHeader = ({ rides, onClickPost }) => {
+const MessagePostHeader = ({ rides, onClickPost, messageRoom }) => {
     return (
-        <div className="messagePostHeader">
+        <div
+            className={
+                classNames('messagePostHeader', { messageRoom })
+            }
+        >
             {
                 rides.map((ride, index) => (
                     <div className="messageRide">

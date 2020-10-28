@@ -1,0 +1,22 @@
+@import '../../styles/utils';
+
+.messagePostHeader {
+  padding: 0.5rem;
+  cursor: pointer;
+  .messageRide {
+    .city {
+      color: $lightBrown
+    }
+    .date {
+      padding-left: 0.5rem;
+      color: $black;
+    }
+  }
+  &.messageRoom {
+    border: 1px solid $black;
+    box-shadow: 3px 3px 1px 0px rgba(0,0,0,0.1);
+    &:hover {
+      font-weight: bold;
+    }
+  }
+}

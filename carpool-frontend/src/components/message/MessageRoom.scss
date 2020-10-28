@@ -7,9 +7,20 @@
   .chats {
     margin-bottom: 1rem;
   }
+  .userList {
+    .username {
+      padding-right: 0.5rem;
+      cursor: pointer;
+      &:hover {
+        color: $oc-gray-6;
+        color-weight: bold;
+      }
+    }
+  }
   .chat {
     display: flex;
     flex-direction: row;
+    padding: 0.5rem;
     .username {
       margin-right: 0.8rem;
       &:hover {
@@ -34,6 +45,20 @@
         color: $oc-gray-5;
         font-size: 0.5rem;
         text-align: end;
+      }
+    }
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+    svg {
+      cursor: pointer;
+    }
+    .icon {
+      flex: 0 50%;
+      &.end {
+        display: flex;
+        flex-direction: row-reverse;
       }
     }
   }

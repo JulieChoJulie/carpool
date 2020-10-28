@@ -3,7 +3,6 @@ import './AuthFormBlock.scss';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 import Input from './Input';
-// import { IoLogoFacebook } from 'react-icons/io';
 
 const text = {
     login: 'LOG IN',

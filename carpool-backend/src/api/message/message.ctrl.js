@@ -120,9 +120,19 @@ exports.getRooms = async (req, res, next) => {
                             attributes: ['id', 'username', 'isStudent']
                         }
                     ]
+                },
+                {
+                    model: Post,
+                    include: [
+                        {
+                            model: Ride,
+                            attributes: ['from', 'to', 'when']
+                        }
+                    ]
                 }
             ]
         });
+
         res.status(200).send(rooms);
 
     } catch (err) {

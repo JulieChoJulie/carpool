@@ -15,53 +15,74 @@ const MessageContainer = ({ location }) => {
         user: user.user,
         messages: message.messages,
     }));
-    const fakeData = [
-        {
-            id: 0,
-            lastMessage: "hello",
-            username: 'Julie2',
-            createdAt: new Date(),
-            MessageUsers: [
-                {
-                    username: "Julie3",
+    const fakeData =
+        [
+            {
+                "id": 1,
+                "createdAt": "2020-10-28T04:29:26.000Z",
+                "updatedAt": "2020-10-28T04:29:26.000Z",
+                "deletedAt": null,
+                "postId": 1,
+                "post": {
+                    "id": 1,
+                    "status": true,
+                    "notes": "",
+                    "createdAt": "2020-10-28T04:26:33.000Z",
+                    "updatedAt": "2020-10-28T04:26:33.000Z",
+                    "deletedAt": null,
+                    "userId": 1,
+                    "rides": [
+                        {
+                            "from": "Amherstburg",
+                            "to": "Atikokan",
+                            "when": "2020-10-31T00:38:13.000Z"
+                        },
+                        {
+                            "from": "Atikokan",
+                            "to": "Aurora",
+                            "when": "2020-11-01T00:38:13.000Z"
+                        }
+                    ]
                 },
-                {
-                    username: "Simon",
+                "Message": {
+                    "createdAt": "2020-10-28T04:29:26.000Z",
+                    "updatedAt": "2020-10-28T04:29:26.000Z",
+                    "userId": 1,
+                    "roomId": 1
                 },
-                {
-                    username: "Julie2"
-                }
-            ]
-        },
-        {
-            id: 1,
-            lastMessage: "Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?Is it still available?",
-            username: 'Simon',
-            createdAt: new Date(),
-            MessageUsers: [
-                {
-                    username: "Julie3",
-                },
-                {
-                    username: "Simon",
-                }
-            ]
-        }
-    ];
+                "chats": [
+                    {
+                        "id": 1,
+                        "chat": "hello",
+                        "gif": null,
+                        "createdAt": "2020-10-28T04:38:17.000Z",
+                        "updatedAt": "2020-10-28T04:38:17.000Z",
+                        "deletedAt": null,
+                        "roomId": 1,
+                        "userId": 1,
+                        "user": {
+                            "id": 1,
+                            "username": "Julie",
+                            "isStudent": false
+                        }
+                    }
+                ]
+            }
+        ];
 
     const roomData = {
         "chats": [
             {
                 "id": 1,
-                "chat": "Hello???",
+                "chat": "hello",
                 "gif": null,
-                "createdAt": "2020-10-27T23:13:52.000Z",
-                "updatedAt": "2020-10-27T23:13:52.000Z",
+                "createdAt": "2020-10-28T04:38:17.000Z",
+                "updatedAt": "2020-10-28T04:38:17.000Z",
                 "deletedAt": null,
-                "roomId": 18,
-                "userId": 5,
+                "roomId": 1,
+                "userId": 1,
                 "user": {
-                    "id": 5,
+                    "id": 1,
                     "username": "Julie",
                     "isStudent": false
                 }
@@ -69,26 +90,52 @@ const MessageContainer = ({ location }) => {
         ],
         "users": [
             {
-                "id": 5,
+                "id": 1,
                 "username": "Julie",
                 "isStudent": false,
                 "Message": {
-                    "createdAt": "2020-10-27T00:45:05.000Z",
-                    "updatedAt": "2020-10-27T00:45:05.000Z",
-                    "userId": 5,
-                    "roomId": 18
+                    "createdAt": "2020-10-28T04:29:26.000Z",
+                    "updatedAt": "2020-10-28T04:29:26.000Z",
+                    "userId": 1,
+                    "roomId": 1
                 }
             },
             {
-                "id": 6,
-                "username": "Julie3",
+                "id": 2,
+                "username": "Simon",
                 "isStudent": false,
                 "Message": {
-                    "createdAt": "2020-10-27T00:45:05.000Z",
-                    "updatedAt": "2020-10-27T00:45:05.000Z",
-                    "userId": 6,
-                    "roomId": 18
+                    "createdAt": "2020-10-28T04:29:26.000Z",
+                    "updatedAt": "2020-10-28T04:29:26.000Z",
+                    "userId": 2,
+                    "roomId": 1
                 }
+            }
+        ],
+        "rides": [
+            {
+                "id": 1,
+                "seats": 1,
+                "available": 1,
+                "from": "Amherstburg",
+                "to": "Atikokan",
+                "when": "2020-10-31T00:38:13.000Z",
+                "status": true,
+                "offering": true,
+                "price": "10.00",
+                "postId": 1
+            },
+            {
+                "id": 2,
+                "seats": 1,
+                "available": 1,
+                "from": "Atikokan",
+                "to": "Aurora",
+                "when": "2020-11-01T00:38:13.000Z",
+                "status": true,
+                "offering": true,
+                "price": "10.00",
+                "postId": 1
             }
         ]
     };
@@ -109,14 +156,38 @@ const MessageContainer = ({ location }) => {
         }
     }, [location, dispatch, room]);
 
+    const onClickUser = (username) => {
+        history.push(`/user/@${username}/profile`)
+    };
+    const onClickBack = () => {
+        history.push('/message');
+    };
+    const onClickDelete = () => {
+
+    };
+    const onClickThumbnail = (roomId) => {
+        history.push(`/message/room/${roomId}`)
+    };
+
     let comp = null;
 
     if (createRoom) {
         comp = <CreateMessageRoom/>
     } else if (room) {
-        comp = <MessageRoom room={roomData} user={user}/>;
+        comp =
+            <MessageRoom
+                room={roomData}
+                user={user}
+                onClickUser={onClickUser}
+                onClickBack={onClickBack}
+                onClickDelete={onClickDelete}
+            />;
     } else if (roomList) {
-        comp = <MessageRoomList rooms={fakeData}/>;
+        comp =
+            <MessageRoomList
+                rooms={fakeData}
+                onClickThumbnail={onClickThumbnail}
+            />;
     }
 
     if (!user) {
