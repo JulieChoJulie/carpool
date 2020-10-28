@@ -1,6 +1,6 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const { User, Chat, Room, Post } = require('../../../models');
+const { User, Chat, Room, Ride, Post } = require('../../../models');
 const schedule = require('node-schedule');
 const { Op } = require('sequelize');
 const { sequelize } = require('../../../models');
@@ -93,10 +93,11 @@ exports.getRoom = async (req, res, next) => {
         });
         const room = await Room.findOne({ where: { id: parseInt(req.params.roomId) }});
         const post = await Post.findOne({ where: { id: room.postId }});
+        const rides = await Ride.findAll({ where: { postId: post.id } });
         const users = await room.getMessageUsers({
             attributes: ['id', 'username', 'isStudent']
         });
-        res.status(200).send({ chats, users, post });
+        res.status(200).send({ chats, users, rides });
     } catch (err) {
         console.error(err);
         next(err);
